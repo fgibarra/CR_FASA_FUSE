@@ -1,0 +1,10 @@
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/api/resources/ConsultaProductosRestService.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/api/resources/json/Promocion.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/utils/json/JSonUtilities.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/procesor/PreparaQry.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/api/resources/ConsultaProductoRequest.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/api/resources/json/Producto.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/procesor/GeneraRespuestaWs.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/utils/Constantes.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/api/resources/ConsultaProductoResponse.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-productos/src/main/java/cl/ahumada/fuse/productos/procesor/EjecutaSP.java

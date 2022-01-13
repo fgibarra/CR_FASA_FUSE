@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2014-2017, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. 
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    https://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+   This is the OSGi Blueprint XML file defining the Camel context and routes.  Because the file is in the
+   OSGI-INF/blueprint directory inside our JAR, it will be automatically activated as soon as the bundle is installed.
+
+   The root element for any OSGi Blueprint file is 'blueprint' - you also see the namespace definitions for both the Blueprint
+   and the Camel namespaces.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <!-- archivo de propiedades -->
+    <cm:property-placeholder persistent-id="cl.ahumada.descuentos">
+        <cm:default-properties>
+            <cm:property name="boots.url" value="boots.url"/>
+            <cm:property name="cartEntry.url" value="cartEntry.url"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESB/descuentosV3/" id="rsServiceDescuentos" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="promService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <bean
+        class="cl.ahumada.fuse.descuentos.api.resources.DescuentosV3RestService" id="promService"/>
+    <bean class="cl.ahumada.fuse.descuentos.procesor.GeneraAllRequest" id="generaRequests"/>
+    <bean
+        class="cl.ahumada.fuse.descuentos.procesor.ProcesaRespuestaCartEntry" id="procesaRespuestaCartEntry"/>
+    <bean
+        class="cl.ahumada.fuse.descuentos.procesor.ProcesaRespuestaBalanceInquiry" id="procesaRespuestaBI"/>
+    <bean class="org.apache.camel.impl.DefaultHeaderFilterStrategy" id="bootsFilter">
+        <property name="outFilter">
+            <set>
+                <value>request</value>
+                <value>responses</value>
+                <value>breadcrumbId</value>
+                <value>RESPONSE_CODE</value>
+            </set>
+        </property>
+    </bean>
+    <bean
+        class="cl.ahumada.fuse.descuentos.procesor.aggregate.SetAggregationStrategy" id="setAggregationStrategy"/>
+    <bean
+        class="cl.ahumada.fuse.descuentos.procesor.GeneraRequestCalculateDiscount" id="generaReqCalculateDiscount"/>
+    <bean
+        class="cl.ahumada.fuse.descuentos.procesor.ProcesaRespuestaCalculateDiscount" id="procesaRespuestaCD"/>
+    <bean class="cl.ahumada.fuse.descuentos.procesor.GeneraRespuesta" id="generaRespuesta"/>
+    <bean class="cl.ahumada.fuse.descuentos.procesor.DumpHeaderBody" id="dumpHB"/>
+    <camelContext id="descuentosV3-api" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.descuentos.cfg"/>
+        <route id="restApiRoute">
+            <from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from WS: ${body}"/>
+            <to id="_ApreparaReqRoute" uri="seda:incomingDescuentos"/>
+        </route>
+        <route id="preparaReqRoute">
+            <from id="_restApiRoute" uri="seda:incomingDescuentos"/>
+            <process id="_preparaReqAction" ref="generaRequests"/>
+            <to id="_aPostCartEntry" uri="direct:toSplit"/>
+        </route>
+        <route id="splitRoute">
+            <from id="_preparaReqRoute" uri="direct:toSplit"/>
+            <split id="_split1" parallelProcessing="true"
+                strategyRef="setAggregationStrategy">
+                <xpath>/Servicios/servicio</xpath>
+                <setHeader headerName="servicio" id="_setHeader1">
+                    <xpath resultType="String">/servicio/@id</xpath>
+                </setHeader>
+                <to id="_to1" uri="direct:doRequest"/>
+            </split>
+            <log id="_log11" message="en splitRoute despues del split"/>
+            <to id="_to5" uri="direct:doAggregate"/>
+        </route>
+
+        <route id="_doRequest">
+            <!-- hace los request a los sitios de boots y  cartentry -->
+            <from id="_preparaReqRoute" uri="direct:doRequest"/>
+            <choice id="_choice1">
+                <!-- en funcion del header servicio despachar a la ruta que invoca al 
+            	RESTApi que corresponde -->
+                <when id="_when1">
+                    <simple>${header.servicio} == 'CartEntryRequest'</simple>
+                    <log id="_log2" message="Vamos a cart entry"/>
+                    <to id="_to2" uri="direct:cartEntry"/>
+                </when>
+                <when id="_when2">
+                    <simple>${header.servicio} == 'BalanceInquiryRequest'</simple>
+                    <log id="_log3" message="vamos a balance inquiry"/>
+                    <to id="_to3" uri="direct:balanceInquiry"/>
+                </when>
+                <otherwise id="_otherwise1">
+                    <log id="_log4" loggingLevel="ERROR" message="se encuentra $simple{in.header.servicio}"/>
+                    <log id="_log5" loggingLevel="ERROR" message="se encuentra ${header[servicio]}"/>
+                    <setBody id="_setBody1">
+                        <constant>ERROR</constant>
+                    </setBody>
+                    <to id="_to4" uri="direct:doResponse"/>
+                </otherwise>
+            </choice>
+        </route>
+        <route id="_doCartEntry">
+            <from id="_from1" uri="direct:cartEntry"/>
+            <log id="_log12" message="En _doCartEntry"/>
+            <!-- <process id="_dumpceAction" ref="dumpHB"/>  -->
+            <setBody id="_setBody2">
+                <simple>${header[request[CartEntryRequest]]}</simple>
+            </setBody>
+            <log id="_log6" message="vamos a cartentry con: ${body}"/>
+            <to id="_aCartEntryRoute" uri="cxfrs:bean:rsClientCartEntry?headerFilterStrategy=#bootsFilter"/>
+            <process id="_procesaRespuestaCartEntryction" ref="procesaRespuestaCartEntry"/>
+            <log id="_log7" message="devuelve a WS: ${body}"/>
+        </route>
+        <route id="_doBalanceInquiry">
+            <from id="_from2" uri="direct:balanceInquiry"/>
+            <log id="_log13" message="En _doBalanceInquiry"/>
+            <!--  <process id="_dumpbiAction" ref="dumpHB"/> -->
+            <setBody id="_setBody3">
+                <simple>${header[request[BalanceInquiryRequest]]}</simple>
+            </setBody>
+            <log id="_log8" message="vamos a balanceInquiry con: ${body}"/>
+            <setHeader headerName="channel" id="_setHeader2">
+                <constant>L</constant>
+            </setHeader>
+            <to id="_aBERoute" uri="cxfrs:bean:rsClientBootsBalanceInquiry?headerFilterStrategy=#bootsFilter"/>
+            <process id="_procesaRespuestaBIAction" ref="procesaRespuestaBI"/>
+            <log id="_log9" message="devuelve a WS: ${body}"/>
+        </route>
+        
+        <route id="_agregateRoute">
+            <from id="_agreggateRoute" uri="direct:doAggregate"/>
+            <log id="_log14" message="En _agregateRoute entrando"/>
+            <!-- <process id="_dump0Action" ref="dumpHB"/>  -->
+            <when id="_when3">
+             <!--  <camel:simple>${body.size} == 2</camel:simple> -->
+                <!-- <camel:simple>${header[aggregate]} == 2</camel:simple>  -->
+                <simple>${header[aggregate]} == 2 || ${header[aggregate]} == 1</simple>    
+                <log id="_log15" message="En _agregateRoute : hay 1 o 2 en el body"/>
+                <to id="_toCalculateDiscount" uri="direct:doCalculateDiscount"/>
+            </when>
+            <!-- 
+            <when id="_when4">
+                < ! - - <camel:simple>${body.size} == 1</camel:simple>  - - >
+                <camel:simple>${header[aggregate]} == 1</camel:simple>
+                < ! - -    <camel:simple>${header[request[BalanceInquiryRequest]]} == null</camel:simple>  - - >
+                <log id="_log15" message="En _agregateRoute : hay 1 en el body y no hay invocacion a BalanceInquiry"/>
+                <to id="_toCalculateDiscount" uri="direct:doCalculateDiscount"/>
+            </when>
+             -->
+            <otherwise>
+            	<log message="Entrando a otherwise: ${header[aggregate]}"/>
+            	<to uri="mock:dead"/>
+            </otherwise>
+        </route>
+         
+        <route id="_doCalculateDiscountRoute">
+        	<from id="_calculateDiscountRoute" uri="direct:doCalculateDiscount"/>
+        	<log message="Entrando a _doCalculateDiscountRoute"/>
+        	<process id="_generaCI" ref="generaReqCalculateDiscount"/>
+            <setHeader headerName="channel" id="_setHeader3">
+                <constant>L</constant>
+            </setHeader>
+            <to id="_aCDRoute" uri="cxfrs:bean:rsClientBootsCalculateDiscount?headerFilterStrategy=#bootsFilter"/>
+            <process id="_procesaRespuestaCDAction" ref="procesaRespuestaCD"/>
+            <log message="respuesta de Calculate Discount: ${body}"/>
+            <to id="_toResponse" uri="direct:doResponse"/>
+        </route>
+
+        <route id="_doResponseRoute">
+            <from id="_doResponse" uri="direct:doResponse"/>
+            <process id="_dumpCDAction" ref="dumpHB"/>
+            <process id="_generaRespuestaWsPromocionesAction" ref="generaRespuesta"/>
+            <log message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+    <cxf:rsClient
+        address="http://{{cartEntry.url}}/orchestrator/cartEntry"
+        id="rsClientCartEntry" loggingFeatureEnabled="true"
+        password="{{cartEntry.password}}"
+        serviceClass="cl.ahumada.fuse.descuentos.restclient.CartEntryEndpoint" username="{{cartEntry.user}}">
+        <cxf:headers>
+        	<entry key="Content-Type" value="application/json"/>
+        </cxf:headers>
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsClient>
+    <cxf:rsClient
+        address="https://{{boots.url}}/pos-api/transactions/balanceInquiry"
+        id="rsClientBootsBalanceInquiry" loggingFeatureEnabled="true" 
+        serviceClass="cl.ahumada.fuse.descuentos.restclient.BalanceInquiryEndpoint">
+        <cxf:headers>
+        	<entry key="Content-Type" value="application/json"/>
+        </cxf:headers>
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsClient>
+    <cxf:rsClient
+        address="https://{{boots.url}}/pos-api/transactions/calculateDiscountsV2"
+        id="rsClientBootsCalculateDiscount" loggingFeatureEnabled="true" 
+        serviceClass="cl.ahumada.fuse.descuentos.restclient.CalculateDiscountEndpoint">
+        <cxf:headers>
+        	<entry key="Content-Type" value="application/json"/>
+        </cxf:headers>
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsClient>
+</blueprint>
+<!--        
+        <route id="postCartEntryRoute">
+            <from id="_preparaReqRoute" uri="direct:toSplit"/>
+            <log id="_log3" message="dejado por generaRequests: ${body}"/>
+            <to id="_aCartEntryRoute" uri="cxfrs:bean:rsClientCartEntry?headerFilterStrategy=#bootsFilter"/>
+            <process id="_procesaRespuestaCartEntryction" ref="procesaRespuestaCartEntry"/>
+            <log id="_log2" message="vamos a balanceInquiry: ${body}"/>
+            <setHeader headerName="channel" id="_setHeader1">
+                <constant>L</constant>
+            </setHeader>
+            <to id="_aBERoute" uri="cxfrs:bean:rsClientBootsBalanceInquiry?headerFilterStrategy=#bootsFilter"/>
+            <process id="_procesaRespuestaBIAction" ref="procesaRespuestaBI"/>
+            <log id="_log2" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+ -->

@@ -1,0 +1,53 @@
+[INFO  13/01/2022 06:01:12,478] proxy.tcp.lib.ProxyMainBase.<init>(ProxyMainBase.java:52) - [13/01/22-18:01:12.477] ProxyMain v CoberturaPEYA-1.0.0 is running
+[INFO  13/01/2022 06:01:12,481] proxy.tcp.lib.utils.Utils.getInstance(Utils.java:28) - Utils: version:2.0 (11-11-2021)
+[DEBUG 13/01/2022 06:01:12,482] proxy.tcp.lib.ProxyMainBase.initFromProperties(ProxyMainBase.java:99) - fileProperties= /home/fernando/CodeReady/FASA/FUSE/cobertura-peya-pos/cobertura-peya-pos-proxy/src/main/java/resources/proxy_coberturapeya.properties existe true
+[INFO  13/01/2022 06:01:12,482] cl.ahumada.proxy.tcp.coberturaPeyaPos.ProxyMain.main(ProxyMain.java:28) - Proxy parte: proxy.tcp.coberturapeya.port=3202
+proxy.tcp.coberturapeya.endpoint=http://localhost:8181/cxf/ESB/coberturaPeya/obtiene/cobertura
+
+[INFO  13/01/2022 06:01:12,483] proxy.tcp.lib.ProxyMainBase.run(ProxyMainBase.java:59) - Proxy WebServices v CoberturaPEYA-1.0.0  is running
+[INFO  13/01/2022 06:01:12,485] proxy.tcp.lib.ProxyMainBase.run(ProxyMainBase.java:71) - Valores iniciales:
+proxy.tcp.coberturapeya.port=3202
+proxy.tcp.coberturapeya.endpoint=http://localhost:8181/cxf/ESB/coberturaPeya/obtiene/cobertura
+
+[DEBUG 13/01/2022 06:01:12,528] proxy.tcp.lib.utils.Semaforo.opP(Semaforo.java:40) - opP: espera Thread [ProxyMain_Thread-0]. valor=-1
+[INFO  13/01/2022 06:01:12,532] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:49) - Escuchando en puerta 3202
+[DEBUG 13/01/2022 06:01:12,533] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:56) - Esperando coneccion en puerto 3202
+[DEBUG 13/01/2022 06:01:29,629] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:62) - Recibio coneccion de Socket[addr=/0:0:0:0:0:0:0:1,port=17919,localport=3202].
+[DEBUG 13/01/2022 06:01:29,631] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:56) - Esperando coneccion en puerto 3202
+[DEBUG 13/01/2022 06:01:29,632] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:25) - run:Hora inicio: 18:01:29.632
+[DEBUG 13/01/2022 06:01:35,793] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:93) - nBlock=1  rdBuf.length=57
+[DEBUG 13/01/2022 06:01:35,794] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:98) - encontro CR LF
+[DEBUG 13/01/2022 06:01:35,794] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:109) - AtiendeRequestCliente IN [[B@4382687d]
+[DEBUG 13/01/2022 06:01:35,794] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:110) - AtiendeRequestCliente IN [50|45|59|41|7c|50|61|62|6c|6f|20|50|69|63|61|73|73|6f|7c|31|33|30|35|7c|48|75|65|63|68|75|72|61|62|61|7c|30|30|30|31|2c|30|30|30|32|2c|30|32|37|32|2c|30|32|31|32|7c|0d|0a|]
+[DEBUG 13/01/2022 06:01:35,797] proxy.tcp.lib.threads.AtiendeRequestCliente.doAtiendeRequestCliente(AtiendeRequestCliente.java:199) - RECIBE DEL POS:
+0--|--|--|--|--|--|--|--|--|--10-|--|--|--|--|--|--|--|--|--20-|--|--|--|--|--|--|--|--|--30-|--|--|--|--|--|--|--|--|--|
+|50|45|59|41|7c|50|61|62|6c|6f|20|50|69|63|61|73|73|6f|7c|31|33|30|35|7c|48|75|65|63|68|75|72|61|62|61|7c|30|30|30|31|2c|
+| P| E| Y| A| || P| a| b| l| o|  | P| i| c| a| s| s| o| || 1| 3| 0| 5| || H| u| e| c| h| u| r| a| b| a| || 0| 0| 0| 1| ,|
+|30|30|30|32|2c|30|32|37|32|2c|30|32|31|32|7c|0d|0a|
+| 0| 0| 0| 2| ,| 0| 2| 7| 2| ,| 0| 2| 1| 2| ||  |  |
+|
+[DEBUG 13/01/2022 06:01:35,798] proxy.tcp.lib.threads.AtiendeRequestCliente.doAtiendeRequestCliente(AtiendeRequestCliente.java:203) - doAtiendeRequestCliente: procesa=class cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest
+[DEBUG 13/01/2022 06:01:35,800] cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest.getRespuesta(CoberturaPeyaApirest.java:21) - getRespuesta: data: 0--|--|--|--|--|--|--|--|--|--10-|--|--|--|--|--|--|--|--|--20-|--|--|--|--|--|--|--|--|--30-|--|--|--|--|--|--|--|--|--|
+|50|45|59|41|7c|50|61|62|6c|6f|20|50|69|63|61|73|73|6f|7c|31|33|30|35|7c|48|75|65|63|68|75|72|61|62|61|7c|30|30|30|31|2c|
+| P| E| Y| A| || P| a| b| l| o|  | P| i| c| a| s| s| o| || 1| 3| 0| 5| || H| u| e| c| h| u| r| a| b| a| || 0| 0| 0| 1| ,|
+|30|30|30|32|2c|30|32|37|32|2c|30|32|31|32|7c|0d|0a|
+| 0| 0| 0| 2| ,| 0| 2| 7| 2| ,| 0| 2| 1| 2| ||  |  |
+|
+[DEBUG 13/01/2022 06:01:36,044] cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest.getRespuesta(CoberturaPeyaApirest.java:25) - getRespuesta: request: {"idTransaccion":"P","calle":"E","numero":"Y","comuna":"A","farmacias":["|"],"validRequest":true}
+[DEBUG 13/01/2022 06:01:36,076] cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest.generaRespuestaCoberturaPeya(CoberturaPeyaApirest.java:44) - request para CoberturaPeya: request.getURI()=http://localhost:8181/cxf/ESB/coberturaPeya/obtiene/cobertura
+[DEBUG 13/01/2022 06:01:36,105] cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest.generaRespuestaCoberturaPeya(CoberturaPeyaApirest.java:51) - {"codigo":0,"descripcion":"OK","farmacias":["0001","0072"]}
+[INFO  13/01/2022 06:01:36,106] cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest.generaRespuesta(CoberturaPeyaApirest.java:77) - generaRespuesta: recibido desde fuse:
+{"codigo":0,"descripcion":"OK","farmacias":["0001","0072"]}
+[INFO  13/01/2022 06:01:36,107] proxy.tcp.lib.utils.JSonUtilities.json2java(JSonUtilities.java:26) - convertir a Class =class cl.ahumada.fuse.coberturaPeyaPos.lib.CoberturaPeyaResponse
+[INFO  13/01/2022 06:01:36,164] cl.ahumada.proxy.tcp.coberturaPeyaPos.CoberturaPeyaApirest.generaRespuesta(CoberturaPeyaApirest.java:81) - generaRespuesta: recibido de fuse:
+{"codigo":0,"descripcion":"OK","farmacias":["0001","0072"]}
+[DEBUG 13/01/2022 06:01:36,165] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:114) - AtiendeRequestCliente OUT [OK|0001,0072]
+[DEBUG 13/01/2022 06:01:36,165] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:116) - AtiendeRequestCliente OUT [4f|4b|7c|30|30|30|31|2c|30|30|37|32|]
+[DEBUG 13/01/2022 06:01:36,165] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:121) - run: consulta [PEYA|Pablo Picasso|1305|Huechuraba|0001,0002,0272,0212|
+]
+responde al POS [OK|0001,0072]
+[DEBUG 13/01/2022 06:01:36,165] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:148) - contesto al POS:->|OK|0001,0072|
+[DEBUG 13/01/2022 06:01:36,186] proxy.tcp.lib.threads.AtiendeRequestCliente.run(AtiendeRequestCliente.java:187) - run:Hora termino:18:01:36.186
+[DEBUG 13/01/2022 06:01:59,662] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:56) - Esperando coneccion en puerto 3202
+[DEBUG 13/01/2022 06:02:29,667] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:56) - Esperando coneccion en puerto 3202
+[DEBUG 13/01/2022 06:02:59,696] proxy.tcp.lib.threads.AtiendeServerSocket.run(AtiendeServerSocket.java:56) - Esperando coneccion en puerto 3202

@@ -1,0 +1,11 @@
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/api/resources/ConsultaStockFarmaciaRestService.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/api/resources/json/Farmacias.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/api/resources/json/Producto.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/procesor/EjecutaSP.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/api/resources/ConsultaStockRequest.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/api/resources/ConsultaStockResponse.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/procesor/PreparaQry.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/utils/Constantes.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/procesor/GeneraRespuestaWs.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/stockFarmacia/api/resources/json/Ubicacion.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-stock-farmacia/src/main/java/cl/ahumada/fuse/utils/json/JSonUtilities.java

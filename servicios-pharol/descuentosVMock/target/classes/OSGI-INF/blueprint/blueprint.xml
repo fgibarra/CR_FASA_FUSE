@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://cxf.apache.org/blueprint/core"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESB/OrquestadorDescuentosV4/"
+        id="rsServiceDescuentosV4" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="restService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <bean
+        class="cl.ahumada.fuse.descuentos.api.resources.DescuentosV4RestService" id="restService"/>
+    <bean class="cl.ahumada.fuse.descuentos.procesor.LeeArchivo" id="leeArchivo"/>
+    <camelContext id="descuentos-v4" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.descuentosV4.cfg"/>
+        <route id="restApiRoute">
+            <from id="_restService" uri="direct:start"/>
+            <log id="_log1" message="received from WS: ${body}"/>
+            <to id="_ArecuperaRespuestaRoute" uri="seda:incomingDescuento"/>
+        </route>
+        <route id="ecuperaRespuestaRoute">
+            <from id="_restApiRoute" uri="seda:incomingDescuento"/>
+            <process id="_leeArchivo" ref="leeArchivo"/>
+            <log id="_log2" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+</blueprint>

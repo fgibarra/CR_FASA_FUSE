@@ -1,0 +1,13 @@
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Producto.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/procesor/PreparaQry.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Trackings.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/MedioPago.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Pedido.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/procesor/GeneraRespuestaWs.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/ConsultaPedidoResponse.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/procesor/EjecutaSP.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/ConsultaPedidosRestService.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/ConsultaPedidoRequest.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/utils/json/JSonUtilities.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/utils/Constantes.java
+/home/fernando/CodeReady/FASA/FUSE/servicio-consultas/consulta-pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Cliente.java

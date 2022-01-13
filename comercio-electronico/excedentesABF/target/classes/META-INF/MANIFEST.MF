@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1642111463299
+Build-Jdk: 15.0.1
+Built-By: fernando
+Bundle-Blueprint: OSGI-INF/blueprint/blueprint.xml
+Bundle-Description: ExcedentesABF
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-ManifestVersion: 2
+Bundle-Name: Servicios Comercio Electronico [excedentes-abf-v1]
+Bundle-SymbolicName: excedentes-abf-v1
+Bundle-Version: 0.0.1
+Created-By: Apache Maven Bundle Plugin
+Export-Package: cl.ahumada.fuse.excedentes.colmena.api.resources;version
+ ="0.0.1",com.fasterxml.jackson.jaxrs;version="0.0.1"
+Import-Package: com.fasterxml.jackson.annotation;version="[2.6,3)",com.f
+ asterxml.jackson.databind;version="[2.6,3)",com.fasterxml.jackson.jaxrs
+ .json;version="[2.6,3)",javax.ws.rs;version="[2.1,3)",org.apache.camel;
+ version="[2.21,3)",org.apache.camel.impl;version="[2.21,3)",org.apache.
+ log4j;version="[1.2,2)",org.osgi.service.blueprint;version="[1.0.0,2.0.
+ 0)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Tool: Bnd-3.2.0.201605172007

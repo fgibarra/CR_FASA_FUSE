@@ -1,0 +1,15 @@
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/MedioPago.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/utils/Constantes.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/PedidosResponse.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/CarroCompras.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Cliente.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Message.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Producto.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/v4/PedidosRequest.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/DatosEntrega.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/procesor/PreparaResponse.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/utils/json/JSonUtilities.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/Descuento.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/json/PharolError.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/api/resources/PedidosRestService.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/pedidos/src/main/java/cl/ahumada/fuse/pedidos/procesor/PreparaQuery.java
