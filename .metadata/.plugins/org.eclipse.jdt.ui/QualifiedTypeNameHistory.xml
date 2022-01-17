@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonIgnore"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.dto.ActionsDTO"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.dataformat.xml.XmlMapper"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.SerializationFeature"/>
+    <fullyQualifiedTypeName name="javax.xml.stream.XMLOutputFactory"/>
+    <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.lib.CoberturaPeyaResponse"/>
+</qualifiedTypeNameHistroy>

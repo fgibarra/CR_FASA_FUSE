@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-        xmlns:camel="http://camel.apache.org/schema/blueprint"
-        xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
-        xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
-        xsi:schemaLocation="
-         http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-         http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
-         http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
-
-  <cm:property-placeholder persistent-id="HelloBean" update-strategy="reload">
-    <cm:default-properties>
-      <cm:property name="googleApi" value="https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDkdKNsIJhc8TYudWuFw8KfjsO9g4bsCpM" />
-      <cm:property name="peyaApi" value="https://courier-api.pedidosya.com/v1/estimates/shippings" />
-      <cm:property name="greeting" value="Hi from Camel" />
-    </cm:default-properties>
-  </cm:property-placeholder>
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 
+		http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+        http://camel.apache.org/schema/blueprint 
+		http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <cm:property-placeholder persistent-id="HelloBean" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="googleApi" value="https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDkdKNsIJhc8TYudWuFw8KfjsO9g4bsCpM"/>
+            <cm:property name="peyaApi" value="https://courier-api.pedidosya.com/v1/estimates/shippings"/>
+            <cm:property name="greeting" value="Hi from Camel"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
     <!-- CXF servers -->
     <jaxrs:server address="/ESB/coberturaPeya" id="rsServiceDescuentos" staticSubresourceResolution="true">
         <jaxrs:serviceBeans>
@@ -26,25 +24,111 @@
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
-
-  <bean
+    <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.api.CoberturaPeyaRestService" id="promService"/>
-  <bean id="helloBean" class="cl.ahumada.fuse.coberturaPeyaPos.service.HelloBean">
-      <property name="say" value="${greeting}"/>
-  </bean>
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.aggregate.SetAggregationStrategy" id="setAggregationStrategy"/>
+    <bean class="org.apache.camel.impl.DefaultHeaderFilterStrategy" id="bootsFilter">
+        <property name="outFilter">
+            <set>
+                <value>request</value>
+                <value>responses</value>
+                <value>breadcrumbId</value>
+                <value>RESPONSE_CODE</value>
+            </set>
+        </property>
+    </bean>
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.GeneraMock" id="generaMock"/>
+    <camelContext id="cobertura-peya-pos-context" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.descuentos.cfg"/>
+        <!--
+			en paralelo:
+			 invoca al SP para recuperar coordenadas de locales
+			 api google para recuperar coordenadas cliente
+			con ambos resultados
+			 invoca api peya para cobertura
+			genera respuesta del servicio
+		-->
+		<route id="restApiRoute">
+            <from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from WS: ${body}"/>
+            <to id="_ApreparaReqRoute" uri="seda:incomingCobertura"/>
+        </route>
+        <route id="preparaReqRoute">
+            <from id="_restApiRoute" uri="seda:incomingCobertura"/>
+            <split id="_split1" parallelProcessing="true"
+                strategyRef="setAggregationStrategy">
+                <xpath>/ActionsDTO/servicio/@id</xpath>
+ 
+                <camel:setHeader headerName="servicio" id="_setHeader1">
+                    <xpath resultType="String">/servicio/@id</xpath>
+                </camel:setHeader>
 
-  <camelContext id="cobertura-peya-pos-context" xmlns="http://camel.apache.org/schema/blueprint">
-    <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.descuentos.cfg"/>
-    <!--
-    <route id="timerToLog">
-      <from uri="timer:foo?period=5000"/>
-      <setBody>
-          <method ref="helloBean" method="hello"/>
-      </setBody>
-      <log message="The message contains ${body}"/>
-      <to uri="mock:result"/>
-    </route>
-    -->
-  </camelContext>
+                <to id="_to1" uri="direct:doRequest"/>
+            </split>
+            <log id="_log11" message="en splitRoute despues del split"/>
+            <to id="_to5" uri="direct:doAggregate"/>
+        </route>
 
+		<route id="_doRequest">
+			<from id="_preparaReqRoute" uri="direct:doRequest"/>
+            <choice id="_choice1">
+                <!-- en funcion del header servicio despachar a la ruta que invoca al 
+            	RESTApi que corresponde -->
+                <when id="_when1">
+                    <simple>${header.servicio} == 'Oracle'</simple>
+                    <log id="_log2" message="Vamos a Oracle"/>
+                    <to id="_to2" uri="direct:oracle"/>
+                </when>
+                <when id="_when2">
+                    <simple>${header.servicio} == 'GMaps'</simple>
+                    <log id="_log3" message="vamos a GoogleMaps"/>
+                    <to id="_to3" uri="direct:gmaps"/>
+                </when>
+                <otherwise id="_otherwise1">
+                    <log id="_log4" loggingLevel="ERROR" message="se encuentra $simple{in.header.servicio}"/>
+                    <log id="_log5" loggingLevel="ERROR" message="se encuentra ${header[servicio]}"/>
+                    <setBody id="_setBody1">
+                        <constant>ERROR</constant>
+                    </setBody>
+                    <to id="_to4" uri="direct:doResponse"/>
+                </otherwise>
+            </choice>
+		</route>
+
+		<camel:route id ="_OracleRoute">
+			<camel:from id="_fromWhen1" uri="direct:oracle"/>
+			<log message="_fromWhen1: ${body}"/>
+		</camel:route>
+
+		<camel:route id ="_GMapsRoute">
+			<camel:from id="_fromWhen2" uri="direct:gmaps"/>
+			<log message="_fromWhen2: ${body}"/>
+		</camel:route>
+		<camel:route id="_AggregateRoute">
+			<camel:from id="_agreggateRoute" uri="direct:doAggregate"/>
+            <log message="En _agregateRoute entrando"/>
+<!-- 	-->		
+			<camel:when>
+				<camel:simple>${header[aggregate]} == 2 || ${header[aggregate]} == 1</camel:simple>
+				<log message="En _agregateRoute : hay 1 o 2 en el body"/>
+                <to id="_toCalculateCobertura" uri="direct:doCalculateCobertura"/>
+			</camel:when>
+            <otherwise>
+            	<log message="Entrando a otherwise: ${header[aggregate]}"/>
+            	<to uri="mock:dead"/>
+            </otherwise>
+	
+		</camel:route>
+		<camel:route id="_CalculateCoberturaRoute">
+			<camel:from id="_aggregate" uri="direct:doCalculateCobertura"/>
+			<log message="_CalculateCoberturaRoute: ${body}"/>
+			<camel:setBody>
+				<camel:constant>{"codigo":0,"descripcion":"OK","farmacias":["0001","0002"]}</camel:constant>
+			</camel:setBody>
+			<camel:process ref="generaMock"/>
+			<to uri="mock:end" />
+		</camel:route>
+    </camelContext>
 </blueprint>
