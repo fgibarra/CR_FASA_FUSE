@@ -14,7 +14,7 @@ public class GeneraMock implements Processor {
 	public void process(Exchange exchange) throws Exception {
 		
 		String data = (String) exchange.getIn().getBody();
-		logger.info(String.format("body:[%s]", data));
+		logger.info(String.format("GeneraMock: body:[%s]", data));
 
 		CoberturaPeyaResponse response = new CoberturaPeyaResponse(Integer.valueOf(0), "OK", new String[] {"0001","0002"});
 		exchange.getIn().setBody(response);

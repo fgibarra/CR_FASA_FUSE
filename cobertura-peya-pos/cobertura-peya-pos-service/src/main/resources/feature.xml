@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="CoberturaPeya">
+  <feature name="CoberturaPeya-basic">
+    <bundle>mvn:fasaFUSE/cobertura-peya-pos-service/1.0</bundle>
+  </feature>
+  <feature name="GmailApiConector-gmail">
+    <bundle>mvn:fasaFUSE/cobertura-peya-pos-lib/1.0</bundle>
+    <bundle>mvn:commons-lang/commons-lang/2.6</bundle>
+  </feature>
+</features>
