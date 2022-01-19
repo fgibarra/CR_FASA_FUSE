@@ -10,8 +10,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 public class UbicacionCliente implements Processor {
 
 	protected Logger logger = Logger.getLogger(getClass());
@@ -19,6 +17,7 @@ public class UbicacionCliente implements Processor {
     @PropertyInject(value = "gmaps.url", defaultValue="https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDkdKNsIJhc8TYudWuFw8KfjsO9g4bsCpM&address=%s")
     private String gmapsUrl;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void process(Exchange exchange) throws Exception {
 		Element data = (Element) exchange.getIn().getBody();

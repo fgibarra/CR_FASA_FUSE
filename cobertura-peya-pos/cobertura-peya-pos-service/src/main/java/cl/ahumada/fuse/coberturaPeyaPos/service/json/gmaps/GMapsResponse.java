@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import cl.ahumada.fuse.coberturaPeyaPos.service.json.Imprimible;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GMapsResponse implements Serializable {
+public class GMapsResponse extends Imprimible implements Serializable {
 
 	/**
 	 * 
@@ -32,18 +32,6 @@ public class GMapsResponse implements Serializable {
 		this.status = status;
 	}
 	
-	@Override
-	@JsonIgnore
-	public String toString() {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.setSerializationInclusion(Include.NON_NULL);
-			return mapper.writeValueAsString(this);
-		} catch (Exception e) {
-			return String.format("No pudo serializar %s",this.getClass().getSimpleName());
-		}
-	}
-
 	public Result[] getResults() {
 		return results;
 	}

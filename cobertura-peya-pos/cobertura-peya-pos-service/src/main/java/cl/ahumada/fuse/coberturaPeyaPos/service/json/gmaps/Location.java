@@ -18,31 +18,31 @@ public class Location implements Serializable {
 	@JsonIgnore
 	private static final long serialVersionUID = 1850354804477894962L;
 	@JsonProperty("lat")
-	private Long lat;
+	private Float lat;
 	@JsonProperty("lng")
-	private Long lng;
+	private Float lng;
 	
 	@JsonCreator
-	public Location(@JsonProperty("lat")Long lat, 
-			@JsonProperty("lng")Long lng) {
+	public Location(@JsonProperty("lat")Float lat, 
+			@JsonProperty("lng")Float lng) {
 		super();
 		this.lat = lat;
 		this.lng = lng;
 	}
 
-	public Long getLat() {
+	public Float getLat() {
 		return lat;
 	}
 
-	public void setLat(Long lat) {
+	public void setLat(Float lat) {
 		this.lat = lat;
 	}
 
-	public Long getLng() {
+	public Float getLng() {
 		return lng;
 	}
 
-	public void setLng(Long lng) {
+	public void setLng(Float lng) {
 		this.lng = lng;
 	}
 	

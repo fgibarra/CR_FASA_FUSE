@@ -21,12 +21,18 @@
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
+    <reference availability="mandatory"
+        filter="(osgi.jndi.service.name=pharolds)" id="ventadomicilioDataSource" interface="javax.sql.DataSource"/>
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.api.CoberturaPeyaRestService" id="promService"/>
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.aggregate.SetAggregationStrategy" id="setAggregationStrategy"/>
     <bean
-        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.UbicacionFarmacias" id="ubicacionFarmacias"/>
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.UbicacionFarmacias" id="ubicacionFarmacias">
+        <property name="datasource" ref="ventadomicilioDataSource"/>
+        <property name="storeProcedure" value="{{ubicacionFarmacias.sp}}"/>
+        <property name="schema" value="{{schema}}"/>
+    </bean>
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.UbicacionCliente" id="ubicacionCliente"/>
     <bean
@@ -42,7 +48,10 @@
         </property>
     </bean>
     <bean
-        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.GeneraMock" id="generaMock"/>
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.GeneraRequestPeya" id="generaRequestPeya"/>
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaRespuestaPeya" id="procesaRespuestaPeya"/>
+
     <camelContext id="cobertura-peya-pos-context" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.coberturaPeya.cfg"/>
         <!--
@@ -98,19 +107,17 @@
         <camel:route id="_OracleRoute">
             <camel:from id="_fromWhenOracle" uri="direct:oracle"/>
             <log id="_log6" message="_fromWhenOracle:  - body: [${body}]"/>
-			<camel:process ref="ubicacionFarmacias"></camel:process>
-			<log message="despues _fromWhenOracle:  - body: [${body}]"/>
-			
+            <camel:process id="_process2" ref="ubicacionFarmacias"/>
+            <log id="_log13" message="despues _fromWhenOracle:  - body: [${body}]"/>
         </camel:route>
         <camel:route id="_GMapsRoute">
             <camel:from id="_fromWhenGMaps" uri="direct:gmaps"/>
             <log id="_log7" message="_fromWhenGMaps:  - body: [${body}]"/>
-			<camel:process ref="ubicacionCliente"></camel:process>
-			<log message="despues _fromWhenGMaps:  - body: [${body}]"/>
-			<to id="_aGMapsRoute" uri="cxfrs:bean:rsClientGMaps?headerFilterStrategy=#bootsFilter"/>
-			<log message="despues de GMaps Api: ${body}"/>
-			<process id="_procesaRespuestaGMapsAction" ref="procesaRespuestaGMaps"/>
-			<log message="despues de _procesaRespuestaGMapsAction header: ${header[gMapsResponse]}"/>
+            <camel:process id="_process3" ref="ubicacionCliente"/>
+            <log id="_log14" message="despues _fromWhenGMaps:  - body: [${body}]"/>
+            <to id="_aGMapsRoute" uri="cxfrs:bean:rsClientGMaps?headerFilterStrategy=#bootsFilter"/>
+            <process id="_procesaRespuestaGMapsAction" ref="procesaRespuestaGMaps"/>
+            <log id="_log16" message="despues de _procesaRespuestaGMapsAction header: ${header[gMapsResponse]}"/>
         </camel:route>
         <camel:route id="_AggregateRoute">
             <camel:from id="_agreggateRoute" uri="direct:doAggregate"/>
@@ -129,19 +136,25 @@
         <camel:route id="_CalculateCoberturaRoute">
             <camel:from id="_aggregate" uri="direct:doCalculateCobertura"/>
             <log id="_log12" message="_CalculateCoberturaRoute: en body [${body}]"/>
-            <camel:setBody id="_setBody2">
-                <camel:constant>{"codigo":0,"descripcion":"OK","farmacias":["0001","0002"]}</camel:constant>
-            </camel:setBody>
-            <camel:process id="_process1" ref="generaMock"/>
+            <camel:process id="_process1" ref="generaRequestPeya"/>
+			<camel:choice>
+				<when id="hayError">
+					<simple>${header.pideCobertura} == 'NO'</simple>
+					<log message="NO en header: body: ${body}"/>
+				</when>
+				<camel:otherwise>
+					<log message="vuelve con [${body}]"/>
+		            <!--to id="_aPeya" uri="cxfrs:bean:rsClientPeya?headerFilterStrategy=#bootsFilter"/-->
+		            <process id="_procesaRespuestaPeyaAction" ref="procesaRespuestaPeya"/>
+				</camel:otherwise>
+			</camel:choice>
             <to id="_to7" uri="mock:end"/>
         </camel:route>
     </camelContext>
-    <cxf:rsClient
-        address="http://{{gmaps.url}}direccion,comuna"
-        id="rsClientGMaps" loggingFeatureEnabled="true"
-        serviceClass="cl.ahumada.fuse.coberturaPeyaPos.service.restclient.GMapsEndpoint">
+    <cxf:rsClient address="http://{{gmaps.url}}direccion,comuna"
+        id="rsClientGMaps" loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.coberturaPeyaPos.service.restclient.GMapsEndpoint">
         <cxf:headers>
-        	<entry key="Content-Type" value="application/json"/>
+            <entry key="Content-Type" value="application/json"/>
         </cxf:headers>
         <cxf:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>

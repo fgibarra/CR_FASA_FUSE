@@ -6,17 +6,17 @@ import org.apache.log4j.Logger;
 
 import cl.ahumada.fuse.coberturaPeyaPos.lib.CoberturaPeyaResponse;
 
-public class GeneraMock implements Processor {
+public class ProcesaRespuestaPeya implements Processor {
 
 	private Logger logger = Logger.getLogger(getClass());
 	
 	@Override
 	public void process(Exchange exchange) throws Exception {
+		// TODO Auto-generated method stub
+		logger.info(String.format("ProcesaRespuestaPeya: entra: [%s]", exchange.getIn().getBody()));
 		
-		String data = (String) exchange.getIn().getBody();
-		logger.info(String.format("GeneraMock: body:[%s]", data));
-
-		CoberturaPeyaResponse response = new CoberturaPeyaResponse(Integer.valueOf(0), "OK", new String[] {"0001","0002"});
+		
+		CoberturaPeyaResponse response = new CoberturaPeyaResponse(0, "OK", new String[] {"0001","0002","0072"});
 		exchange.getIn().setBody(response);
 	}
 
