@@ -6,7 +6,6 @@
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.SerializationFeature"/>
     <fullyQualifiedTypeName name="javax.xml.stream.XMLOutputFactory"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.dataformat.xml.XmlMapper"/>
-    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.utils.JacksonFunctions"/>
     <fullyQualifiedTypeName name="org.w3c.dom.NodeList"/>
     <fullyQualifiedTypeName name="org.w3c.dom.Node"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonInclude"/>
@@ -20,8 +19,6 @@
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.dto.ActionsDTO.Servicio"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonIgnoreProperties"/>
     <fullyQualifiedTypeName name="java.util.Arrays"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="javax.ws.rs.GET"/>
     <fullyQualifiedTypeName name="javax.ws.rs.Path"/>
     <fullyQualifiedTypeName name="javax.ws.rs.Consumes"/>
@@ -30,8 +27,6 @@
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.GMapsResponse"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectMapper"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonInclude.Include"/>
-    <fullyQualifiedTypeName name="javax.ws.rs.core.Response"/>
-    <fullyQualifiedTypeName name="java.io.SequenceInputStream"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.gmaps.GMapsResponse"/>
     <fullyQualifiedTypeName name="java.io.Reader"/>
     <fullyQualifiedTypeName name="java.net.URLEncoder"/>
@@ -44,10 +39,17 @@
     <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.math.BigDecimal"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.Imprimible"/>
-    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.CoberturaRequest"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.CoberturaResponse"/>
     <fullyQualifiedTypeName name="javax.ws.rs.POST"/>
-    <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.lib.CoberturaPeyaResponse"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.TokenRequest"/>
     <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.TokenResponse"/>
+    <fullyQualifiedTypeName name="javax.ws.rs.core.Response"/>
+    <fullyQualifiedTypeName name="java.io.SequenceInputStream"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.utils.JacksonFunctions"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.CoberturaRequest"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>

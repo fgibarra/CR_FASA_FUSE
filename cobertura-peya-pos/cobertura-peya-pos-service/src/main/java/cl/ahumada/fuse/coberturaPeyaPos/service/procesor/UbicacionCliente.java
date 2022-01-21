@@ -10,6 +10,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * @author fernando
+ * 
+ * Recupera un org.w3c.dom.Element desde el body, que contiene un NodeList con comuna y direccion del cliente
+ * recibidas del POS
+ *
+ * Devuelve en [header.Exchange.DESTINATION_OVERRIDE_URL] url para la invocacion a Google Maps para invocar
+ * al API que obteniene la ubicacion del cliente.
+ */
 public class UbicacionCliente implements Processor {
 
 	protected Logger logger = Logger.getLogger(getClass());

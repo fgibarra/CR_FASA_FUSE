@@ -29,19 +29,34 @@ public class Waypoints extends Imprimible implements Serializable {
 	private String addressStreet;
 	@JsonProperty("addressAdditional")
 	private String addressAdditional;
+	@JsonProperty("city")
+	private String city;
+	@JsonProperty("phone")
+	private final String phone = "+56912345678";
+	@JsonProperty("name")
+	private String name;
+	@JsonProperty("order")
+	private Integer order;
 	
 	@JsonCreator
 	public Waypoints(@JsonProperty("type")String type, 
 			@JsonProperty("latitud")Float latitud, 
 			@JsonProperty("longitude")Float longitude, 
 			@JsonProperty("addressStreet")String addressStreet, 
-			@JsonProperty("addressAdditional")String addressAdditional) {
+			@JsonProperty("addressAdditional")String addressAdditional,
+			@JsonProperty("city")String city,
+			@JsonProperty("name")String name,
+			@JsonProperty("order")Integer order
+			) {
 		super();
 		this.type = type;
 		this.latitud = latitud;
 		this.longitude = longitude;
 		this.addressStreet = addressStreet;
 		this.addressAdditional = addressAdditional;
+		this.city = city;
+		this.name = name;
+		this.order = order;
 	}
 
 	public String getType() {
@@ -82,6 +97,30 @@ public class Waypoints extends Imprimible implements Serializable {
 
 	public void setAddressAdditional(String addressAdditional) {
 		this.addressAdditional = addressAdditional;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getOrder() {
+		return order;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
 	}
 	
 }

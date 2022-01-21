@@ -1,6 +1,0 @@
-# RAPI
-
-# para invocar a los WS
-proxy.tcp.coberturapeya.endpoint=http://localhost:8181/cxf/ESB/coberturaPeya/obtiene/cobertura
-# TCP
-proxy.tcp.coberturapeya.port=3202

@@ -19,6 +19,14 @@ import org.w3c.dom.NodeList;
 import cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.Waypoints;
 import oracle.jdbc.OracleTypes;
 
+/**
+ * @author fernando
+ *
+ * Recupera un org.w3c.dom.Element desde el body, que contiene un NodeList con las farmacias recibidas del POS.
+ * 
+ * Devuelve en [header.responses.ubicacionFarmacias] un Map<String,Waypoints> con las ubicaciones de las farmacias
+ * o un mensaje de error.
+ */
 public class UbicacionFarmacias implements Processor {
 
 	protected Logger logger = Logger.getLogger(getClass());
@@ -71,6 +79,9 @@ public class UbicacionFarmacias implements Processor {
 
 
 
+	/**
+	 *
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void process(Exchange exchange) throws Exception {
@@ -104,6 +115,13 @@ public class UbicacionFarmacias implements Processor {
 	}
 
 
+	/**
+	 * @param farmacias
+	 * @return
+	 * Map<String, Waypoints> : key: numero farmacia
+	 * En caso de error
+	 * String: mensaje de error
+	 */
 	private Object getUbicacionesFarmacias(String farmacias) {
 		String qry = String.format("{ call %s.%s(?,?) }", schema, storeProcedure);
 		Connection conn = null;
@@ -127,9 +145,9 @@ public class UbicacionFarmacias implements Processor {
             rs = (ResultSet)stmt.getObject(2);
 
             // procesar la respuesta
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Waypoints> map = new HashMap<String, Waypoints>();
             response = map;
-            
+            int count = 2;
             while (rs.next()) {
             	String numeroFarmacia = rs.getString(1);
             	String direccion = rs.getString(2);
@@ -140,7 +158,10 @@ public class UbicacionFarmacias implements Processor {
             			latitud, 
             			longitud, 
             			String.format("%s, %s", direccion, comuna), 
-            			getAdicionalDefault());
+            			getAdicionalDefault(),
+            			comuna, // city
+            			getNombre(direccion, comuna), //name
+            			Integer.valueOf(count++));
             	map.put(numeroFarmacia, waypoints);
             	logger.info(String.format("getUbicacionesFarmacias: agrega %s [%s]", numeroFarmacia, waypoints));
             }
@@ -175,6 +196,13 @@ public class UbicacionFarmacias implements Processor {
 			}
 		}
 		return valor;
+	}
+
+	protected String getNombre(String street, String comuna) {
+		int n1 = (int) (new java.util.Date().getTime() % 100);
+		String p1 = street != null && street.length() > 8 ? street.substring(0, 8) : "Santiago";
+		String p2 = comuna != null && comuna.length() > 8 ? comuna.substring(0, 8) : "Region Metro";
+		return String.format("B-%d-%s/%s", n1, p1, p2);
 	}
 
 }

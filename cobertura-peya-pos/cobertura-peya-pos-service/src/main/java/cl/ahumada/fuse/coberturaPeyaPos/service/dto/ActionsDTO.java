@@ -42,6 +42,10 @@ public class ActionsDTO implements Serializable {
 		servicio.add(new Servicio(id, farmacias, null, null));
 	}
 	
+	public void addServicioToken(String id) {
+		servicio.add(new Servicio(id, null, null, null));
+	}
+	
 	public void addServicioGMaps(String id, Map<String, Object> data) {
 		Object comuna = data.get("comuna");
 		Object direccion = data.get("direccion");

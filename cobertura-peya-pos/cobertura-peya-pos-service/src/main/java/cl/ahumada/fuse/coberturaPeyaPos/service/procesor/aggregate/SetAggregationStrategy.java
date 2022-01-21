@@ -19,13 +19,6 @@ public class SetAggregationStrategy implements AggregationStrategy {
             		newExchange.getIn().getHeader("aggregate"),
             		newExchange.getProperty("CamelSplitIndex", Integer.class),
             		body));
-            /*
-            Set<String> set = new HashSet<String>();
-            set.add(body);
-            newExchange.getIn().setBody(set);
-            logger.info(String.format("SetAggregationStrategy:class body:%s", 
-            		newExchange.getIn().getBody().getClass()));
-            */
             return newExchange;
         } else {
         	oldExchange.getIn().setHeader("aggregate", Integer.valueOf(2));
@@ -35,12 +28,6 @@ public class SetAggregationStrategy implements AggregationStrategy {
             		oldExchange.getProperty("CamelSplitIndex", Integer.class),
             		newExchange.getProperty("CamelSplitIndex", Integer.class),
             		body));
-        	/*
-            @SuppressWarnings("unchecked")
-            Set<String> set = Collections.checkedSet(oldExchange.getIn().getBody(Set.class), String.class);
-            set.add(body);
-            logger.info(String.format("SetAggregationStrategy: Set en body size:%d", set.size()));
-            */
             return oldExchange;
         }
 	}

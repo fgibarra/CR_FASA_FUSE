@@ -18,6 +18,7 @@ public class CoberturaPeyaRequest implements Serializable {
     /**
 	 * 
 	 */
+	@JsonIgnore
 	private static final long serialVersionUID = -3092076061498354652L;
 	@JsonProperty("idTransaccion")
 	String idTransaccion;

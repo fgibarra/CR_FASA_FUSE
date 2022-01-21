@@ -19,6 +19,14 @@ import cl.ahumada.fuse.coberturaPeyaPos.service.utils.JacksonFunctions;
 
 
 
+/**
+ * @author fernando
+ * Expone la url: cxf/ESB/coberturaPeya/obtiene/cobertura
+ * 
+ * Deja preparado map en [header.resultados]
+ * Deja en el body un xml con el xpath para hacer el split paralelo con los datos recibidos desde el cliente
+ * 
+ */
 @Path("/obtiene")
 public class CoberturaPeyaRestService extends JacksonFunctions {
     @EndpointInject(uri="direct:start")
@@ -45,7 +53,7 @@ public class CoberturaPeyaRestService extends JacksonFunctions {
         ActionsDTO apis = new ActionsDTO();
         apis.addServicioOracle("Oracle", mapOracle);
         apis.addServicioGMaps("GMaps", mapGMaps);
-
+        apis.addServicioToken("Token");
         String xml = java2xml(apis);
         
         // preparar header para respuestas de actions paralelos

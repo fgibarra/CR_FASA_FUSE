@@ -1,11 +1,15 @@
 package cl.ahumada.fuse.coberturaPeyaPos.service.procesor;
 
+import java.io.IOException;
 import java.io.SequenceInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.log4j.Logger;
 
@@ -14,6 +18,15 @@ import cl.ahumada.fuse.coberturaPeyaPos.service.json.gmaps.Location;
 import cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.Waypoints;
 import cl.ahumada.fuse.coberturaPeyaPos.service.utils.JacksonFunctions;
 
+/**
+ * @author fernando
+ * 
+ * Recibe en el body un javax.ws.rs.core.Response resultado de la invocacion al API cxfrs:bean:rsClientGMaps
+ * 
+ * Devuelve en [header.responses.gMapsResponse] un Waypoints para la cobertura del cliente o
+ * un String con el mensaje de error.
+ *
+ */
 public class ProcesaRespuestaGMaps extends JacksonFunctions implements Processor {
 
 	private Logger logger = Logger.getLogger(getClass());
@@ -21,9 +34,10 @@ public class ProcesaRespuestaGMaps extends JacksonFunctions implements Processor
 	@SuppressWarnings("unchecked")
 	@Override
 	public void process(Exchange exchange) throws Exception {
+		Message message = exchange.getIn();
 		GMapsResponse gMapsResponse;
 		
-		Object jsonResponse = exchange.getIn().getBody();
+		Object jsonResponse = message.getBody();
 		logger.info(String.format("ProcesaRespuestaGMaps.process: body %s", jsonResponse));
 		StringBuffer sb = new StringBuffer();
 
@@ -34,12 +48,18 @@ public class ProcesaRespuestaGMaps extends JacksonFunctions implements Processor
 					response.getStatus(),response.getLength(),
 					response.getEntity().getClass().getSimpleName()));
 			
-			java.io.SequenceInputStream instream= (SequenceInputStream) response.getEntity();
-			logger.info(String.format("ProcesaRespuestaGMaps.process: available=%d",instream.available()));
-			
-			int str;
-			while ((str = instream.read()) >= 0)
-				sb.append((char)str);
+			try {
+				java.io.SequenceInputStream instream= (SequenceInputStream) response.getEntity();
+				logger.info(String.format("ProcesaRespuestaGMaps.process: available=%d",instream.available()));
+				
+				int str;
+				while ((str = instream.read()) >= 0)
+					sb.append((char)str);
+			} catch (IOException e) {
+				logger.error("ProcesaRespuestaGMaps.process", e);
+			} finally {
+				response.close();
+			}
 			
 			logger.info(String.format("ProcesaRespuestaGMaps.process: en entity: |%s|", sb.toString()));
 			Object resp = "PROBLEMA EN SERVICIO DE GOOGLE";
@@ -67,19 +87,33 @@ public class ProcesaRespuestaGMaps extends JacksonFunctions implements Processor
 								sbB.append(partes[i]);
 							}
 						}
+						String street = sbA.toString();
+						String comuna = sbB.toString();
 						Waypoints waypoints = new Waypoints("DROP_OFF",
 													location.getLat(), 
 													location.getLng(), 
-													sbA.toString(), 
-													sbB.toString());
+													street, 
+													comuna,
+													comuna, //city
+													getNombre(street, comuna), // name
+													Integer.valueOf(1));
 						resp = waypoints;
 						logger.info(String.format("ProcesaRespuestaGMaps.process: agrega %s", waypoints));
 					}
 				}
 			}
-			Map<String, Object> responses = (Map<String, Object>) exchange.getIn().getHeader("responses");
+			Map<String, Object> responses = (Map<String, Object>) message.getHeader("responses");
 			responses.put("gMapsResponse", resp);
+			List<Long> distancias = new ArrayList<Long>();
+			message.setHeader("distancias", distancias);
 		}
+	}
+
+	protected String getNombre(String street, String comuna) {
+		int n1 = (int) (new java.util.Date().getTime() % 100);
+		String p1 = street != null && street.length() > 8 ? street.substring(0, 8) : "Santiago";
+		String p2 = comuna != null && comuna.length() > 8 ? comuna.substring(0, 8) : "Region Metro";
+		return String.format("B-%d-%s/%s", n1, p1, p2);
 	}
 
 }

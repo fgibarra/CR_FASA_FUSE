@@ -17,6 +17,7 @@ public class CoberturaPeyaResponse implements Serializable {
     /**
 	 * 
 	 */
+	@JsonIgnore
 	private static final long serialVersionUID = -5808642008363515548L;
 	@JsonProperty("codigo")
 	Integer codigo;

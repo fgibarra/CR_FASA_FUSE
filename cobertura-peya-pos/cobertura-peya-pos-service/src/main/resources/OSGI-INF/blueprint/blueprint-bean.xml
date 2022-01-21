@@ -22,7 +22,8 @@
         </jaxrs:providers>
     </jaxrs:server>
     <reference availability="mandatory"
-        filter="(osgi.jndi.service.name=pharolds)" id="ventadomicilioDataSource" interface="javax.sql.DataSource"/>
+        filter="(osgi.jndi.service.name=pharolds)"
+        id="ventadomicilioDataSource" interface="javax.sql.DataSource"/>
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.api.CoberturaPeyaRestService" id="promService"/>
     <bean
@@ -50,24 +51,68 @@
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.GeneraRequestPeya" id="generaRequestPeya"/>
     <bean
-        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaRespuestaPeya" id="procesaRespuestaPeya"/>
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.PreparaTokenPeya" id="preparaTokenPeya">
+        <property name="clientId" value="{{peyaToken.clientId}}"/>
+        <property name="clientSecret" value="{{peyaToken.clientSecret}}"/>
+        <property name="grantType" value="{{peyaToken.grantType}}"/>
+        <property name="username" value="{{peyaToken.username}}"/>
+        <property name="password" value="{{peyaToken.password}}"/>
+    </bean>
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaTupla" id="procesaTupla"/>
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.CalculaDistancia" id="calculaDistancia"/>
 
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaRespuestaPeya" id="procesaRespuestaPeya">
+        <property name="distanciaMaximaProp" value="{{peyaCobertura.distanciaMaxima}}"/>
+    </bean>
     <camelContext id="cobertura-peya-pos-context" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.coberturaPeya.cfg"/>
         <!--
 			en paralelo:
 			 invoca al SP para recuperar coordenadas de locales
 			 api google para recuperar coordenadas cliente
-			con ambos resultados
-			 invoca api peya para cobertura
+		     api de peya para obtener token
+			con estos resultados
+			 invoca api peya para cobertura, para cada par cliente/farmacia que se recibio
 			genera respuesta del servicio
 		-->
         <route id="restApiRoute">
+		<!-- Apirest expuesto para ser invocado desde fuera
+				Deja preparado map en [header.resultados]
+				Deja en el body un xml con el xpath para hacer el split paralelo con los datos recibidos desde el cliente 
+		-->
             <from id="_promService" uri="direct:start"/>
             <log id="_log1" message="CoberturaPeyaRestService deja en body: ${body}"/>
             <to id="_ApreparaReqRoute" uri="seda:incomingCobertura"/>
         </route>
+		<!--                 -->
         <route id="preparaReqRoute">
+		<!-- 
+			separa el proceso mediante un split. Recibe el el body un xml del tipo:
+				<ActionsDTO>
+				  <servicio id="Oracle">
+				    <farmacias>
+				      <farmacia>0001</farmacia>
+				      <farmacia>0072</farmacia>
+				      <farmacia>0002</farmacia>
+				    </farmacias>
+				  </servicio>
+				  <servicio id="GMaps">
+				    <comuna>Huechuraba</comuna>
+				    <direccion>Pablo Picasso 1305</direccion>
+				  </servicio>
+				  <servicio id="Token">
+				  </servicio>
+				</ActionsDTO>		
+
+			El split deja  en [header.servicio] el valor del atributo del nodo servicio y en el
+			body el Node del DOM correspondiente al tag servicio.
+			
+			Invoca a la ruta indicada dentro del split
+			Invoca a la ruta que hace el Aggregate del bean especificado en setAggregationStrategy
+		-->
             <from id="_restApiRoute" uri="seda:incomingCobertura"/>
             <split id="_split1" parallelProcessing="true" strategyRef="setAggregationStrategy">
                 <xpath>/ActionsDTO/servicio</xpath>
@@ -77,9 +122,13 @@
                 <to id="_to1" uri="direct:doRequest"/>
             </split>
             <log id="_log11" message="en splitRoute despues del split"/>
-            <to id="_to5" uri="direct:doAggregate"/>
+            <to id="_to6" uri="direct:doAggregate"/>
         </route>
+		<!--                 -->
         <route id="_doRequest">
+		<!--
+			En base al [header.servicio] invoca a la ruta que procesa
+		-->
             <from id="_preparaReqRoute" uri="direct:doRequest"/>
             <choice id="_choice1">
                 <!-- en funcion del header servicio despachar a la ruta que invoca al 
@@ -94,32 +143,76 @@
                     <log id="_log3" message="vamos a GoogleMaps - body: [${body}]"/>
                     <to id="_to3" uri="direct:gmaps"/>
                 </when>
+                <when id="_when2">
+                    <simple>${header.servicio} == 'Token'</simple>
+                    <log id="_log18" message="vamos a Peya - body: [${body}]"/>
+                    <to id="_to4" uri="direct:peyaToken"/>
+                </when>
                 <otherwise id="_otherwise1">
                     <log id="_log4" loggingLevel="ERROR" message="se encuentra $simple{in.header.servicio}"/>
                     <log id="_log5" loggingLevel="ERROR" message="se encuentra ${header[servicio]}"/>
                     <setBody id="_setBody1">
                         <constant>ERROR</constant>
                     </setBody>
-                    <to id="_to4" uri="direct:doResponse"/>
+                    <to id="_to5" uri="direct:doResponse"/>
                 </otherwise>
             </choice>
         </route>
-        <camel:route id="_OracleRoute">
+		<!--                 -->
+		<camel:route id="_OracleRoute">
+		<!--
+			Recupera un org.w3c.dom.Element desde el body, que contiene un NodeList con las farmacias recibidas del POS.
+			Devuelve en [header.responses.ubicacionFarmacias] un Map<String,Waypoints> con las ubicaciones de las farmacias
+			o un mensaje de error.
+		-->
             <camel:from id="_fromWhenOracle" uri="direct:oracle"/>
             <log id="_log6" message="_fromWhenOracle:  - body: [${body}]"/>
             <camel:process id="_process2" ref="ubicacionFarmacias"/>
             <log id="_log13" message="despues _fromWhenOracle:  - body: [${body}]"/>
         </camel:route>
+		<!--                 -->
         <camel:route id="_GMapsRoute">
+		<!-- 
+			Recupera un org.w3c.dom.Element desde el body, que contiene un NodeList con comuna y direccion del cliente
+			recibidas del POS
+			Devuelve en [header.responses.gMapsResponse] un Waypoints para la cobertura del cliente o
+			un String con el mensaje de error.
+		-->
             <camel:from id="_fromWhenGMaps" uri="direct:gmaps"/>
             <log id="_log7" message="_fromWhenGMaps:  - body: [${body}]"/>
+
+			<!-- Devuelve en [header.Exchange.DESTINATION_OVERRIDE_URL] url para la invocacion a Google Maps para invocar
+			al API que obteniene la ubicacion del cliente. -->
             <camel:process id="_process3" ref="ubicacionCliente"/>
+
             <log id="_log14" message="despues _fromWhenGMaps:  - body: [${body}]"/>
+			<!-- Invoca al API de GMaps y deja en el body el Response devuelto -->
             <to id="_aGMapsRoute" uri="cxfrs:bean:rsClientGMaps?headerFilterStrategy=#bootsFilter"/>
-            <process id="_procesaRespuestaGMapsAction" ref="procesaRespuestaGMaps"/>
+            
+			<process id="_procesaRespuestaGMapsAction" ref="procesaRespuestaGMaps"/>
             <log id="_log16" message="despues de _procesaRespuestaGMapsAction header: ${header[gMapsResponse]}"/>
         </camel:route>
+		<!--                 -->
+        <camel:route id="_TokenRoute">
+		<!-- 
+			Devuelve en [header.responses.TokenResponse] un TokenResponse con el token o
+			un String con el mensaje de error.
+		-->
+            <camel:from id="_fromWhenToken" uri="direct:peyaToken"/>
+			<!-- Deja en el body el json con los datos con que se pide el token -->
+            <camel:process id="_process4" ref="preparaTokenPeya"/>
+			
+			<!-- invoca al API y deja un Response el el body -->
+            <to id="_aGetToken" uri="cxfrs:bean:rsPeyaToken?headerFilterStrategy=#bootsFilter"/>
+
+            <camel:process id="_process5" ref="procesaRespuestaToken"/>
+            <log id="_log19" message="despues de procesaRespuestaToken: token ${header[tokenResponse]}"/>
+        </camel:route>
+		<!--                 -->
         <camel:route id="_AggregateRoute">
+		<!-- 
+			se invoca cuando termina un thread del split y cuando terminan todos se puede continuar
+		-->
             <camel:from id="_agreggateRoute" uri="direct:doAggregate"/>
             <log id="_log8" message="En _agregateRoute entrando  - body: [${body}] header [${header[aggregate]}]"/>
             <!-- 	-->
@@ -130,29 +223,72 @@
             </camel:when>
             <otherwise id="_otherwise2">
                 <log id="_log10" message="Entrando a otherwise: ${header[aggregate]}"/>
-                <to id="_to6" uri="mock:dead"/>
+                <to id="_to7" uri="mock:dead"/>
             </otherwise>
         </camel:route>
+		<!--                 -->
         <camel:route id="_CalculateCoberturaRoute">
+		<!-- 
+			Verifica que se cumplan las condiciones
+			Prepara los request para calcular las distancias entre cliente y cada una de las farmacias
+			Hace un ciclo invocando al Api Peya
+			Deja en body la respuesta que hay que devolver al cliente que invoco a este apirest.
+		-->
             <camel:from id="_aggregate" uri="direct:doCalculateCobertura"/>
             <log id="_log12" message="_CalculateCoberturaRoute: en body [${body}]"/>
+			<!-- verifica que se cumplan las condiciones, si es asi deja en el [header.listaTuplasCobertura] 
+				map con local,request para determinar distancias entre el cliente y cada una de las farmacias.
+			-->
             <camel:process id="_process1" ref="generaRequestPeya"/>
-			<camel:choice>
-				<when id="hayError">
-					<simple>${header.pideCobertura} == 'NO'</simple>
-					<log message="NO en header: body: ${body}"/>
-				</when>
-				<camel:otherwise>
-					<log message="vuelve con [${body}]"/>
-		            <!--to id="_aPeya" uri="cxfrs:bean:rsClientPeya?headerFilterStrategy=#bootsFilter"/-->
-		            <process id="_procesaRespuestaPeyaAction" ref="procesaRespuestaPeya"/>
-				</camel:otherwise>
-			</camel:choice>
-            <to id="_to7" uri="mock:end"/>
+            <camel:choice id="_choice2">
+                <when id="hayError">
+                    <simple>${header.pideCobertura} == 'NO'</simple>
+                    <log id="_log15" message="NO en header: body: ${body}"/>
+                </when>
+                <camel:otherwise id="_otherwise3">
+                    <log id="_log17" message="vuelve con [${body}]"/>
+                    <log id="_log20" message="size: ${header.listaTuplasCobertura.size}"/>
+                    <loop doWhile="true" id="_loopPor tupla">
+                        <camel:simple>${header.listaTuplasCobertura.keySet.size} &gt; 0</camel:simple>
+						<!-- saca el primero de la lista y prepara json y http header para invocar api peya
+							deja en [header.procesandoLocal] el local
+						 -->
+						<process ref="procesaTupla"/>
+						<!-- va al api peya y deja Response en el body -->
+						<to id="_aGetCobertura" uri="cxfrs:bean:rsPeyaCobertura?headerFilterStrategy=#bootsFilter"/>
+						<!-- toma Response y deja en [header.distancias] la distancia devuelta -->
+                        <process id="_calculaDistanciaAction" ref="calculaDistancia"/>
+                    </loop>
+                </camel:otherwise>
+            </camel:choice>
+
+			<!-- genera la respuesta al cliente que invoco al apirest segun lo que se encuentra en [header.pideCobertura]
+			     y [header.distancias]
+            -->
+            <camel:process id="_process6" ref="procesaRespuestaPeya"/>
+            <to id="_to8" uri="mock:end"/>
         </camel:route>
     </camelContext>
     <cxf:rsClient address="http://{{gmaps.url}}direccion,comuna"
         id="rsClientGMaps" loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.coberturaPeyaPos.service.restclient.GMapsEndpoint">
+        <cxf:headers>
+            <entry key="Content-Type" value="application/json"/>
+        </cxf:headers>
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsClient>
+    <cxf:rsClient address="{{peyaToken.url}}" id="rsPeyaToken"
+        loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.coberturaPeyaPos.service.restclient.PeyaTokenEndpoint">
+        <cxf:headers>
+            <entry key="Content-Type" value="application/json"/>
+        </cxf:headers>
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsClient>
+    <cxf:rsClient address="{{peyaCobertura.url}}" id="rsPeyaCobertura"
+        loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.coberturaPeyaPos.service.restclient.CoberturaPeyaEndpoint">
         <cxf:headers>
             <entry key="Content-Type" value="application/json"/>
         </cxf:headers>
