@@ -21,7 +21,7 @@ public class Waypoints extends Imprimible implements Serializable {
 	private static final long serialVersionUID = -434746972091840412L;
 	@JsonProperty("type")
 	private String type;
-	@JsonProperty("latitud")
+	@JsonProperty("latitude")
 	private Float latitud;
 	@JsonProperty("longitude")
 	private Float longitude;
@@ -40,7 +40,7 @@ public class Waypoints extends Imprimible implements Serializable {
 	
 	@JsonCreator
 	public Waypoints(@JsonProperty("type")String type, 
-			@JsonProperty("latitud")Float latitud, 
+			@JsonProperty("latitude")Float latitud, 
 			@JsonProperty("longitude")Float longitude, 
 			@JsonProperty("addressStreet")String addressStreet, 
 			@JsonProperty("addressAdditional")String addressAdditional,

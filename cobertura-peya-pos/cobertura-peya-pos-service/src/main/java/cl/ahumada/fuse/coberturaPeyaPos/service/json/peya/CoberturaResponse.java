@@ -22,11 +22,11 @@ public class CoberturaResponse extends Imprimible implements Serializable {
 	@JsonProperty("deliveryTime")
 	private String deliveryTime;
 	@JsonProperty("price")
-	private Price price[];
+	private Price price;
 
 	@JsonCreator
 	public CoberturaResponse(@JsonProperty("deliveryTime")String deliveryTime, 
-			@JsonProperty("price")Price[] price) {
+			@JsonProperty("price")Price price) {
 		super();
 		this.deliveryTime = deliveryTime;
 		this.price = price;
@@ -34,8 +34,8 @@ public class CoberturaResponse extends Imprimible implements Serializable {
 
 	@JsonIgnore
 	public Long getDistancia() {
-		if (price != null && price.length > 0)
-			return price[0].getDistance();
+		if (price != null)
+			return price.getDistance();
 		return 9000l;
 	}
 	public String getDeliveryTime() {
@@ -46,11 +46,11 @@ public class CoberturaResponse extends Imprimible implements Serializable {
 		this.deliveryTime = deliveryTime;
 	}
 
-	public Price[] getPrice() {
+	public Price getPrice() {
 		return price;
 	}
 
-	public void setPrice(Price[] price) {
+	public void setPrice(Price price) {
 		this.price = price;
 	}
 

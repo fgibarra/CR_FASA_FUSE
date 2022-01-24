@@ -106,65 +106,70 @@
  <validation>
   <core validator-id="jboss.cdi.core"/>
   <el>
-   <linked-el length="74" name="%0" offset="9821" path="%1"/>
-   <linked-el length="53" name="%2" offset="4087" path="%1"/>
+   <linked-el length="74" name="%0" offset="10039" path="%1"/>
+   <linked-el length="53" name="%2" offset="4213" path="%1"/>
    <linked-el length="53" name="%3" offset="6628" path="%4"/>
-   <linked-el length="29" name="%5" offset="7091" path="%1"/>
-   <linked-el length="29" name="%5" offset="7357" path="%1"/>
-   <linked-el length="30" name="%5" offset="6827" path="%1"/>
+   <linked-el length="29" name="%5" offset="7525" path="%1"/>
+   <linked-el length="30" name="%5" offset="6995" path="%1"/>
+   <linked-el length="29" name="%5" offset="7259" path="%1"/>
    <linked-el length="18" name="%6" offset="2399" path="%4"/>
    <linked-el length="18" name="%6" offset="2587" path="%4"/>
-   <linked-el length="43" name="%7" offset="12977" path="%1"/>
-   <linked-el length="43" name="%7" offset="12831" path="%1"/>
-   <linked-el length="32" name="%8" offset="7441" path="%1"/>
-   <linked-el length="37" name="%8" offset="8501" path="%1"/>
-   <linked-el length="36" name="%8" offset="11251" path="%1"/>
-   <linked-el length="22" name="%8" offset="12761" path="%1"/>
-   <linked-el length="45" name="%8" offset="12094" path="%1"/>
-   <linked-el length="77" name="%8" offset="10972" path="%1"/>
-   <linked-el length="44" name="%8" offset="9473" path="%1"/>
-   <linked-el length="29" name="%8" offset="12609" path="%1"/>
-   <linked-el length="34" name="%8" offset="6911" path="%1"/>
-   <linked-el length="38" name="%8" offset="7174" path="%1"/>
-   <linked-el length="48" name="%8" offset="4804" path="%1"/>
-   <linked-el length="36" name="%8" offset="9161" path="%1"/>
-   <linked-el length="45" name="%8" offset="8647" path="%1"/>
-   <linked-el length="54" name="%9" offset="11141" path="%1"/>
-   <linked-el length="44" name="%9" offset="11481" path="%1"/>
-   <linked-el length="77" name="%9" offset="10972" path="%1"/>
-   <linked-el length="53" name="%10" offset="4087" path="%1"/>
+   <linked-el length="71" name="%7" offset="13971" path="%1"/>
+   <linked-el length="50" name="%7" offset="13119" path="%1"/>
+   <linked-el length="43" name="%7" offset="13272" path="%1"/>
+   <linked-el length="44" name="%8" offset="9686" path="%1"/>
+   <linked-el length="45" name="%8" offset="12373" path="%1"/>
+   <linked-el length="37" name="%8" offset="8691" path="%1"/>
+   <linked-el length="36" name="%8" offset="11514" path="%1"/>
+   <linked-el length="32" name="%8" offset="7609" path="%1"/>
+   <linked-el length="22" name="%8" offset="13049" path="%1"/>
+   <linked-el length="36" name="%8" offset="9367" path="%1"/>
+   <linked-el length="29" name="%8" offset="12897" path="%1"/>
+   <linked-el length="45" name="%8" offset="8837" path="%1"/>
+   <linked-el length="77" name="%8" offset="11235" path="%1"/>
+   <linked-el length="34" name="%8" offset="7079" path="%1"/>
+   <linked-el length="38" name="%8" offset="7342" path="%1"/>
+   <linked-el length="48" name="%8" offset="4940" path="%1"/>
+   <linked-el length="44" name="%9" offset="11744" path="%1"/>
+   <linked-el length="77" name="%9" offset="11235" path="%1"/>
+   <linked-el length="54" name="%9" offset="11404" path="%1"/>
+   <linked-el length="53" name="%10" offset="4213" path="%1"/>
    <linked-el length="15" name="%11" offset="1832" path="%4"/>
    <linked-el length="18" name="%12" offset="2399" path="%4"/>
    <linked-el length="18" name="%12" offset="2587" path="%4"/>
-   <linked-el length="43" name="%13" offset="12831" path="%1"/>
-   <linked-el length="16" name="%14" offset="1668" path="%4"/>
-   <linked-el length="16" name="%14" offset="1166" path="%4"/>
-   <linked-el length="53" name="%15" offset="6628" path="%4"/>
-   <linked-el length="43" name="%16" offset="12977" path="%1"/>
-   <linked-el length="53" name="%17" offset="6628" path="%4"/>
-   <linked-el length="30" name="%18" offset="5289" path="%4"/>
-   <linked-el length="43" name="%19" offset="12977" path="%1"/>
-   <linked-el length="31" name="%20" offset="12523" path="%1"/>
-   <linked-el length="34" name="%21" offset="7779" path="%1"/>
+   <linked-el length="16" name="%13" offset="1668" path="%4"/>
+   <linked-el length="16" name="%13" offset="1166" path="%4"/>
+   <linked-el length="53" name="%14" offset="6628" path="%4"/>
+   <linked-el length="71" name="%15" offset="13971" path="%1"/>
+   <linked-el length="50" name="%15" offset="13119" path="%1"/>
+   <linked-el length="43" name="%15" offset="13272" path="%1"/>
+   <linked-el length="53" name="%16" offset="6628" path="%4"/>
+   <linked-el length="30" name="%17" offset="5289" path="%4"/>
+   <linked-el length="71" name="%18" offset="13971" path="%1"/>
+   <linked-el length="50" name="%18" offset="13119" path="%1"/>
+   <linked-el length="43" name="%18" offset="13272" path="%1"/>
+   <linked-el length="31" name="%19" offset="12811" path="%1"/>
+   <linked-el length="34" name="%20" offset="7947" path="%1"/>
+   <linked-el length="30" name="%21" offset="5289" path="%4"/>
    <linked-el length="30" name="%22" offset="5289" path="%4"/>
    <linked-el length="30" name="%23" offset="5289" path="%4"/>
-   <linked-el length="30" name="%24" offset="5289" path="%4"/>
-   <linked-el length="66" name="%25" offset="10597" path="%1"/>
-   <linked-el length="43" name="%26" offset="12977" path="%1"/>
-   <linked-el length="43" name="%26" offset="12831" path="%1"/>
-   <linked-el length="66" name="%26" offset="10597" path="%1"/>
-   <linked-el length="54" name="%26" offset="11141" path="%1"/>
-   <linked-el length="29" name="%26" offset="7091" path="%1"/>
-   <linked-el length="34" name="%26" offset="7779" path="%1"/>
-   <linked-el length="44" name="%26" offset="11481" path="%1"/>
-   <linked-el length="29" name="%26" offset="7357" path="%1"/>
-   <linked-el length="74" name="%26" offset="9821" path="%1"/>
-   <linked-el length="77" name="%26" offset="10972" path="%1"/>
-   <linked-el length="30" name="%26" offset="6827" path="%1"/>
-   <linked-el length="31" name="%26" offset="12523" path="%1"/>
-   <linked-el length="15" name="%27" offset="1832" path="%4"/>
-   <linked-el length="16" name="%28" offset="1668" path="%4"/>
-   <linked-el length="16" name="%28" offset="1166" path="%4"/>
+   <linked-el length="66" name="%24" offset="10844" path="%1"/>
+   <linked-el length="71" name="%25" offset="13971" path="%1"/>
+   <linked-el length="30" name="%25" offset="6995" path="%1"/>
+   <linked-el length="43" name="%25" offset="13272" path="%1"/>
+   <linked-el length="74" name="%25" offset="10039" path="%1"/>
+   <linked-el length="66" name="%25" offset="10844" path="%1"/>
+   <linked-el length="29" name="%25" offset="7259" path="%1"/>
+   <linked-el length="44" name="%25" offset="11744" path="%1"/>
+   <linked-el length="50" name="%25" offset="13119" path="%1"/>
+   <linked-el length="29" name="%25" offset="7525" path="%1"/>
+   <linked-el length="77" name="%25" offset="11235" path="%1"/>
+   <linked-el length="54" name="%25" offset="11404" path="%1"/>
+   <linked-el length="34" name="%25" offset="7947" path="%1"/>
+   <linked-el length="31" name="%25" offset="12811" path="%1"/>
+   <linked-el length="15" name="%26" offset="1832" path="%4"/>
+   <linked-el length="16" name="%27" offset="1668" path="%4"/>
+   <linked-el length="16" name="%27" offset="1166" path="%4"/>
   </el>
  </validation>
  <aliases>
@@ -179,25 +184,24 @@
   <alias path="karaf" value="%10"/>
   <alias path="fuse" value="%11"/>
   <alias path="jackson" value="%12"/>
-  <alias path="header.listaTuplasCobertura.size" value="%13"/>
   <alias path="/cobertura-peya-pos-service/pom.xml" value="%4"/>
-  <alias path="camel" value="%14"/>
-  <alias path="project.build.outputDirectory" value="%15"/>
-  <alias path="header.listaTuplasCobertura.keySet.size" value="%16"/>
-  <alias path="project.build" value="%17"/>
-  <alias path="bundle" value="%18"/>
-  <alias path="header.listaTuplasCobertura.keySet" value="%19"/>
-  <alias path="header.pideCobertura" value="%20"/>
-  <alias path="servicio" value="%21"/>
+  <alias path="camel" value="%13"/>
+  <alias path="project.build.outputDirectory" value="%14"/>
+  <alias path="header.listaTuplasCobertura.keySet.size" value="%15"/>
+  <alias path="project.build" value="%16"/>
+  <alias path="bundle" value="%17"/>
+  <alias path="header.listaTuplasCobertura.keySet" value="%18"/>
+  <alias path="header.pideCobertura" value="%19"/>
+  <alias path="servicio" value="%20"/>
   <alias
    path="/cobertura-peya-pos-service/src/main/resources/OSGI-INF/blueprint/blueprint-bean.xml" value="%1"/>
-  <alias path="version.maven" value="%22"/>
-  <alias path="version" value="%23"/>
-  <alias path="plugin" value="%24"/>
-  <alias path="tokenResponse" value="%25"/>
-  <alias path="header" value="%26"/>
-  <alias path="fuse.version" value="%27"/>
-  <alias path="camel.version" value="%28"/>
+  <alias path="version.maven" value="%21"/>
+  <alias path="version" value="%22"/>
+  <alias path="plugin" value="%23"/>
+  <alias path="tokenResponse" value="%24"/>
+  <alias path="header" value="%25"/>
+  <alias path="fuse.version" value="%26"/>
+  <alias path="camel.version" value="%27"/>
  </aliases>
  <includes/>
  <uris/>

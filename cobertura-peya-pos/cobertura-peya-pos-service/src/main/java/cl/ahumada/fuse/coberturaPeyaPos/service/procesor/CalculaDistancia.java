@@ -60,6 +60,7 @@ public class CalculaDistancia extends JacksonFunctions implements Processor {
 					distancia = getDistancia(sb.toString());
 				}
 				ubicacionFarmacias.put(local, distancia);
+				logger.info(String.format("CalculaDistancia.process: local: %s distancia: %d", local, distancia));
 			} catch (IOException e) {
 				logger.error("CalculaDistancia.process", e);
 			} finally {
@@ -73,6 +74,7 @@ public class CalculaDistancia extends JacksonFunctions implements Processor {
 			CoberturaResponse coberturaResponse = (CoberturaResponse) json2java(jsonString, CoberturaResponse.class, Boolean.FALSE);
 			Long distancia = coberturaResponse.getDistancia();
 			logger.info(String.format("getDistancia: distancia = %d", distancia));
+			return distancia;
 		} catch (Exception e) {
 			logger.error("", e);
 		}

@@ -47,7 +47,7 @@ public class CoberturaRequest extends Imprimible implements Serializable {
 	}
 
 	private String initTime() {
-		String DEFAULT_DATE_PATTERN = "yyyy-MM-ddTHH:mm:ss";
+		String DEFAULT_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 		DateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(DEFAULT_DATE_PATTERN);
 		
 		return String.format("%sZ", DEFAULT_DATE_FORMATTER.format(new java.util.Date()));

@@ -28,13 +28,17 @@ public class ProcesaRespuestaPeya implements Processor {
 	private Long distanciaMaxima = 7000l;
 	
 	public String getDistanciaMaximaProp() {
-		return distanciaMaximaProp;
+		return distanciaMaximaProp!= null?distanciaMaximaProp.trim() : null;
 	}
 
 	public void setDistanciaMaximaProp(String distanciaMaximaProp) {
 		this.distanciaMaximaProp = distanciaMaximaProp;
 		if (distanciaMaximaProp != null)
-			this.distanciaMaxima = Long.valueOf(distanciaMaximaProp);
+			try {
+				this.distanciaMaxima = Long.valueOf(getDistanciaMaximaProp());
+			} catch (NumberFormatException e) {
+				logger.error(String.format("setDistanciaMaximaProp: no pudo convertir |%s|", getDistanciaMaximaProp()));
+			}
 	}
 
 	public Long getDistanciaMaxima() {

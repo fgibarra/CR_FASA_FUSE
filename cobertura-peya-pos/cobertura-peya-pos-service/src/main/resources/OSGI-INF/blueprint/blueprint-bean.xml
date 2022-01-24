@@ -62,7 +62,8 @@
         class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaTupla" id="procesaTupla"/>
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.CalculaDistancia" id="calculaDistancia"/>
-
+    <bean
+        class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaRespuestaToken" id="procesaRespuestaToken"/>
     <bean
         class="cl.ahumada.fuse.coberturaPeyaPos.service.procesor.ProcesaRespuestaPeya" id="procesaRespuestaPeya">
         <property name="distanciaMaximaProp" value="{{peyaCobertura.distanciaMaxima}}"/>
@@ -79,7 +80,7 @@
 			genera respuesta del servicio
 		-->
         <route id="restApiRoute">
-		<!-- Apirest expuesto para ser invocado desde fuera
+            <!-- Apirest expuesto para ser invocado desde fuera
 				Deja preparado map en [header.resultados]
 				Deja en el body un xml con el xpath para hacer el split paralelo con los datos recibidos desde el cliente 
 		-->
@@ -87,9 +88,9 @@
             <log id="_log1" message="CoberturaPeyaRestService deja en body: ${body}"/>
             <to id="_ApreparaReqRoute" uri="seda:incomingCobertura"/>
         </route>
-		<!--                 -->
+        <!--                 -->
         <route id="preparaReqRoute">
-		<!-- 
+            <!-- 
 			separa el proceso mediante un split. Recibe el el body un xml del tipo:
 				<ActionsDTO>
 				  <servicio id="Oracle">
@@ -124,9 +125,9 @@
             <log id="_log11" message="en splitRoute despues del split"/>
             <to id="_to6" uri="direct:doAggregate"/>
         </route>
-		<!--                 -->
+        <!--                 -->
         <route id="_doRequest">
-		<!--
+            <!--
 			En base al [header.servicio] invoca a la ruta que procesa
 		-->
             <from id="_preparaReqRoute" uri="direct:doRequest"/>
@@ -158,9 +159,9 @@
                 </otherwise>
             </choice>
         </route>
-		<!--                 -->
-		<camel:route id="_OracleRoute">
-		<!--
+        <!--                 -->
+        <camel:route id="_OracleRoute">
+            <!--
 			Recupera un org.w3c.dom.Element desde el body, que contiene un NodeList con las farmacias recibidas del POS.
 			Devuelve en [header.responses.ubicacionFarmacias] un Map<String,Waypoints> con las ubicaciones de las farmacias
 			o un mensaje de error.
@@ -170,9 +171,9 @@
             <camel:process id="_process2" ref="ubicacionFarmacias"/>
             <log id="_log13" message="despues _fromWhenOracle:  - body: [${body}]"/>
         </camel:route>
-		<!--                 -->
+        <!--                 -->
         <camel:route id="_GMapsRoute">
-		<!-- 
+            <!-- 
 			Recupera un org.w3c.dom.Element desde el body, que contiene un NodeList con comuna y direccion del cliente
 			recibidas del POS
 			Devuelve en [header.responses.gMapsResponse] un Waypoints para la cobertura del cliente o
@@ -180,37 +181,32 @@
 		-->
             <camel:from id="_fromWhenGMaps" uri="direct:gmaps"/>
             <log id="_log7" message="_fromWhenGMaps:  - body: [${body}]"/>
-
-			<!-- Devuelve en [header.Exchange.DESTINATION_OVERRIDE_URL] url para la invocacion a Google Maps para invocar
+            <!-- Devuelve en [header.Exchange.DESTINATION_OVERRIDE_URL] url para la invocacion a Google Maps para invocar
 			al API que obteniene la ubicacion del cliente. -->
             <camel:process id="_process3" ref="ubicacionCliente"/>
-
             <log id="_log14" message="despues _fromWhenGMaps:  - body: [${body}]"/>
-			<!-- Invoca al API de GMaps y deja en el body el Response devuelto -->
+            <!-- Invoca al API de GMaps y deja en el body el Response devuelto -->
             <to id="_aGMapsRoute" uri="cxfrs:bean:rsClientGMaps?headerFilterStrategy=#bootsFilter"/>
-            
-			<process id="_procesaRespuestaGMapsAction" ref="procesaRespuestaGMaps"/>
+            <process id="_procesaRespuestaGMapsAction" ref="procesaRespuestaGMaps"/>
             <log id="_log16" message="despues de _procesaRespuestaGMapsAction header: ${header[gMapsResponse]}"/>
         </camel:route>
-		<!--                 -->
+        <!--                 -->
         <camel:route id="_TokenRoute">
-		<!-- 
+            <!-- 
 			Devuelve en [header.responses.TokenResponse] un TokenResponse con el token o
 			un String con el mensaje de error.
 		-->
             <camel:from id="_fromWhenToken" uri="direct:peyaToken"/>
-			<!-- Deja en el body el json con los datos con que se pide el token -->
+            <!-- Deja en el body el json con los datos con que se pide el token -->
             <camel:process id="_process4" ref="preparaTokenPeya"/>
-			
-			<!-- invoca al API y deja un Response el el body -->
+            <!-- invoca al API y deja un Response el el body -->
             <to id="_aGetToken" uri="cxfrs:bean:rsPeyaToken?headerFilterStrategy=#bootsFilter"/>
-
             <camel:process id="_process5" ref="procesaRespuestaToken"/>
             <log id="_log19" message="despues de procesaRespuestaToken: token ${header[tokenResponse]}"/>
         </camel:route>
-		<!--                 -->
+        <!--                 -->
         <camel:route id="_AggregateRoute">
-		<!-- 
+            <!-- 
 			se invoca cuando termina un thread del split y cuando terminan todos se puede continuar
 		-->
             <camel:from id="_agreggateRoute" uri="direct:doAggregate"/>
@@ -226,9 +222,9 @@
                 <to id="_to7" uri="mock:dead"/>
             </otherwise>
         </camel:route>
-		<!--                 -->
+        <!--                 -->
         <camel:route id="_CalculateCoberturaRoute">
-		<!-- 
+            <!-- 
 			Verifica que se cumplan las condiciones
 			Prepara los request para calcular las distancias entre cliente y cada una de las farmacias
 			Hace un ciclo invocando al Api Peya
@@ -236,7 +232,7 @@
 		-->
             <camel:from id="_aggregate" uri="direct:doCalculateCobertura"/>
             <log id="_log12" message="_CalculateCoberturaRoute: en body [${body}]"/>
-			<!-- verifica que se cumplan las condiciones, si es asi deja en el [header.listaTuplasCobertura] 
+            <!-- verifica que se cumplan las condiciones, si es asi deja en el [header.listaTuplasCobertura] 
 				map con local,request para determinar distancias entre el cliente y cada una de las farmacias.
 			-->
             <camel:process id="_process1" ref="generaRequestPeya"/>
@@ -247,22 +243,22 @@
                 </when>
                 <camel:otherwise id="_otherwise3">
                     <log id="_log17" message="vuelve con [${body}]"/>
-                    <log id="_log20" message="size: ${header.listaTuplasCobertura.size}"/>
+                    <log id="_log20" message="size: ${header.listaTuplasCobertura.keySet.size}"/>
                     <loop doWhile="true" id="_loopPor tupla">
                         <camel:simple>${header.listaTuplasCobertura.keySet.size} &gt; 0</camel:simple>
-						<!-- saca el primero de la lista y prepara json y http header para invocar api peya
+                        <!-- saca el primero de la lista y prepara json y http header para invocar api peya
 							deja en [header.procesandoLocal] el local
 						 -->
-						<process ref="procesaTupla"/>
-						<!-- va al api peya y deja Response en el body -->
-						<to id="_aGetCobertura" uri="cxfrs:bean:rsPeyaCobertura?headerFilterStrategy=#bootsFilter"/>
-						<!-- toma Response y deja en [header.distancias] la distancia devuelta -->
+                        <process id="_process7" ref="procesaTupla"/>
+                        <!-- va al api peya y deja Response en el body -->
+                        <to id="_aGetCobertura" uri="cxfrs:bean:rsPeyaCobertura?headerFilterStrategy=#bootsFilter"/>
+                        <!-- toma Response y deja en [header.distancias] la distancia devuelta -->
                         <process id="_calculaDistanciaAction" ref="calculaDistancia"/>
+						<log message="_loopPor: quedan ${header.listaTuplasCobertura.keySet.size} elementos"/>
                     </loop>
                 </camel:otherwise>
             </camel:choice>
-
-			<!-- genera la respuesta al cliente que invoco al apirest segun lo que se encuentra en [header.pideCobertura]
+            <!-- genera la respuesta al cliente que invoco al apirest segun lo que se encuentra en [header.pideCobertura]
 			     y [header.distancias]
             -->
             <camel:process id="_process6" ref="procesaRespuestaPeya"/>

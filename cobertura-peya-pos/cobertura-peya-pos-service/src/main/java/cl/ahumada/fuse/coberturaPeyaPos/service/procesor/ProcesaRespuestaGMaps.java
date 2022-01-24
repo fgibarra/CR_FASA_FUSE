@@ -71,13 +71,15 @@ public class ProcesaRespuestaGMaps extends JacksonFunctions implements Processor
 				if (gMapsResponse != null && "OK".equalsIgnoreCase(gMapsResponse.getStatus())) {
 					Location location = gMapsResponse.getResults()[0].getGeometry().getLocation();
 					String formatedAdd = gMapsResponse.getResults()[0].getFormattedAddress();
+					logger.info(String.format("ProcesaRespuestaGMaps.process: formatedAdd: %s", formatedAdd));
 					if (formatedAdd != null) {
 						String partes[] = formatedAdd.split(",");
 						boolean paraAdd = true;
 						StringBuffer sbA = new StringBuffer();
 						StringBuffer sbB = new StringBuffer();
 						for (int i=0; i<partes.length; i++) {
-							if (partes[i].startsWith("Regi"))
+							logger.info(String.format("ProcesaRespuestaGMaps.process: partes[%d]: %s", i, partes[i]));
+							if (partes[i].indexOf("Regi") >= 0)
 								paraAdd = false;
 							if (paraAdd) {
 								if (sbA.length()>0) sbA.append(", ");
