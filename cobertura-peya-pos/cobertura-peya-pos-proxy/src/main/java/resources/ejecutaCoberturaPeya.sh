@@ -1,7 +1,7 @@
 #!/bin/sh
 # the path to your PID file
 
-PIDFILE=./pid/rapi.pid
+PIDFILE=./pid/COBPEYA.pid
 # the path to your  binary, including options if necessary
 if [ "x"$JAVA_HOME = "x" ] ; then
 #    JAVA_HOME=/usr/java/default
@@ -10,12 +10,12 @@ if [ "x"$JAVA_HOME = "x" ] ; then
 
 fi
 JAVACMD=$JAVA_HOME/bin/java
-DIR_HOME=/home/montran/runtimeRAPI/
+DIR_HOME=/home/montran/runtimeCOBPEYA/
 
-BIN_HOME=/home/montran/runtimeRAPI
-LOG_HOME=/home/montran/runtimeRAPI/log
+BIN_HOME=/home/montran/runtimeCOBPEYA
+LOG_HOME=/home/montran/runtimeCOBPEYA/log
 
-SERVICIO=-DRapiService
+SERVICIO=-DCOBPEYAService
 if [ ""$2 != "" ]; then
 	SERVICIO="-D"$2
 fi
@@ -46,19 +46,19 @@ do
     if [ -f $PIDFILE ] ; then
 	PID=`cat $PIDFILE`
 	if [ "x$PID" != "x" ] && kill -0 $PID 2>/dev/null ; then
-	    STATUS="DRapiService (pid $PID) running"
+	    STATUS="DCOBPEYAService (pid $PID) running"
 	    RUNNING=1
 	else
-	    STATUS="DRapiService (pid $PID?) not running"
+	    STATUS="DCOBPEYAService (pid $PID?) not running"
 	    RUNNING=0
 	fi
     else
         PID=`pidofproc $SERVICIO`
         if [ "x$PID" = "x" ]; then
-		STATUS="DRapiService not running"
+		STATUS="DCOBPEYAService not running"
 		RUNNING=0
 	else
-	    STATUS="DRapiService (pid $PID) running"
+	    STATUS="DCOBPEYAService (pid $PID) running"
 	    RUNNING=1
 	fi
     fi
@@ -68,7 +68,7 @@ do
     case $ARG in
     start)
 	if [ $RUNNING -eq 1 ]; then
-	    echo "$0 $ARG: DRapiService (pid $PID) already running"
+	    echo "$0 $ARG: DCOBPEYAService (pid $PID) already running"
 	    continue
 	fi
 	cd $LOG_HOME
@@ -77,8 +77,8 @@ do
                 mv $j $j.`date +%y%m%d%k%M%S`
         done
         cd $BIN_HOME
-        $JAVACMD -jar $SERVICIO -Xms1024m -Xmx2048m -Dhttps.protocols=TLSv1.2 rapi-1.0-jar-with-dependencies.jar &
-        echo "$0 $ARG: DRapiService started."
+        $JAVACMD -jar $SERVICIO -Xms1024m -Xmx2048m -Dhttps.protocols=TLSv1.2 cobertura-peya-pos-proxy-1.0-jar-with-dependencies.jar &
+        echo "$0 $ARG: DCOBPEYAService started."
 	;;
     stop)
 	if [ $RUNNING -eq 0 ]; then
@@ -86,22 +86,22 @@ do
 	    continue
 	fi
 	if kill $PID ; then
-	    echo "$0 $ARG: DRapiService stopped"
+	    echo "$0 $ARG: DCOBPEYAService stopped"
 	else
-	    echo "$0 $ARG: DRapiService could not be stopped"
+	    echo "$0 $ARG: DCOBPEYAService could not be stopped"
 	    ERROR=4
 	fi
 	;;
     restart)
 	if [ $RUNNING -eq 0 ]; then
-	    echo "$0 $ARG: DRapiService not running, trying to start"
-            $JAVACMD -jar $SERVICIO -Xms1024m -Xmx2048m -Dhttps.protocols=TLSv1.2  rapi-1.0-jar-with-dependencies.jar &
+	    echo "$0 $ARG: DCOBPEYAService not running, trying to start"
+            $JAVACMD -jar $SERVICIO -Xms1024m -Xmx2048m -Dhttps.protocols=TLSv1.2  COBPEYA-1.0-jar-with-dependencies.jar &
 	else
             if kill $PID ; then
-                echo "$0 $ARG: DRapiService stopped"
+                echo "$0 $ARG: DCOBPEYAService stopped"
                 sleep 30
             else
-        	    echo "$0 $ARG: DRapiService could not be stopped"
+        	    echo "$0 $ARG: DCOBPEYAService could not be stopped"
 	            ERROR=4
                     continue
 	    fi
@@ -110,17 +110,17 @@ do
                 mv $j $j.`date +%y%m%d%k%M%S`
             done
 	    cd $BIN_HOME
-            $JAVACMD -jar $SERVICIO -Xms1024m -Xmx2048m -Dhttps.protocols=TLSv1.2 -Dpeya.status.ambiente=$AMBIENTE_EJECUCION -Dpeya.status.port=$PORT rapi-1.0-jar-with-dependencies.jar &
-            echo "$0 $ARG: DRapiService restarted"
+            $JAVACMD -jar $SERVICIO -Xms1024m -Xmx2048m -Dhttps.protocols=TLSv1.2 -Dpeya.status.ambiente=$AMBIENTE_EJECUCION -Dpeya.status.port=$PORT COBPEYA-1.0-jar-with-dependencies.jar &
+            echo "$0 $ARG: DCOBPEYAService restarted"
 	fi
 	;;
     *)
 	echo "usage: $0 (start|stop|restart|help)"
 	cat <<EOF
 
-start      - start DRapiService
-stop       - stop DRapiService
-restart    - restart DRapiService if running by sending a SIGHUP or start if
+start      - start DCOBPEYAService
+stop       - stop DCOBPEYAService
+restart    - restart DCOBPEYAService if running by sending a SIGHUP or start if
              not running
 help       - this screen
 
