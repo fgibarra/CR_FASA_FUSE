@@ -195,7 +195,7 @@
 				<configuration>
 					<instructions>
 						<Export-Package>cl.ahumada.fuse.coberturaPeyaPos.service.api</Export-Package>
-						
+						<Import-Package>*;org.apache.camel.component.cxf</Import-Package>
 						<Built-By>Fernando Ibarra</Built-By>
 						<Bundle-Description>CoberturaPeyaparaPOS</Bundle-Description>
 						<Bundle-Name>Cobertura Peya para POS V1.0</Bundle-Name>

@@ -251,10 +251,19 @@
 						 -->
                         <process id="_process7" ref="procesaTupla"/>
                         <!-- va al api peya y deja Response en el body -->
-                        <to id="_aGetCobertura" uri="cxfrs:bean:rsPeyaCobertura?headerFilterStrategy=#bootsFilter"/>
+			            <doTry id="_doTry1">
+			            	<to id="_aApiCobertura" uri="cxfrs:bean:rsPeyaCobertura?headerFilterStrategy=#bootsFilter"/>
+			                <doCatch id="_doCatch1">
+			                    <exception>org.apache.camel.component.cxf.CxfOperationException</exception>
+			                    <log message="CATCH: proceso [${body}]"/>
+			                    <process id="_calculaDistanciaAction2" ref="calculaDistancia"/>
+			                    <log message="_loopPor: quedan ${header.listaTuplasCobertura.keySet.size} elementos"/>
+			                </doCatch>
+			            </doTry>
+						<log message="Vuelve del api cobertura peya"/>
                         <!-- toma Response y deja en [header.distancias] la distancia devuelta -->
                         <process id="_calculaDistanciaAction" ref="calculaDistancia"/>
-						<log message="_loopPor: quedan ${header.listaTuplasCobertura.keySet.size} elementos"/>
+                        <log id="_log21" message="_loopPor: quedan ${header.listaTuplasCobertura.keySet.size} elementos"/>
                     </loop>
                 </camel:otherwise>
             </camel:choice>

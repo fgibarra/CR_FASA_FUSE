@@ -482,3 +482,9 @@ java.lang.NoClassDefFoundError: Could not initialize class groovy.grape.GrapeIvy
 
 !ENTRY org.fusesource.ide.camel.model.service.core 2 0 2022-01-25 10:58:10.624
 !MESSAGE Unexpected child element of the context: propertyPlaceholder
+
+!ENTRY org.fusesource.ide.camel.model.service.core 2 0 2022-01-25 14:42:50.766
+!MESSAGE Unexpected child element of the context: propertyPlaceholder
+
+!ENTRY org.fusesource.ide.camel.model.service.core 2 0 2022-01-25 16:15:16.132
+!MESSAGE Unexpected child element of the context: propertyPlaceholder

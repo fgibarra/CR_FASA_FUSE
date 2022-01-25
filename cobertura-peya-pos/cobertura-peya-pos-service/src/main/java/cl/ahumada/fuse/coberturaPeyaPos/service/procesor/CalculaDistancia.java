@@ -66,6 +66,10 @@ public class CalculaDistancia extends JacksonFunctions implements Processor {
 			} finally {
 				response.close();
 			}
+		} else {
+			logger.info("CalculaDistancia.process: no hay Response, error http");
+			distancia = 9000l;
+			ubicacionFarmacias.put(local, distancia);
 		}
 	}
 
