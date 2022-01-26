@@ -47,13 +47,17 @@
     <fullyQualifiedTypeName name="java.text.DateFormat"/>
     <fullyQualifiedTypeName name="org.apache.camel.Message"/>
     <fullyQualifiedTypeName name="org.apache.camel.CamelContext"/>
-    <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.CoberturaRequest"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.TokenResponse"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.utils.JacksonFunctions"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.CoberturaResponse"/>
+    <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
+    <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.module.Requester"/>
+    <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.servicios.http.json.StatusResponse"/>
+    <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer"/>
+    <fullyQualifiedTypeName name="java.util.StringTokenizer"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
 </qualifiedTypeNameHistroy>

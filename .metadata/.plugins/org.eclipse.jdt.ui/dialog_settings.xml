@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item key="ProjectSelectionDialog.show_all" value="false"/>
+	<item key="org.eclipse.jdt.ui.last.external.project" value="/home/fernando/CodeReady/FASA/FUSE/ordenes-peya/ordenes-peya-requester/src/main/java"/>
+	<item key="filters_last_used" value="filter_imports;"/>
 	<section name="JavaElementSearchActions">
 	</section>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
@@ -111,5 +113,8 @@
 		<item key="expanded6" value="true"/>
 		<item key="expanded7" value="true"/>
 		<item key="expanded8" value="true"/>
+	</section>
+	<section name="BuildPathsPropertyPage">
+		<item key="pageIndex" value="0"/>
 	</section>
 </section>

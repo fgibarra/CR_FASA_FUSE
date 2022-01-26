@@ -1,0 +1,116 @@
+[INFO  2022-01-26 18:37:15,678] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:37:14.260] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:38:06,908] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:38:05.842] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:38:21,971] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:38:21.370 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:39:29,088] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:39:29,374] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:39:29,376] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[INFO  2022-01-26 18:39:29,378] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-175] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-01-26 18:39:35,757] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:39963 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:39:35,757] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:39:35,758] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-189] - setParametrosURI: data a?orden=1234&confirma=1
+[INFO  2022-01-26 18:39:35,758] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-194] - setParametrosURI: a?orden 1234&confirma=1
+[INFO  2022-01-26 18:39:49,960] {server-dispatch-2} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:39967 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:39:49,960] {server-dispatch-2} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:39:49,961] {server-dispatch-2} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-189] - setParametrosURI: data a?orden=1234&confirma=1
+[INFO  2022-01-26 18:39:49,962] {server-dispatch-2} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-194] - setParametrosURI: a?orden 1234&confirma=1
+[INFO  2022-01-26 18:47:27,802] {server-dispatch-3} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:40097 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:47:27,802] {server-dispatch-3} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:48:13,824] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:48:13.823] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:48:13,833] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:48:13.828 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:48:13,891] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:48:13,934] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:48:13,935] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[ERROR 2022-01-26 18:48:14,019] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-180] - 
+java.util.concurrent.ExecutionException: java.net.BindException: Socket bind failure for socket ServerSocket[unbound], address=0.0.0.0/0.0.0.0:8180, BacklogSize=0: java.net.BindException: Address already in use
+	at org.apache.hc.core5.concurrent.BasicFuture.getResult(BasicFuture.java:72)
+	at org.apache.hc.core5.concurrent.BasicFuture.get(BasicFuture.java:85)
+	at cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer.run(ReactiveFullDuplexServer.java:173)
+Caused by: java.net.BindException: Socket bind failure for socket ServerSocket[unbound], address=0.0.0.0/0.0.0.0:8180, BacklogSize=0: java.net.BindException: Address already in use
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:550)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:249)
+	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:88)
+	at org.apache.hc.core5.reactor.SingleCoreListeningIOReactor.processSessionRequests(SingleCoreListeningIOReactor.java:172)
+	at org.apache.hc.core5.reactor.SingleCoreListeningIOReactor.processEvents(SingleCoreListeningIOReactor.java:102)
+	at org.apache.hc.core5.reactor.SingleCoreListeningIOReactor.doExecute(SingleCoreListeningIOReactor.java:96)
+	at org.apache.hc.core5.reactor.AbstractSingleCoreIOReactor.execute(AbstractSingleCoreIOReactor.java:85)
+	at org.apache.hc.core5.reactor.IOReactorWorker.run(IOReactorWorker.java:44)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+[INFO  2022-01-26 18:49:11,400] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:49:11.399] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:49:11,409] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:49:11.404 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:49:11,470] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:49:11,505] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:49:11,506] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[INFO  2022-01-26 18:49:11,582] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-175] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-01-26 18:49:18,675] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:40143 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:49:18,675] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:49:36,132] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-193] - setParametrosURI: data [orden=1234&confirma=1]
+[INFO  2022-01-26 18:49:54,543] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-201] - setParametrosURI: orden 1234&confirma=1
+[INFO  2022-01-26 18:53:01,282] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:53:01.282] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:53:01,291] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:53:01.286 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:53:01,347] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:53:01,384] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:53:01,385] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[INFO  2022-01-26 18:53:01,472] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-175] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-01-26 18:53:04,996] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:40215 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:53:04,997] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:53:30,850] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-193] - setParametrosURI: data [orden=1234&confirma=1]
+[INFO  2022-01-26 18:53:43,363] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: orden 1234&confirma=1
+[INFO  2022-01-26 18:54:24,314] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:54:41,506] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-193] - setParametrosURI: data [orden=1234&confirma=1]
+[INFO  2022-01-26 18:54:55,867] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: key:[confirma] data:[1]
+[INFO  2022-01-26 18:55:06,467] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: key:[orden] data:[1234]
+[INFO  2022-01-26 18:56:36,841] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:56:36.840] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:56:36,850] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:56:36.846 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:56:36,902] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:56:36,936] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:56:36,938] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[INFO  2022-01-26 18:56:37,031] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-175] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-01-26 18:56:44,312] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:40283 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:56:44,313] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:56:44,314] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-193] - setParametrosURI: data [orden=1234&confirma=1]
+[INFO  2022-01-26 18:56:44,314] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: key:[confirma] data:[1]
+[INFO  2022-01-26 18:56:44,315] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: key:[orden] data:[1234]
+[INFO  2022-01-26 18:57:48,376] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:57:48.375] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:57:48,386] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:57:48.381 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:57:48,450] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:57:48,493] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:57:48,494] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[ERROR 2022-01-26 18:57:48,570] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-180] - 
+java.util.concurrent.ExecutionException: java.net.BindException: Socket bind failure for socket ServerSocket[unbound], address=0.0.0.0/0.0.0.0:8180, BacklogSize=0: java.net.BindException: Address already in use
+	at org.apache.hc.core5.concurrent.BasicFuture.getResult(BasicFuture.java:72)
+	at org.apache.hc.core5.concurrent.BasicFuture.get(BasicFuture.java:85)
+	at cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer.run(ReactiveFullDuplexServer.java:173)
+Caused by: java.net.BindException: Socket bind failure for socket ServerSocket[unbound], address=0.0.0.0/0.0.0.0:8180, BacklogSize=0: java.net.BindException: Address already in use
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:550)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:249)
+	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:88)
+	at org.apache.hc.core5.reactor.SingleCoreListeningIOReactor.processSessionRequests(SingleCoreListeningIOReactor.java:172)
+	at org.apache.hc.core5.reactor.SingleCoreListeningIOReactor.processEvents(SingleCoreListeningIOReactor.java:102)
+	at org.apache.hc.core5.reactor.SingleCoreListeningIOReactor.doExecute(SingleCoreListeningIOReactor.java:96)
+	at org.apache.hc.core5.reactor.AbstractSingleCoreIOReactor.execute(AbstractSingleCoreIOReactor.java:85)
+	at org.apache.hc.core5.reactor.IOReactorWorker.run(IOReactorWorker.java:44)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+[INFO  2022-01-26 18:58:11,918] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-18:58:11.917] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 18:58:11,927] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-18:58:11.922 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 18:58:11,977] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:58:12,016] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 18:58:12,017] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[INFO  2022-01-26 18:58:12,098] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-175] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-01-26 18:58:17,549] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-77] - onRequestHead: getRemoteAddress: /127.0.0.1:40349 RequestLine(request):GET /confirma?orden=1234&confirma=1 HTTP/1.1 request.getRequestUri(): /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:58:17,550] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-186] - setParametrosURI: requestUri /confirma?orden=1234&confirma=1
+[INFO  2022-01-26 18:58:17,551] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-193] - setParametrosURI: data [orden=1234&confirma=1]
+[INFO  2022-01-26 18:58:17,551] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: key:[confirma] data:[1]
+[INFO  2022-01-26 18:58:17,551] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-203] - setParametrosURI: key:[orden] data:[1234]
+[INFO  2022-01-26 18:58:23,024] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-233] - getJsonResponse: numeroOrden:1234 confirmar true
+[DEBUG 2022-01-26 18:58:26,878] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-255] - confirmaOrden: numeroOrden=1234 confirma=true
+[INFO  2022-01-26 18:58:29,136] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-236] - getJsonResponse: json { "status": 0, "message": "OK"}
+[INFO  2022-01-26 18:58:32,705] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-87] - onResponseHead: getRemoteAddress: /127.0.0.1:40349 StatusLine(request):HTTP/1.1 200 OK
+[INFO  2022-01-26 18:58:32,710] {server-dispatch-1} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-96] - onExchangeComplete: getRemoteAddress: /127.0.0.1:40349  exchange completed (connection kept alive)
+[INFO  2022-01-26 19:05:07,740] {main} [cl.ahumada.ordenes.peya.main.PeyaController-31] - [26/01/22-19:05:07.739] PeyaController - 2.0.0 (26-01-2022) is running
+[INFO  2022-01-26 19:05:07,749] {main} [cl.ahumada.ordenes.peya.main.PeyaController-43] - [ 26/01/22-19:05:07.744 ] PeyaController - 2.0.0 (26-01-2022)  is running a desarrollo
+[INFO  2022-01-26 19:05:07,801] {main} [cl.ahumada.ordenes.peya.servicios.esb.ServiciosdeBus-48] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 19:05:07,835] {main} [cl.ahumada.ordenes.peya.servicios.esb.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://150.10.255.93:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8080/ESB/PedidosV4/detalle/generar
+[INFO  2022-01-26 19:05:07,836] {Thread-1} [cl.ahumada.ordenes.peya.module.Requester-48] - waiting for new information ...
+[INFO  2022-01-26 19:05:07,915] {Thread-0} [cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer-175] - Listening on /[0:0:0:0:0:0:0:0]:8180

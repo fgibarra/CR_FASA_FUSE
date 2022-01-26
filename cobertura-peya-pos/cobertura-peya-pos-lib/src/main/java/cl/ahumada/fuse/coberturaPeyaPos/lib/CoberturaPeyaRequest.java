@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 
 
@@ -54,27 +57,25 @@ public class CoberturaPeyaRequest implements Serializable {
     public void parsea(String data) {
         if (data != null && data.length() > 0) {
 
-            String partes[] = data.split("|");
-            if (partes.length > 0)
-                this.idTransaccion = partes[0];
-    
-            if (partes.length > 1)
-                this.calle = partes[1];
-    
-            if (partes.length > 2)
-                this.numero = partes[2];
-    
-            if (partes.length > 3)
-                this.comuna = partes[3];
-    
-            if (partes.length > 4) {
-                if (partes[4].indexOf(',') >= 0) {
-                    this.farmacias =  partes[4].split(",");
-                } else {
-                    this.farmacias = new String[1];
-                    this.farmacias[0] = partes[4];
-                }
-            }
+        	StringTokenizer st = new StringTokenizer(data, "|");
+        	if (st.hasMoreTokens())
+        		this.idTransaccion = st.nextToken();
+        	if (st.hasMoreTokens())
+        		this.calle = st.nextToken();
+        	if (st.hasMoreTokens())
+        		this.numero = st.nextToken();
+        	if (st.hasMoreTokens())
+        		this.comuna = st.nextToken();
+        	String valor = null;
+        	if (st.hasMoreTokens())
+        		valor = st.nextToken();
+        	if (valor != null) {
+        		List<String> f = new ArrayList<String>();
+        		st = new StringTokenizer(valor, ",");
+        		while (st.hasMoreTokens())
+        			f.add(st.nextToken());
+        		this.farmacias = f.toArray(new String[0]);
+        	}
         }
     }
 

@@ -7,13 +7,21 @@
 		<artifactId>ordenes-peya</artifactId>
 		<version>2.0</version>
 	</parent>
-	
+
 	<groupId>fasaFUSE</groupId>
 	<artifactId>ordenes-peya-requester</artifactId>
 	<version>2.0</version>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 
 	<name>Confirma Ordenes Peya Service</name>
+
+	<repositories>
+		<repository>
+			<id>release</id>
+			<!-- id>librerias-pedidosya</id> <name>Pedidos Ya</name -->
+			<url>https://pedidosya.jfrog.io/artifactory/partner-integrations-maven-prod-local/</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<maven.test.skip>true</maven.test.skip>
@@ -24,136 +32,87 @@
 		<camel.version>2.21.0.fuse-760027-redhat-00001</camel.version>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<!-- Camel BOM -->
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-parent</artifactId>
-				<version>${camel.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 
-		<!-- Camel -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-blueprint</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jackson</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-rs-client</artifactId>
-			<!-- -->
-			<version>${fuse.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http-hc</artifactId>
-			<!-- 2.7.8 or 3.0.15 -->
-			<version>3.1.5.redhat-630187</version>
-		</dependency>
-
+		<!-- dependencias bibliotecas servicios -->
 		<dependency>
 			<groupId>fasaFUSE</groupId>
 			<artifactId>ordenes-peya-lib</artifactId>
 			<version>2.0</version>
 		</dependency>
-
-		<!-- Jackson dependencies -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<!-- -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-xml-provider</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.6.3</version>
-			<scope>provided</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
-			<version>2.1.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.xml.stream</groupId>
-			<artifactId>stax-api</artifactId>
-			<version>1.0-2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.2.3</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- using Jetty with CXF -->
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http-jetty</artifactId>
-		</dependency>
-
-		<!-- explicit dependency to exclude asm:asm:3.3.1 -->
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<groupId>fasaESB</groupId>
+			<artifactId>bibliotecaPedidosYa</artifactId>
+			<version>1.2.0</version>
 		</dependency>
 
 		<!-- logging -->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<scope>runtime</scope>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<!-- PEYA -->
+		<dependency>
+			<groupId>com.pedidosya.partners.sdk</groupId>
+			<artifactId>reception-sdk</artifactId>
+			<version>1.7.0</version>
+			<!-- version>1.8.2</version -->
+		</dependency>
+
+		<!-- parte TCP server -->
+		<!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<scope>runtime</scope>
+			<groupId>commons-ssl</groupId>
+			<artifactId>commons-ssl</artifactId>
+			<version>0.9.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<scope>runtime</scope>
+			<!-- jsoup HTML parser library @ https://jsoup.org/ -->
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5 -->
+		<dependency>
+			<groupId>org.apache.httpcomponents.core5</groupId>
+			<artifactId>httpcore5</artifactId>
+			<version>5.1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5-reactive -->
+		<dependency>
+			<groupId>org.apache.httpcomponents.core5</groupId>
+			<artifactId>httpcore5-reactive</artifactId>
+			<version>5.1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.reactivestreams/reactive-streams -->
+		<dependency>
+			<groupId>org.reactivestreams</groupId>
+			<artifactId>reactive-streams</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
+		<!-- Jackson dependencies -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -161,25 +120,6 @@
 	<build>
 		<defaultGoal>install</defaultGoal>
 		<plugins>
-
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>${version.maven-bundle-plugin}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Built-By>Fernando Ibarra</Built-By>
-						<Bundle-Description>Confirma ordenes Peya para Monitor</Bundle-Description>
-						<Bundle-Name>Confirma ordenes Peya para Monitor V1.0</Bundle-Name>
-						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Name>Confirma ordenes Peya Service [confirm-ordenes-peya-service-v1]</Bundle-Name>
-						<Export-Package>cl.ahumada.ordenes.peya.confirm.service*;version=${project.version}</Export-Package>
-						<Import-Package>*</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
 
 			<!-- compiler plugin -->
 			<plugin>
@@ -192,31 +132,29 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-
-			<!-- to include MANIFEST.MF in the bundle -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>
+		      3.1.0
+		  </version>
 				<configuration>
 					<archive>
-						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+						<manifest>
+							<mainClass>cl.ahumada.ordenes.peya.main.PeyaController</mainClass>
+						</manifest>
 					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
 				</configuration>
-			</plugin>
-
-			<!-- to run the example using mvn camel:run -->
-			<plugin>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-maven-plugin</artifactId>
-				<version>2.21.0.fuse-760027-redhat-00001</version>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
