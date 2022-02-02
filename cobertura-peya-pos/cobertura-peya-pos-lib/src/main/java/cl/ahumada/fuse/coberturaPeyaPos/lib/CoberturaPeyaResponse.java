@@ -57,7 +57,7 @@ public class CoberturaPeyaResponse implements Serializable {
 		if (codigo == 0)
 			respuesta.append(String.format("%s", getPipeFarmacias()));
 		else
-			respuesta.append(String.format("%s|%s",getDescripcion(), getPipeFarmacias()));
+			respuesta.append(String.format("%s", getDescripcion()));
 		return respuesta.toString();
 	}
 

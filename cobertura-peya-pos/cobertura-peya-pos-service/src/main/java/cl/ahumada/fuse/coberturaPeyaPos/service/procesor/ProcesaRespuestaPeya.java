@@ -60,8 +60,12 @@ public class ProcesaRespuestaPeya implements Processor {
 				cumplen.add(local);
 		}
 		
-		
-		CoberturaPeyaResponse response = new CoberturaPeyaResponse(0, "OK", cumplen.toArray(new String[0]));
+		CoberturaPeyaResponse response = null;
+		if (cumplen.isEmpty()) {
+			response = new CoberturaPeyaResponse(-1, "COBERTURA NO DISPONIBLE|", null);
+		} else {
+			response = new CoberturaPeyaResponse(0, "OK", cumplen.toArray(new String[0]));
+		}
 		exchange.getIn().setBody(response);
 	}
 
