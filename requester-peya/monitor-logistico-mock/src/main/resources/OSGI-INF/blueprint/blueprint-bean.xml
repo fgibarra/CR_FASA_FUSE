@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="          http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd          http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd          http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESB/monitorLogistico"
+        id="rsServiceMonitolLogistico" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="promService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <cxf:rsClient
+        address="http://localhost:8180/peyaRequester?numeroOrden=00000000&amp;confirma=X"
+        id="rsClientConfirmaOrden" loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.requesterPeya.monitorLogistico.restclient.MonitorLogisticoEndpoint">
+        <cxf:headers>
+            <entry key="Content-Type" value="application/x-www-form-urlencoded"/>
+            <entry key="Accept" value="application/x-www-form-urlencoded"/>
+        </cxf:headers>
+    </cxf:rsClient>
+    <bean
+        class="cl.ahumada.fuse.requesterPeya.monitorLogistico.api.MonitorLogisticoMockRestService" id="promService"/>
+    <bean
+        class="cl.ahumada.fuse.requesterPeya.monitorLogistico.process.Espera" id="espera">
+        <property name="tiempo" value="15"/>
+    </bean>
+    <bean
+        class="cl.ahumada.fuse.requesterPeya.monitorLogistico.process.GeneraUrl" id="generaUrl"/>
+    <camelContext id="monitolLogistico-mock-context" xmlns="http://camel.apache.org/schema/blueprint">
+        <camel:route id="getDatosOrderRoute">
+            <camel:from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from cliente: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </camel:route>
+        <camel:route id="espereRoute">
+            <camel:from id="_espera" uri="seda:espera"/>
+            <log id="_log2" message="en body: ${body}"/>
+            <process id="esperaAction" ref="espera"/>
+            <to id="_callRequester" uri="seda:sendConfirmaOrden"/>
+        </camel:route>
+        <camel:route id="callRequesterRoute">
+            <camel:from id="_callRequester" uri="seda:sendConfirmaOrden"/>
+            <log id="_log3" message="en body: ${body}"/>
+            <process id="preparaUrlAction" ref="generaUrl"/>
+            <to id="_apiRequester" uri="cxfrs:bean:rsClientConfirmaOrden?continuationTimeout=0&amp;throwExceptionOnFailure=false"/>
+        </camel:route>
+    </camelContext>
+</blueprint>

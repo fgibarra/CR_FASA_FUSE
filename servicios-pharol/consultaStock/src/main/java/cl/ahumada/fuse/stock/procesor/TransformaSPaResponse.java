@@ -42,6 +42,12 @@ public class TransformaSPaResponse implements Processor {
 					logger.info(String.format("process: i=%d numeroLocal=%d codigoProducto=%d cantidad=%d",
 							i, numeroLocal,codigoProducto,cantidad));
 					Stock stock = new Stock(codigoProducto, cantidad);
+					/*
+					if (fila.size() > 3)
+						stock.setSeccion(Constantes.toLong(fila.get(3)));
+					if (fila.size() > 4)
+						stock.setNombreProducto((String)fila.get(4));
+					*/
 					Stock stocks[] = new Stock[1];
 					stocks[0] = stock;
 					Local local = mapLocales.get(numeroLocal);

@@ -2,8 +2,8 @@
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/api/resources/json/Stock.java
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/procesor/GeneraRespuestaWsConsultaStock.java
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/procesor/PreparaQry.java
-/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/api/resources/ConsultaStockRestService.java
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/utils/Constantes.java
+/home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/api/resources/ConsultaStockRestService.java
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/utils/json/JSonUtilities.java
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/api/resources/json/Local.java
 /home/fernando/CodeReady/FASA/FUSE/servicios-pharol/consultaStock/src/main/java/cl/ahumada/fuse/stock/api/resources/ConsultaStockResponse.java
