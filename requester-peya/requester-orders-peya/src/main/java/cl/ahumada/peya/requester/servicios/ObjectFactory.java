@@ -1,21 +1,25 @@
 package cl.ahumada.peya.requester.servicios;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
 import com.pedidosya.reception.sdk.models.Address;
+import com.pedidosya.reception.sdk.models.Attachment;
 import com.pedidosya.reception.sdk.models.Detail;
 import com.pedidosya.reception.sdk.models.Discount;
 import com.pedidosya.reception.sdk.models.Order;
 import com.pedidosya.reception.sdk.models.Payment;
 import com.pedidosya.reception.sdk.models.Product;
-import com.pedidosya.reception.sdk.models.Section;
 import com.pedidosya.reception.sdk.models.User;
 
 import cl.ahumada.esb.dto.pharol.json.Local;
@@ -28,14 +32,19 @@ import cl.ahumada.esb.dto.pharolV2.json.MedioPago;
 import cl.ahumada.esb.dto.pharolV2.json.Producto;
 import cl.ahumada.esb.dto.pharolV2.orquestadorDescuentos.comun.Message;
 import cl.ahumada.esb.dto.pharolV4.pedidos.PedidosRequest;
-import cl.ahumada.fuse.requesterPeya.lib.consultaStock.json.Items;
+import cl.ahumada.fuse.requesterPeya.lib.monitorLogistico.ItemML;
+import cl.ahumada.fuse.requesterPeya.lib.monitorLogistico.MedioPagoML;
+import cl.ahumada.fuse.requesterPeya.lib.monitorLogistico.MonitorLogisticoRequest;
+import cl.ahumada.peya.requester.main.PeyaController;
+import cl.ahumada.peya.requester.servicios.dto.ReconciliaDTO;
 
 public class ObjectFactory {
 
 	private Logger logger = Logger.getLogger(getClass());
 	Long totalBoleta;
 	private Properties integracionProps;
-
+	
+	
 	public Local factoryLocal(Order order) {
 		// generar el request para consultar stock
 
@@ -52,8 +61,10 @@ public class ObjectFactory {
 		return new Local(numeroLocal, stock.toArray(new Stock[0]));
 	}
 
-	public PedidosRequest factoryPedidosRequest(Map<String,Object> map) {
+	// aca se usa el pedido reconciliado
+	public PedidosRequest factoryPedidosRequest(Map<String, Object> map) throws IOException {
 		Order order = (Order) map.get("order");
+		
 		integracionProps = (Properties) map.get("integracionProps");
 		PedidosRequest request = null;
 		long idTransaccion = order.getId();
@@ -65,7 +76,7 @@ public class ObjectFactory {
 			throw new RuntimeException("Aun no estan asignados los numero de local");
 		Long numeroLocal = Long.valueOf(valor);
 		Long costoDespacho = order.getPayment().getShippingNoDiscount().longValue();
-		CarroCompras carroCompras = factoryCarroCompras(order);
+		CarroCompras carroCompras = factoryCarroCompras(map);
 
 		MedioPago[] medioPago = factoryMedioPago(order.getPayment());
 		Cliente cliente = factoryCliente(order.getUser());
@@ -88,25 +99,26 @@ public class ObjectFactory {
 		return request;
 	}
 
-	public CarroCompras factoryCarroCompras(Order order) {
-		Producto producto[] = factoryProducto(order.getDetails());
+	public CarroCompras factoryCarroCompras(Map<String,Object> map) throws IOException {
+		Order order = (Order)map.get(ServiciosdeBus.ORDER_KEY);
+		List<String> productosStock0 = generaListaRemueve(map);
+		List<ReconciliaDTO> listaFaltaStock = generaListaModifica(map);
+		Producto producto[] = factoryProducto(order.getDetails(), productosStock0, listaFaltaStock);
 		//Payment payment = order.getPayment();
 
 		Long descuentoTotal = getDescuento(order.getDiscounts()); // ??????????????????
 
 		Long neto = 0l; //payment.getTotal() != null ? payment.getTotal().longValue() : 0;
 		Long iva = 0l; //payment.getTax() != null ? payment.getTax().longValue() : 0;
-		totalBoleta = sumatoria(order.getDetails(), order.getDiscounts());
+		Double valor  = calculaNuevoTotal(order.getDetails(), productosStock0, listaFaltaStock);
+		totalBoleta = sumatoria(valor.longValue(), order.getDiscounts());
 		CarroCompras carroCompra = new CarroCompras(producto, descuentoTotal, neto, iva, totalBoleta);
 		return carroCompra;
 	}
 
-	private Long sumatoria(List<Detail> details, List<Discount> discounts) {
-		Long valor = 0l;
+	private Long sumatoria(Long valor, List<Discount> discounts) {
+		
 		String descuentosAplicables = 	integracionProps.getProperty("descuentosAplicables");
-		for (Detail detail : details) {
-			valor += detail.getSubtotal() != null ? detail.getSubtotal().longValue() : 0l;
-		}
 		for (Discount discount : discounts) {
 			String codigoDescuento = discount.getCode();
 			if (descuentosAplicables.indexOf(codigoDescuento) >= 0) {
@@ -130,8 +142,10 @@ public class ObjectFactory {
 		return totalDescuentos;
 	}
 
-	public Producto[] factoryProducto(List<Detail> details) {
+	public Producto[] factoryProducto(List<Detail> details, List<String> productosStock0, List<ReconciliaDTO>listaFaltaStock) {
 		Map<Object, Producto> mapSkus = new HashMap<Object,Producto>();
+		HashSet<String> setProductosStock0 = productosStock0 != null ?new HashSet<String>(productosStock0) : new HashSet<String>();
+		Map<String, ReconciliaDTO> mapFaltaStock = listaFaltaStock != null ? listaFaltaStock.stream().collect(Collectors.toMap(ReconciliaDTO::getCodigoProducto, Function.identity())) : new HashMap<String, ReconciliaDTO>();
 
 		List<Producto> productos = new ArrayList<Producto>();
 		for (Detail detail : details) {
@@ -139,17 +153,27 @@ public class ObjectFactory {
 			Long cantidad = detail.getQuantity().longValue();
 			Long precioUnitario = detail.getUnitPrice().longValue();
 			Long total = detail.getSubtotal().longValue();
+
+			if (setProductosStock0.contains((String)codigoProducto))
+				continue;
+			if (mapFaltaStock.containsKey((String)codigoProducto)) {
+				ReconciliaDTO dto = mapFaltaStock.get((String)codigoProducto);
+				cantidad = dto.getCantidad().longValue();
+				total = (long) (dto.getPrecioUnitario() * dto.getCantidad());
+			}
+
 			Descuento[] descuentos = factoryDescuentos(detail);
 
-			Producto pAnterior = mapSkus.get(codigoProducto);
+			Producto pAnterior = mapSkus.remove(codigoProducto);
 			if (pAnterior != null) {
 				cantidad += pAnterior.cantidad;
 				total += pAnterior.total;
-			} else {
-				Producto nProducto = new Producto(codigoProducto, cantidad, precioUnitario, total, descuentos);
-				productos.add(nProducto);
-				mapSkus.put(codigoProducto, nProducto);
-			}
+			} 
+
+			Producto nProducto = new Producto(codigoProducto, cantidad, precioUnitario, total, descuentos);
+			productos.add(nProducto);
+			mapSkus.put(codigoProducto, nProducto);
+			
 		}
 		return productos.toArray(new Producto[0]);
 	}
@@ -203,17 +227,157 @@ public class ObjectFactory {
 		String fechaEntregaHasta = sdf.format(entregaDate);
 		return new DatosEntrega(telefono,calle, numero, dpto, comuna, region, tipoEntrega, ruta, fechaEntregaDesde, fechaEntregaHasta);
 	}
-	
-	public Product factoryProduct(Items item) {
-        Product product = new Product();
-        Section section = new Section();
-        
-        section.setIntegrationCode(item.getSeccion()); // order->product-> section->integrationCode este es el sku de la sección
-        product.setIntegrationCode(item.getSku().toString()); // order->product->integrationCode  este es el sku del producto
-          
-        product.setName(item.getNombre()); //order->product->name
-        product.setSection(section);
 
-        return product;
+	@SuppressWarnings("unchecked")
+	public List<String> generaListaRemueve(Map<String, Object> map) {
+		List<String> productosStock0 = (List<String>)map.get(ServiciosdeBus.PRODUCTOS_STOCK0_KEY);
+		return productosStock0;
 	}
+
+	/**
+	 * @param map
+	 * @return
+	 * a partir de map.PRODUCTOS_STOCK_PARCIAL_KEY hay que complementar el precio unitario y crear
+	 * la lista
+	 * @throws IOException 
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ReconciliaDTO> generaListaModifica(Map<String, Object> map) throws IOException {
+		ServiciosdeBus serviciosdeBus = new ServiciosdeBus(PeyaController.getInstance().getApiClient());
+		Order order = (Order) map.get(ServiciosdeBus.ORDER_KEY);
+		List<ReconciliaDTO> listaFaltaStock = (List<ReconciliaDTO>)map.get(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY);
+		if (listaFaltaStock != null) {
+			for (ReconciliaDTO dto : listaFaltaStock) {
+				//TODO puede que se utilice el deatil.getUnitPrice() y no sirva este
+				Product producto = serviciosdeBus.findProducto(dto.getCodigoProducto(), order.getDetails());
+				if (producto != null)
+					dto.setPrecioUnitario(producto.getPrice());
+			}
+		}
+		return listaFaltaStock;
+	}
+
+	public Double calculaNuevoTotal(List<Detail>details, List<String> productosStock0, List<ReconciliaDTO> listaFaltaStock) {
+		Double newTotal = 0d;
+		HashSet<String> setProductosStock0 = productosStock0 != null ?new HashSet<String>(productosStock0) : new HashSet<String>();
+		Map<String, ReconciliaDTO> mapFaltaStock = listaFaltaStock != null ? listaFaltaStock.stream().collect(Collectors.toMap(ReconciliaDTO::getCodigoProducto, Function.identity())) : new HashMap<String, ReconciliaDTO>();
+		for (Detail detail : details) {
+			Product prod = detail.getProduct();
+			String codigo = prod.getIntegrationCode();
+			if (setProductosStock0.contains(codigo))
+				continue;
+			if (mapFaltaStock.containsKey(codigo)) {
+				ReconciliaDTO dto = mapFaltaStock.get(codigo);
+				newTotal += (dto.getPrecioUnitario() * dto.getCantidad());
+				continue;
+			}
+			newTotal += (prod.getPrice() * prod.getContentQuantity());
+		}
+		return newTotal;
+	}
+
+	public MonitorLogisticoRequest factoryMonitorLogisticoRequest(Map<String, Object> map){
+		// TODO: falta definir lo que se envia al Monitor logistico
+		Order order = (Order) map.get("order");
+		integracionProps = (Properties) map.get("integracionProps");
+		String idTransaccion = String.format("%d", order.getId());
+		List<String> recetas = null;
+		if (order.getAttachments() != null && !order.getAttachments().isEmpty()) {
+			recetas = new ArrayList<String>();
+			for (Attachment attachment: order.getAttachments())
+				recetas.add(attachment.getUrl());
+		}
+		DatosEntrega datosEntrega = factoryDatosEntrega(order);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String fechaCreacion = sdf.format(new java.util.Date());
+		
+		String numeroLocal = order.getRestaurant().getIntegrationCode();
+		if (numeroLocal == null)
+			throw new RuntimeException("Aun no estan asignados los numero de local");
+		//Long numeroLocal = Long.valueOf(valor);
+		Long costoDespacho = order.getPayment().getShippingNoDiscount().longValue();
+		CarroCompras carroCompras;
+		try {
+			carroCompras = factoryCarroCompras(map);
+		} catch (IOException e) {
+			logger.error("factoryMonitorLogisticoRequest: creando carro compras", e);
+			return null;
+		}
+
+		MedioPago[] medioPago = factoryMedioPago(order.getPayment());
+		Cliente cliente = factoryCliente(order.getUser());
+
+		logger.debug(String.format("factoryMonitorLogisticoRequest: idTransaccion:%s fecha:%s numeroLocal=%s costoDespacho:%s carroCompras:%s, medioPago=%s cliente=%s datosEntrega=%s",
+				idTransaccion, fechaCreacion, numeroLocal,
+				costoDespacho, carroCompras, medioPago[0],cliente, datosEntrega));
+		
+		MonitorLogisticoRequest request = new MonitorLogisticoRequest(idTransaccion, recetas);
+		request.setCiudad(datosEntrega.comuna);
+		request.setComuna(datosEntrega.region);
+		request.setFechaCreacion(fechaCreacion);
+		request.setEmail(cliente.mail);
+		request.setExternalNumber("0");
+		request.setNombre(cliente.nombres);
+		request.setApellido(cliente.apellidos);
+		request.setRegion(datosEntrega.comuna);
+		request.setTelefono(datosEntrega.telefono);
+		request.setState(datosEntrega.comuna);
+		request.setDireccion(String.format("%s %s %s", datosEntrega.calle, datosEntrega.numero, datosEntrega.dpto!=null?datosEntrega.dpto:""));
+		request.setTipoEnvio("RETIRO");
+		request.setZipCode("00000");
+		request.setClickCollect("1");
+		request.setEventType("");
+		request.setInternalNumber("");
+		request.setCodigoComercio("KIOSKO");
+		request.setRut("");
+		request.setLatDireccion(1.0d);
+		request.setLongDireccion(1.0d);
+		request.setHomeType("");
+		request.setInitialHour(datosEntrega.fechaEntregaDesde);
+		request.setFinalHour(datosEntrega.fechaEntregaHasta);
+		request.setTransactionCode("0");
+		request.setTotalRemision(carroCompras.totalBoleta);
+		request.setCurrencyIsocode("CLP");
+		request.setCostoDespacho(order.getPayment().getShippingNoDiscount().longValue());
+		request.setRequiereValidacionQF(Boolean.FALSE);
+		request.setItems(factoryItemsML(numeroLocal, carroCompras.producto));
+		request.setMediosPago(factoryMediosPagoML(medioPago));
+		
+		return request;
+	}
+
+	private MedioPagoML[] factoryMediosPagoML(MedioPago[] mediosPago) {
+		List<MedioPagoML> mediosPagoML = null;
+		if (mediosPago == null || mediosPago.length == 0)
+			return null;
+		
+		mediosPagoML = new ArrayList<MedioPagoML>();
+		for (MedioPago medioPago : mediosPago) {
+			MedioPagoML medioPagoML = new MedioPagoML();
+			medioPagoML.setCodCierre("RECETARIO");
+			medioPagoML.setCodigoAutorizacion(medioPago.codigoAutorizacion);
+			medioPagoML.setCodigoComercioTbk(medioPago.codigoComercioTbk);
+			medioPagoML.setFormaPago(medioPago.formaPago);
+			medioPagoML.setIdVenta("");
+			medioPagoML.setMonto(medioPago.monto);
+			medioPagoML.setObjUnicoTrx(medioPago.objUnicoTrx);
+			medioPagoML.setTipoPago(medioPago.tipoPago);
+			mediosPagoML.add(medioPagoML);
+		}
+		return mediosPagoML.toArray(new MedioPagoML[0]);
+	}
+
+	private ItemML[] factoryItemsML(String numeroLocal, Producto[] productos) {
+		List<ItemML> items = null;
+		if (productos == null || productos.length == 0)
+			return null;
+		
+		items = new ArrayList<ItemML>();
+		for (Producto producto : productos) {
+			ItemML item = new ItemML(numeroLocal, producto.codigoProducto.toString(), producto.cantidad, producto.precioUnitario);
+			items.add(item);
+		}
+		return items.toArray(new ItemML[0]);
+	}
+
 }

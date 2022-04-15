@@ -1,0 +1,106 @@
+[INFO  2022-03-31 13:08:33,289] {main} [cl.ahumada.peya.requester.main.PeyaController-71] - [31/03/22-13:08:33.288] PeyaController - 2.0.0 (08-02-2022) is running
+[INFO  2022-03-31 13:08:33,316] {main} [cl.ahumada.peya.requester.main.PeyaController-83] - [ 31/03/22-13:08:33.311 ] PeyaController - 2.0.0 (08-02-2022)  is running a desarrollo
+[INFO  2022-03-31 13:08:33,451] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-03-31 13:08:33,482] {Thread-0} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-159] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-03-31 13:08:33,528] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-03-31 13:08:33,826] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-108] - request Stock: {"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":20}]}]}
+[INFO  2022-03-31 13:08:33,827] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+[INFO  2022-03-31 13:08:33,830] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":20}]}]}
+[DEBUG 2022-03-31 13:08:33,852] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
+[DEBUG 2022-03-31 13:08:33,854] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
+[DEBUG 2022-03-31 13:08:34,835] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-67] - invokeEndpoint: despues del POST; result=200
+[DEBUG 2022-03-31 13:08:34,836] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-77] - invokeEndpoint: JSON Respuesta invocacion a http://localhost:8181/cxf/ESB/Stock/tienda/buscar: result:200 statusLine: OK
+{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":0}]}]}
+[DEBUG 2022-03-31 13:08:34,858] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-212] - invocaEsbServiceStock: stockEndPoint responde: ar.status=200
+[DEBUG 2022-03-31 13:08:34,859] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-217] - invocaEsbServiceStock: del esb: {"ConsultaStockResponse":{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":0}]}]}}
+[DEBUG 2022-03-31 13:08:34,859] {main} [cl.ahumada.esb.utils.json.JSonUtilities-47] - response Class =class cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse
+[DEBUG 2022-03-31 13:08:34,903] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-76] - hayStock: stockResponse: vienen datos:local
+numeroLocal=1
+stock[0]=codigoProducto=62051008
+cantidad=0
+
+indiceCumplimiento=0
+
+[INFO  2022-03-31 13:08:34,904] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-72] - se RECHAZA orden: 1
+[INFO  2022-03-31 13:36:30,777] {main} [cl.ahumada.peya.requester.main.PeyaController-71] - [31/03/22-13:36:30.775] PeyaController - 2.0.0 (08-02-2022) is running
+[INFO  2022-03-31 13:36:30,788] {main} [cl.ahumada.peya.requester.main.PeyaController-83] - [ 31/03/22-13:36:30.782 ] PeyaController - 2.0.0 (08-02-2022)  is running a desarrollo
+[INFO  2022-03-31 13:36:30,874] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-03-31 13:36:30,922] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-03-31 13:36:30,927] {Thread-0} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-159] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-03-31 13:36:31,231] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-108] - request Stock: {"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":20}]}]}
+[INFO  2022-03-31 13:36:31,232] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+[INFO  2022-03-31 13:36:31,235] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":20}]}]}
+[DEBUG 2022-03-31 13:36:31,257] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
+[DEBUG 2022-03-31 13:36:31,259] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
+[DEBUG 2022-03-31 13:36:31,389] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-67] - invokeEndpoint: despues del POST; result=200
+[DEBUG 2022-03-31 13:36:31,391] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-77] - invokeEndpoint: JSON Respuesta invocacion a http://localhost:8181/cxf/ESB/Stock/tienda/buscar: result:200 statusLine: OK
+{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":300}]}]}
+[DEBUG 2022-03-31 13:36:31,392] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-212] - invocaEsbServiceStock: stockEndPoint responde: ar.status=200
+[DEBUG 2022-03-31 13:36:31,392] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-217] - invocaEsbServiceStock: del esb: {"ConsultaStockResponse":{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":300}]}]}}
+[DEBUG 2022-03-31 13:36:31,393] {main} [cl.ahumada.esb.utils.json.JSonUtilities-47] - response Class =class cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse
+[DEBUG 2022-03-31 13:36:31,430] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-76] - hayStock: stockResponse: vienen datos:local
+numeroLocal=1
+stock[0]=codigoProducto=62051008
+cantidad=300
+
+indiceCumplimiento=0
+
+[INFO  2022-03-31 13:36:31,431] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-68] - se CONFIRMA orden: 1
+[INFO  2022-03-31 13:36:31,431] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-70] - se CONFIRMA se debe reconciliar NO
+[DEBUG 2022-03-31 13:37:08,377] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-275] - apiSendOrdenMonitor: json |{"receta":"url to receta","numero-orden":"1"}|
+[DEBUG 2022-03-31 13:37:08,388] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-282] - apiSendOrdenMonitor: request.getURI()=http://localhost:8181/cxf/ESB/monitorLogistico/procesar
+[DEBUG 2022-03-31 13:37:08,443] {main} [cl.ahumada.peya.requester.servicios.Semaforo-74] - opP: espera Thread [main]. valor=-1
+[INFO  2022-03-31 13:37:09,569] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-68] - onRequestHead: getRemoteAddress: /127.0.0.1:52074 RequestLine(request):GET /peyaRequester?numeroOrden=null&confirma=1 HTTP/1.1 request.getRequestUri(): /peyaRequester?numeroOrden=null&confirma=1
+[INFO  2022-03-31 13:37:09,570] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-167] - setParametrosURI: requestUri /peyaRequester?numeroOrden=null&confirma=1
+[INFO  2022-03-31 13:37:09,570] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-170] - setParametrosURI: data numeroOrden=null&confirma=1
+[INFO  2022-03-31 13:37:09,571] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-175] - setParametrosURI: numeroOrden null, resultado=1
+[INFO  2022-03-31 13:37:09,580] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-102] - reconoce path /peyaRequester
+[INFO  2022-03-31 13:37:09,580] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-190] - callbackPeya: numeroOrden null, resultado=1
+[INFO  2022-03-31 13:37:09,584] {server-dispatch-2} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-68] - onRequestHead: getRemoteAddress: /127.0.0.1:52076 RequestLine(request):GET /peyaRequester?numeroOrden=null&confirma=1 HTTP/1.1 request.getRequestUri(): /peyaRequester?numeroOrden=null&confirma=1
+[INFO  2022-03-31 13:37:09,584] {server-dispatch-2} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-167] - setParametrosURI: requestUri /peyaRequester?numeroOrden=null&confirma=1
+[INFO  2022-03-31 13:37:09,584] {server-dispatch-2} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-170] - setParametrosURI: data numeroOrden=null&confirma=1
+[INFO  2022-03-31 13:37:09,585] {server-dispatch-2} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-175] - setParametrosURI: numeroOrden null, resultado=1
+[INFO  2022-03-31 13:37:09,585] {server-dispatch-2} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-102] - reconoce path /peyaRequester
+[INFO  2022-03-31 13:37:09,585] {server-dispatch-2} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-190] - callbackPeya: numeroOrden null, resultado=1
+[INFO  2022-03-31 13:48:53,984] {main} [cl.ahumada.peya.requester.main.PeyaController-71] - [31/03/22-13:48:53.983] PeyaController - 2.0.0 (08-02-2022) is running
+[INFO  2022-03-31 13:48:53,994] {main} [cl.ahumada.peya.requester.main.PeyaController-83] - [ 31/03/22-13:48:53.989 ] PeyaController - 2.0.0 (08-02-2022)  is running a desarrollo
+[INFO  2022-03-31 13:48:54,077] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-03-31 13:48:54,139] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-03-31 13:48:54,150] {Thread-0} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-159] - Listening on /[0:0:0:0:0:0:0:0]:8180
+[INFO  2022-03-31 13:48:54,510] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-108] - request Stock: {"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":20}]}]}
+[INFO  2022-03-31 13:48:54,511] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+[INFO  2022-03-31 13:48:54,516] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":20}]}]}
+[DEBUG 2022-03-31 13:48:54,539] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
+[DEBUG 2022-03-31 13:48:54,541] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
+[DEBUG 2022-03-31 13:48:54,899] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-67] - invokeEndpoint: despues del POST; result=200
+[DEBUG 2022-03-31 13:48:54,901] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-77] - invokeEndpoint: JSON Respuesta invocacion a http://localhost:8181/cxf/ESB/Stock/tienda/buscar: result:200 statusLine: OK
+{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":300}]}]}
+[DEBUG 2022-03-31 13:48:54,902] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-212] - invocaEsbServiceStock: stockEndPoint responde: ar.status=200
+[DEBUG 2022-03-31 13:48:54,902] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-217] - invocaEsbServiceStock: del esb: {"ConsultaStockResponse":{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":300}]}]}}
+[DEBUG 2022-03-31 13:48:54,903] {main} [cl.ahumada.esb.utils.json.JSonUtilities-47] - response Class =class cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse
+[DEBUG 2022-03-31 13:48:54,938] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-76] - hayStock: stockResponse: vienen datos:local
+numeroLocal=1
+stock[0]=codigoProducto=62051008
+cantidad=300
+
+indiceCumplimiento=0
+
+[INFO  2022-03-31 13:48:54,939] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-68] - se CONFIRMA orden: 1
+[INFO  2022-03-31 13:48:54,939] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-70] - se CONFIRMA se debe reconciliar NO
+[DEBUG 2022-03-31 13:49:32,874] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-275] - apiSendOrdenMonitor: json |{"receta":"url to receta","numero-orden":1}|
+[DEBUG 2022-03-31 13:49:32,876] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-282] - apiSendOrdenMonitor: request.getURI()=http://localhost:8181/cxf/ESB/monitorLogistico/procesar
+[DEBUG 2022-03-31 13:49:32,896] {main} [cl.ahumada.peya.requester.servicios.Semaforo-74] - opP: espera Thread [main]. valor=-1
+[INFO  2022-03-31 13:49:33,951] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-68] - onRequestHead: getRemoteAddress: /127.0.0.1:52232 RequestLine(request):GET /peyaRequester?numeroOrden=1&confirma=1 HTTP/1.1 request.getRequestUri(): /peyaRequester?numeroOrden=1&confirma=1
+[INFO  2022-03-31 13:49:33,952] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-167] - setParametrosURI: requestUri /peyaRequester?numeroOrden=1&confirma=1
+[INFO  2022-03-31 13:49:33,952] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-170] - setParametrosURI: data numeroOrden=1&confirma=1
+[INFO  2022-03-31 13:49:33,952] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-175] - setParametrosURI: numeroOrden 1, resultado=1
+[INFO  2022-03-31 13:49:33,959] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-102] - reconoce path /peyaRequester
+[INFO  2022-03-31 13:49:33,960] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-190] - callbackPeya: numeroOrden 1, resultado=1
+[DEBUG 2022-03-31 13:49:33,960] {server-dispatch-1} [cl.ahumada.peya.requester.servicios.Semaforo-104] - opV: encontro esperando a main valor=0
+[DEBUG 2022-03-31 13:49:33,961] {server-dispatch-1} [cl.ahumada.peya.requester.servicios.Semaforo-111] - opV: Thread [server-dispatch-1]. valor=0
+[DEBUG 2022-03-31 13:49:33,961] {main} [cl.ahumada.peya.requester.servicios.Semaforo-86] - opP: continua Thread [main]. valor=0
+[INFO  2022-03-31 13:49:34,003] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-78] - onResponseHead: getRemoteAddress: /127.0.0.1:52232 StatusLine(request):HTTP/1.1 200 OK
+[INFO  2022-03-31 13:49:34,007] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-87] - onExchangeComplete: getRemoteAddress: /127.0.0.1:52232  exchange completed (connection kept alive)

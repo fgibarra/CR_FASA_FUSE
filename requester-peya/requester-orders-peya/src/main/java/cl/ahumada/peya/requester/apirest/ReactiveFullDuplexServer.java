@@ -3,36 +3,23 @@ package cl.ahumada.peya.requester.apirest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.nio.ByteBuffer;
-import java.text.SimpleDateFormat;
 
-import org.apache.hc.core5.function.Callback;
 import org.apache.hc.core5.function.Supplier;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.EntityDetails;
-import org.apache.hc.core5.http.HeaderElements;
 import org.apache.hc.core5.http.HttpConnection;
-import org.apache.hc.core5.http.HttpException;
-import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.URIScheme;
-import org.apache.hc.core5.http.impl.BasicEntityDetails;
 import org.apache.hc.core5.http.impl.Http1StreamListener;
 import org.apache.hc.core5.http.impl.bootstrap.AsyncServerBootstrap;
 import org.apache.hc.core5.http.impl.bootstrap.HttpAsyncServer;
-import org.apache.hc.core5.http.io.entity.StringEntity;
-import org.apache.hc.core5.http.message.BasicHeader;
 import org.apache.hc.core5.http.message.BasicHttpResponse;
 import org.apache.hc.core5.http.message.RequestLine;
 import org.apache.hc.core5.http.message.StatusLine;
 import org.apache.hc.core5.http.nio.AsyncServerExchangeHandler;
-import org.apache.hc.core5.http.nio.ResponseChannel;
 import org.apache.hc.core5.http.nio.support.BasicResponseProducer;
 import org.apache.hc.core5.http.nio.support.ImmediateResponseExchangeHandler;
 import org.apache.hc.core5.io.CloseMode;
@@ -41,15 +28,17 @@ import org.apache.hc.core5.reactor.ListenerEndpoint;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.log4j.Logger;
 
-public class ReactiveFullDuplexServer {
+import cl.ahumada.peya.requester.servicios.ServiciosdeBus;
+
+public class ReactiveFullDuplexServer extends Thread {
 
     Integer port;
     Integer timeout;
     Properties datosConsulta;
-    final IOReactorConfig config;
-    final HttpAsyncServer server;
-    final Future<ListenerEndpoint> future;
-    final ListenerEndpoint listenerEndpoint;
+    IOReactorConfig config;
+    HttpAsyncServer server;
+    Future<ListenerEndpoint> future;
+    ListenerEndpoint listenerEndpoint;
 
     Logger logger = Logger.getLogger(getClass());
 
@@ -63,6 +52,10 @@ public class ReactiveFullDuplexServer {
 
         this.port = Integer.valueOf(portStr);
         this.timeout = Integer.valueOf(integracionProps.getProperty("timeOut", "15"));
+	}
+	
+	
+	public void run() {
 
         this.config = IOReactorConfig.custom().setSoTimeout(timeout, TimeUnit.SECONDS).setTcpNoDelay(true).build();
 
@@ -160,23 +153,28 @@ public class ReactiveFullDuplexServer {
 
         server.start();
         future = server.listen(new InetSocketAddress(port), URIScheme.HTTP);
-        listenerEndpoint = future.get();
-        // System.out.print("Listening on " + listenerEndpoint.getAddress());
-        logger.info(String.format("Listening on %s", listenerEndpoint.getAddress()));
-        server.awaitShutdown(TimeValue.ofDays(Long.MAX_VALUE));
+        try {
+			listenerEndpoint = future.get();
+			// System.out.print("Listening on " + listenerEndpoint.getAddress());
+			logger.info(String.format("Listening on %s", listenerEndpoint.getAddress()));
+			server.awaitShutdown(TimeValue.ofDays(Long.MAX_VALUE));
+		} catch (Exception e) {
+			logger.error("ReactiveFullDuplexServer: start", e);
+		}
 	}
 
     protected void setParametrosURI(String requestUri) {
         logger.info(String.format("setParametrosURI: requestUri %s", requestUri));
         if (requestUri != null && requestUri.length() >= "/peyaRequester?".length()) {
-            String data = requestUri.substring("/status?".length());
+            String data = requestUri.substring("/peyaRequester?".length());
             logger.info(String.format("setParametrosURI: data %s", data));
+            data = data.replace('&', '\n');
             try {
                 datosConsulta = new Properties();
                 datosConsulta.load(new ByteArrayInputStream(data.getBytes()));
                 logger.info(String.format("setParametrosURI: numeroOrden %s, resultado=%s", 
-                		(String) datosConsulta.get("numeroOrden"),
-                		(String) datosConsulta.getProperty("confirma")));
+                		(String) datosConsulta.get(ServiciosdeBus.NUMERO_ORDEN),
+                		(String) datosConsulta.getProperty(ServiciosdeBus.CONFIRMA)));
             } catch (IOException e) {
                 logger.error(String.format("setParametrosURI: data: %s", data), e);
             }
@@ -188,8 +186,11 @@ public class ReactiveFullDuplexServer {
      * resume el proceso de la orden
      */
     protected void callbackPeya() {
-		// TODO Auto-generated method stub
-		
+		// continua el proceso de la orden que esta respondiendo el monitor
+        logger.info(String.format("callbackPeya: numeroOrden %s, resultado=%s", 
+        		(String) datosConsulta.get(ServiciosdeBus.NUMERO_ORDEN),
+        		(String) datosConsulta.getProperty(ServiciosdeBus.CONFIRMA)));
+		ServiciosdeBus.callbackPeya(datosConsulta);
 	}
 
 

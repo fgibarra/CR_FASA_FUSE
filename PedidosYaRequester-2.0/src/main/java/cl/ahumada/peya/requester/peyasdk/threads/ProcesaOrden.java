@@ -141,7 +141,7 @@ public class ProcesaOrden {
 			List<String> remueve = objectFactory.generaListaRemueve(map);
 			List<ReconciliaDTO> modifica = objectFactory.generaListaModifica(map);
 			Double totalOrder = objectFactory.calculaNuevoTotal(((Order) map.get(ServiciosdeBus.ORDER_KEY)).getDetails(), remueve, modifica);
-//TODO			action.getConfirm(order);
+			action.getConfirm(order);
 			doReconciliation(order, totalOrder, remueve, modifica);
 
 			// hacer el pedido
@@ -259,7 +259,7 @@ public class ProcesaOrden {
 		// este es el metodo que aplica la reconciliación,
 		// recibe el objeto reconciliation armado previamente y el restarantID que es el identificador de la
 		// local, se encuentra en: order.getRestaurant().getId()
-//TODO		apiClient.getOrdersClient().reconcile(reconciliation, order.getRestaurant().getId()); 
+		apiClient.getOrdersClient().reconcile(reconciliation, order.getRestaurant().getId()); 
 																								// 
 																								// 
 	}

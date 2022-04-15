@@ -11,15 +11,15 @@ import org.apache.commons.httpclient.HttpClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pedidosya.reception.sdk.models.Order;
 
-import cl.ahumada.esb.dto.pedidosYa.consultaStock.MantencionStockResponse;
-import cl.ahumada.esb.dto.pedidosYa.consultaStock.json.Items;
 import cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockRequest;
 import cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse;
 import cl.ahumada.esb.dto.pharol.json.Local;
 import cl.ahumada.esb.dto.pharol.json.Stock;
-import cl.ahumada.esb.dto.pharol.pedidos.PedidosRequest;
+import cl.ahumada.esb.dto.pharolV4.pedidos.PedidosRequest;
 import cl.ahumada.esb.utils.json.JSonUtilities;
-import cl.ahumada.peya.requester.peyasdk.Requester;
+import cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden;
+import cl.ahumada.peya.requester.servicios.dto.ReconciliaDTO;
+
 
 public class InvocaESB extends RestApiClient {
 
@@ -52,6 +52,7 @@ public class InvocaESB extends RestApiClient {
 		httpclient = new HttpClient();
 		stockEndPoint = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_STOCK_KEY);
 		stockEndPoint2 = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_STOCK2_KEY);
+		pedidosEndPoint = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_PEDIDOS);
 		endpointMantieneStock = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_MANTIENE_STOCK_KEY);
 		endpointInformeDeshabilita = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_INFORMA_DESHABILITA_KEY);
 		logger.info(String.format("endpoint_ws_mantiene_stock=%s "+
@@ -62,17 +63,10 @@ public class InvocaESB extends RestApiClient {
 				integracionProps.get("pedidosEndPoint")));
 	}
 
-	/**
-	 * @param map
-	 * @return
-	 */
-	public Boolean hayStock(Map<String,Object> map) {
+	public Boolean hayStock(Map<String, Object> map) {
 		return hayStock(map, null);
 	}
 
-	public Boolean hayStockConReserva(Map<String,Object> map) {
-		return hayStock(map, stockCritico);
-	}
 	public Boolean hayStock(Map<String,Object> map, Integer critico) {
 		ConsultaStockRequest request = (ConsultaStockRequest) map.get(ServiciosdeBus.REQUEST_STOCK_KEY);
 
@@ -101,82 +95,101 @@ public class InvocaESB extends RestApiClient {
 		return null;
 	}
 
-	public Integer getStockCritico() {
-		return stockCritico;
-	}
-
 	@SuppressWarnings("unchecked")
 	private Boolean hayStock(Stock[] stockPedido, Stock[] stockDisponible, Map<String,Object> map, Integer stockCritico) {
 		// true si hay suficiente stock para todo lo pedido
 		// coloca en el map, la lista de productos que no tienen stock
 		boolean hayStock = true;
+		int countProductosPedidos = 0;
+		List<String> productosStock0 = new ArrayList<String>();
+		List<ReconciliaDTO> productosFaltaStock = new ArrayList<ReconciliaDTO>();
+		
 		for (Stock pedido : stockPedido) {
+			countProductosPedidos++;
 			long cpPedido = pedido.codigoProducto;
-			boolean cumple;
+			long cantidadDisponible;
 			if (stockCritico == null)
-				cumple =suficienteStock(cpPedido, pedido.cantidad, stockDisponible);
+				cantidadDisponible = suficienteStock(cpPedido, pedido.cantidad, stockDisponible);
 			else
-				cumple = suficienteStock(cpPedido, pedido.cantidad, stockDisponible, stockCritico);
+				cantidadDisponible = suficienteStock(cpPedido, pedido.cantidad, stockDisponible, stockCritico);
 
-			if (!cumple) {
-				hayStock = false;
-				List<Long> productosSinStock = (List<Long>) map.get(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY);
-				if (productosSinStock == null) {
-					productosSinStock = new ArrayList<Long>();
-					map.put(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY, productosSinStock);
+			if (cantidadDisponible == -1) {
+				// stock 0 para producto
+				productosStock0 = (List<String>) map.get(ServiciosdeBus.PRODUCTOS_STOCK0_KEY);
+				if (productosStock0 == null) {
+					productosStock0 = new ArrayList<String>();
+					map.put(ServiciosdeBus.PRODUCTOS_STOCK0_KEY, productosStock0);
 				}
-				productosSinStock.add(Long.valueOf(cpPedido));
+				productosStock0.add(String.format("%d", cpPedido));
+			} else {
+				// hay stock total o parcial
+				if (cantidadDisponible != pedido.cantidad) {
+					// hay que reconciliar
+					productosFaltaStock = (List<ReconciliaDTO>) map.get(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY);
+					if (productosFaltaStock == null) {
+						productosFaltaStock = new ArrayList<ReconciliaDTO>();
+						map.put(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY, productosFaltaStock);
+					}
+					productosFaltaStock.add(new ReconciliaDTO(String.format("%d",cpPedido), (int)cantidadDisponible));
+				}
 			}
+			
 		}
+		if (countProductosPedidos == productosStock0.size())
+			hayStock = false;
+
+		// definir si hay stock total o parcial. TRUE si se puede suplir completa la orden
+		map.put(ServiciosdeBus.PRODUCTOS_STOCK_PARCIAL_KEY, productosFaltaStock.size()== 0 && productosStock0.size() == 0);
+		
 		return hayStock;
 	}
 
-	private boolean suficienteStock(long cpPedido, long cantidadPedida, Stock[] stockDisponible) {
+	/**
+	 * @param cpPedido
+	 * @param cantidadPedida
+	 * @param stockDisponible
+	 * @return
+	 * 
+	 * -1 si el producto tiene stock 0
+	 * la cantidad que se puede suplir
+	 */
+	private long suficienteStock(long cpPedido, long cantidadPedida, Stock[] stockDisponible) {
 		// true si cantidad pedida <= stock
 		for (Stock disponible : stockDisponible) {
 			if (cpPedido != disponible.codigoProducto)
 				continue;
+			if (disponible.cantidad == 0)
+				return -1;
 			if (cantidadPedida <= disponible.cantidad)
-				return true;
+				return cantidadPedida;
+			else
+				return disponible.cantidad;
 		}
-		return false;
-	}
-
-	private boolean suficienteStock(long cpPedido, long cantidadPedida, Stock[] stockDisponible, Integer critico) {
-		// true si cantidad pedida <= stock
-		for (Stock disponible : stockDisponible) {
-			if (cpPedido != disponible.codigoProducto)
-				continue;
-			if (cantidadPedida <= (disponible.cantidad - critico))
-				return true;
-		}
-		return false;
+		return -1;
 	}
 
 	/**
-	 * @param map
+	 * @param cpPedido
+	 * @param cantidadPedida
+	 * @param stockDisponible
+	 * @param critico
 	 * @return
+	 * -1 si el producto tiene stock 0
+	 * la cantidad que se puede suplir
 	 */
-	public boolean realizarPedido(Map<String,Object> map) {
-		PedidosRequest request = (PedidosRequest) map.get(ServiciosdeBus.REQUEST_PEDIDOS_KEY);
-		try {
-			String json = JSonUtilities.getInstance().java2gson(request);
-
-			RestApiResponse ar = invokeEndpoint(pedidosEndPoint, json);
-
-			int httpStatus = ar.getStatusCode();
-			if (httpStatus < 300) {
-				String jsonresp = ar.getBody();
-				logger.debug(String.format("invocaEsbServiceStock: del esb pedido aceptado: %s", jsonresp));
-				return true;
-			} else {
-				map.put(ServiciosdeBus.RESULTADO_OPERACION_KEY, String.format("%d", httpStatus));
-			}
-		} catch (Exception e) {
-			logger.error("", e);
-			map.put(ServiciosdeBus.RESULTADO_OPERACION_KEY, String.format("error: %s", e.getMessage()));
+	private long suficienteStock(long cpPedido, long cantidadPedida, Stock[] stockDisponible, Integer critico) {
+		// true si cantidad pedida <= stock
+		for (Stock disponible : stockDisponible) {
+			if (cpPedido != disponible.codigoProducto)
+				continue;
+			if (disponible.cantidad == 0)
+				return -1;
+			if (cantidadPedida <= (disponible.cantidad - critico))
+				return cantidadPedida;
+			else
+				return disponible.cantidad;
 		}
-		return false;
+		return -1;
 	}
 
 	private ConsultaStockResponse invocaEsbServiceStock(ConsultaStockRequest request) {
@@ -211,8 +224,49 @@ public class InvocaESB extends RestApiClient {
 		return null;
 	}
 
+	/**
+	 * @param map
+	 * @return
+	 */
+	public boolean realizarPedido(Map<String, Object> map) {
+		PedidosRequest request = (PedidosRequest) map.get(ServiciosdeBus.REQUEST_PEDIDOS_KEY);
+		try {
+			String json = JSonUtilities.getInstance().java2gson(request);
 
-	public void InformeRechazo(Map<String, Object> map) {
+			RestApiResponse ar = invokeEndpoint(pedidosEndPoint, json);
+
+			int httpStatus = ar.getStatusCode();
+			if (httpStatus < 300) {
+				String jsonresp = ar.getBody();
+				logger.debug(String.format("invocaEsbServiceStock: del esb pedido aceptado: %s", jsonresp));
+				return true;
+			} else {
+				map.put(ServiciosdeBus.RESULTADO_OPERACION_KEY, String.format("%d", httpStatus));
+			}
+		} catch (Exception e) {
+			logger.error("realizarPedido", e);
+			map.put(ServiciosdeBus.RESULTADO_OPERACION_KEY, String.format("error: %s", e.getMessage()));
+		}
+		return false;
+	}
+
+	//********************************************************************************************************
+	/**
+	 * Invocada por ServiciosdeBus.actualizaHabilitacionProductos
+	 * @param map
+	 * @return
+	 */
+	public Boolean hayStockConReserva(Map<String, Object> map) {
+		return hayStock(map, stockCritico);
+	}
+
+	//********************************************************************************************************
+	/**
+	 * Invocada por ServiciosdeBus.informeRechazo
+	 * @param map
+	 * @return
+	 */
+	public void informeRechazo(Map<String, Object> map) {
 		Order order = (Order) map.get("order");
 		ConsultaStockResponse stockResponse = (ConsultaStockResponse)map.get("StockResponse");
 		//ConsultaStockRequest requestPedidos = (ConsultaStockRequest)map.get(ServiciosdeBus.REQUEST_STOCK_KEY);
@@ -225,7 +279,7 @@ public class InvocaESB extends RestApiClient {
 		StringBuffer sb = new StringBuffer();
 		for (Long sku: productosSinStock) {
 			sb.append(String.format("%d", sku)).append('-');
-			Long cantidadEnStock = Requester.buscaCantidadEnStock(sku, stockResponse);
+			Long cantidadEnStock = ProcesaOrden.buscaCantidadEnStock(sku, stockResponse);
 
 			Stock stock = null;
 			for (Stock pedido : stockResponse.local[0].stock) {
@@ -266,21 +320,13 @@ public class InvocaESB extends RestApiClient {
 		return null;
 	}
 
-	public Items[] invocaWsMantieneStock(Integer funcion) {
-		String url = String.format("%s/%d", endpointMantieneStock, funcion);
-		try {
-			RestApiResponse ar = invokeEndpoint(url, null);
-			int httpStatus = ar.getStatusCode();
-			if (httpStatus < 300) {
-				String jsonresp = String.format("{\"MantencionStockResponse\":%s}",ar.getBody());
-				logger.debug(String.format("invocaWsMantieneStock: del esb: %s", jsonresp));
-				@SuppressWarnings("deprecation")
-				MantencionStockResponse msr = (MantencionStockResponse) JSonUtilities.getInstance().json2java(jsonresp, MantencionStockResponse.class);
-				return msr.getItems();
-			}
-		} catch (Exception e) {
-			logger.error("invocaWsMantieneStock", e);
-		}
-		return null;
+	//********************************************************************************************************
+	/**
+	 * Invocada por ServiciosdeBus.getStockCritico
+	 * @return
+	 */
+	public Integer getStockCritico() {
+		return stockCritico;
 	}
+
 }

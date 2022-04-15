@@ -57,7 +57,7 @@ public class ObjectFactory {
 		return new Local(numeroLocal, stock.toArray(new Stock[0]));
 	}
 
-	//TODO: aca se debe usar el pedido reconciliado
+	// aca se usa el pedido reconciliado
 	public PedidosRequest factoryPedidosRequest(Map<String, Object> map) throws IOException {
 		Order order = (Order) map.get("order");
 		
@@ -96,7 +96,6 @@ public class ObjectFactory {
 	}
 
 	public CarroCompras factoryCarroCompras(Map<String,Object> map) throws IOException {
-		// TODO
 		Order order = (Order)map.get(ServiciosdeBus.ORDER_KEY);
 		List<String> productosStock0 = generaListaRemueve(map);
 		List<ReconciliaDTO> listaFaltaStock = generaListaModifica(map);

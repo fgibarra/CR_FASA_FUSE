@@ -1,9 +1,9 @@
 package cl.ahumada.peya.requester.peyasdk.threads;
 
-import com.pedidosya.reception.sdk.models.Order;
+import java.util.Map;
 
 public interface ConfirmaCallback {
 
-	public void onConfirmaEnd(Order order, Integer confirma);
+	public void onConfirmaEnd(Map<String, Object> map, Integer confirma);
 	
 }

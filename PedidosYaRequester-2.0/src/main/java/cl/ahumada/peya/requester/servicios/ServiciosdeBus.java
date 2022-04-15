@@ -25,7 +25,7 @@ import cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockRequest;
 import cl.ahumada.esb.dto.pharol.json.Local;
 import cl.ahumada.esb.dto.pharolV4.pedidos.PedidosRequest;
 import cl.ahumada.esb.utils.json.JSonUtilities;
-import cl.ahumada.peya.requester.servicios.dto.MonitorLogisticoRequest;
+import cl.ahumada.fuse.requesterPeya.lib.monitorLogistico.MonitorLogisticoRequest;
 
 public class ServiciosdeBus {
 
@@ -269,7 +269,7 @@ public class ServiciosdeBus {
 		HttpClient httpClient = new HttpClient();
 		PostMethod postMethod = new PostMethod((String) integracionProps.get(ENDPOINT_MONITOR_LOGISTICO));
 		postMethod.setRequestHeader("Content-type", "application/json");
-		MonitorLogisticoRequest request = new MonitorLogisticoRequest(String.format("%d",numeroOrden),
+		MonitorLogisticoRequest request = new MonitorLogisticoRequest(numeroOrden,
 				urlReceta);
 		String jsonInput = request.toString();
 		logger.debug(String.format("apiSendOrdenMonitor: json |%s|", jsonInput));

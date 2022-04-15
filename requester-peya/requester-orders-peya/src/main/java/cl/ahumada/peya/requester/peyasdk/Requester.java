@@ -1,9 +1,6 @@
 package cl.ahumada.peya.requester.peyasdk;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -15,29 +12,22 @@ import com.pedidosya.reception.sdk.models.Order;
 import com.pedidosya.reception.sdk.queue.OnError;
 import com.pedidosya.reception.sdk.queue.OnReceivedOrder;
 
-import cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse;
-import cl.ahumada.esb.dto.pharol.json.Stock;
 import cl.ahumada.peya.requester.peyasdk.threads.ConfirmaCallback;
 import cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden;
-import cl.ahumada.peya.requester.servicios.ServiciosdeBus;
 
 public class Requester {
 
 	private ApiClient apiClient;
-	private ServiciosdeBus serviciosdeBus;
 	private Logger logger = Logger.getLogger(getClass());
 
 	public Requester(ApiClient apiClient) throws IOException {
 
 		this.apiClient = apiClient;
-		serviciosdeBus = new ServiciosdeBus(apiClient);
 	}
 
 	public void getOrders() throws ApiException {
 
 		final EventsClient eventClient = apiClient.getEventClient();
-		final Actions action = new Actions(apiClient);
-		final Map<String,Object> map = new HashMap<String,Object>();
 
 		try {
 			logger.info("waiting for new information ...");
@@ -72,45 +62,25 @@ public class Requester {
 							logger.info("***********************************************************");
 
 							eventClient.acknowledgement(order);
-							map.put("order", order);
 							
-							// procesar la orden 
-							// OJO!!! el thread se suspende hasta que llegue la confirmacion/rechazo desde
-							// el monitor logistico
-							new ProcesaOrden(order).procesa(new ConfirmaCallback() {
+							// procesa la orden 
+							// OJO!!! podria necesitarse esperar a que se proceso la orden
+							final ProcesaOrden procesaOrder = new ProcesaOrden(order);
+							procesaOrder.procesa(new ConfirmaCallback() {
 								@Override
-								// es invocada por 
-								public void onConfirmaEnd(Order order, Integer confirma) {
-									/*
-									 * - si el monitor logistico rechaza --> rechazar
-									 * - si confirma --> confirma la orden
-									 * - si hay que reconciliar se reconcilia.
-									 */
-									// 
-									if (confirma == 1) {
-										logger.info(String.format("se CONFIRMA orden: %d", order.getId()));
-										try {
-											action.getConfirm(order);
-										} catch (ApiException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-										serviciosdeBus.actualizaHabilitacionProductos(map);
-									} else {
-										logger.info(String.format("se RECHAZA orden: %d", order.getId()));
-										try {
-											action.getReject(order);
-										} catch (ApiException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-										serviciosdeBus.informeRechazo(map);
-										if (stockMenorCritico(map)) {
-											serviciosdeBus.deshabilitaProductos(map);
-										}
+								public void onConfirmaEnd(Map<String, Object> map, Integer confirma) {
+									// Invocado despues que se recibe respuesta desde el monitor logistico
+									// Si confirma == 0, ==> stock 0 para todos los productos de la orden
+									// confirma == 1, ==> se puedeconfirmar la orden sin modificarla
+									// confirma == 2, ==> hay que reconciliar la orden
+									if (confirma == 0) {
+										procesaOrder.rechazaOrden(map);
+									} else if (confirma == 1) {
+										procesaOrder.confirmaOrden(map);
+									} else if (confirma == 2) {
+										procesaOrder.reconciliaOrden(map);
 									}
 								}
-
 							});
 						}
 						// action.getReject(order);
@@ -132,55 +102,4 @@ public class Requester {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean stockMenorCritico(Map<String, Object> map) {
-		// si lo pedido menos el stock es mayor que el critico -> true
-		List<Long> productosSinStock = (List<Long>) map.get(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY);
-		ConsultaStockResponse stockResponse = (ConsultaStockResponse)map.get("StockResponse");
-
-		Integer stockCritico = serviciosdeBus.getStockCritico();
-		List<Long> listaSacar = new ArrayList<Long>();
-
-		for (Long sku : productosSinStock) {
-			// busca lo que hay, si esto es mayor que el critico se saca de la lista de deshabilitar
-			Long cantidadEnStock = buscaCantidadEnStock(sku, stockResponse);
-			for (Stock pedido : stockResponse.local[0].stock) {
-				long cpPedido = pedido.codigoProducto;
-				if (sku == cpPedido) {
-					//Long quedarian = pedido.cantidad - cantidadEnStock;
-					if (/*cantidadEnStock == 0 ||*/ cantidadEnStock >= stockCritico && cantidadEnStock > 0) {
-						// se deshabilita si lo que tengo es menor que el critico o no tengo nada
-						logger.debug(String.format("stockMenorCritico: sku: %d cantidad pedida %d cantidad en stock %d stockCritico: %d NO se deshabilita",
-								sku, pedido.cantidad, cantidadEnStock, stockCritico));
-						listaSacar.add(sku);
-					} else {
-						logger.debug(String.format("stockMenorCritico: sku: %d cantidad pedida %d cantidad en stock %d stockCritico: %d se deshabilita",
-								sku, pedido.cantidad, cantidadEnStock, stockCritico));
-					}
-					break;
-				}
-			}
-		}
-		for (Long skuSacar : listaSacar)
-			productosSinStock.remove(skuSacar);
-
-		if (productosSinStock.size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("VA a deshabilitar los siguientes sku:");
-			for (Long sku : productosSinStock) {
-				sb.append(String.format(" %d,", sku));
-			}
-			logger.debug(sb.toString());
-		}
-		return !productosSinStock.isEmpty();
-	}
-
-	public static Long buscaCantidadEnStock(Long sku, ConsultaStockResponse stockResponse) {
-		for(Stock stock : stockResponse.local[0].stock) {
-
-			if ( sku == stock.codigoProducto)
-				return stock.cantidad;
-		}
-		return 0l;
-	}
 }

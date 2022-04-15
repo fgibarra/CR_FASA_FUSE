@@ -7,7 +7,7 @@ import cl.ahumada.fuse.requesterPeya.lib.monitorLogistico.MonitorLogisticoReques
 
 public class GeneraUrl implements Processor {
 
-	private final String urlTemplate="http://localhost:8180/peyaRequester?numeroOrden=%d&confirma=%d";
+	private final String urlTemplate="http://localhost:8180/peyaRequester?numeroOrden=%s&confirma=%d";
 	@Override
 	public void process(Exchange exchange) throws Exception {
 		MonitorLogisticoRequest request = (MonitorLogisticoRequest)exchange.getIn().getBody();
