@@ -57,6 +57,7 @@ public class ItemML implements Serializable {
 	@JsonCreator
 	public ItemML(@JsonProperty("fk_plant")String fkPlant,
 			@JsonProperty("EAN1")String ean1, 
+			@JsonProperty("material_name")String materialName,
 			@JsonProperty("order_quantity")Long orderQuantity, 
 			@JsonProperty("precio_unitario")Long precioUnitario) {
 		super();
@@ -69,7 +70,7 @@ public class ItemML implements Serializable {
 		this.ean4 = "";
 		this.ean5 = "";
 		this.fkDepartment = "0000";
-		this.materialName = "RECETARIO MAGISTRAL ECOMMERCE";
+		this.materialName = materialName;
 		this.imageUrl = "";
 		this.fkPlant = fkPlant;
 		this.fkStatus = "0";

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.utils.JacksonFunctions"/>
-    <fullyQualifiedTypeName name="cl.ahumada.fuse.coberturaPeyaPos.service.json.peya.CoberturaResponse"/>
-    <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
-    <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.module.Requester"/>
-    <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.servicios.http.json.StatusResponse"/>
     <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer"/>
-    <fullyQualifiedTypeName name="java.util.StringTokenizer"/>
     <fullyQualifiedTypeName name="cl.ahumada.peya.requester.peyasdk.Token"/>
     <fullyQualifiedTypeName name="com.pedidosya.reception.sdk.ApiClient"/>
     <fullyQualifiedTypeName name="cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer"/>
@@ -46,7 +40,6 @@
     <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
     <fullyQualifiedTypeName name="java.util.function.Function"/>
     <fullyQualifiedTypeName name="com.pedidosya.reception.sdk.models.Order"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="com.pedidosya.reception.sdk.models.Detail"/>
     <fullyQualifiedTypeName name="com.pedidosya.reception.sdk.models.Restaurant"/>
@@ -60,4 +53,11 @@
     <fullyQualifiedTypeName name="cl.ahumada.peya.requester.servicios.dto.MonitorLogisticoRequest"/>
     <fullyQualifiedTypeName name="com.pedidosya.reception.sdk.models.Attachment"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.requesterPeya.lib.monitorLogistico.MonitorLogisticoRequest"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonProperty"/>
+    <fullyQualifiedTypeName name="cl.ahumada.fuse.requesterPeya.lib.utils.Constantes"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonIgnore"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonCreator"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.util.StringTokenizer"/>
 </qualifiedTypeNameHistroy>

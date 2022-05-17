@@ -94,6 +94,11 @@ public class PeyaController {
     		propAmbiente = integracionProps.getProperty("peya.requester.ambiente");
         logger.info(String.format("[ %s ] PeyaController - %s  is running a %s",
         		sdf.format(new Date()), version, propAmbiente));
+        String valor = System.getProperty("peya.requester.monitor");
+        if (valor != null)
+        	integracionProps.setProperty("monitorLogisticoEndPoint", valor);
+        
+        logger.info(String.format("PeyaController: url Monitor Logistico: %s", integracionProps.getProperty("monitorLogisticoEndPoint")));
         
         // Inicializar el Http Server en un thread independiente
         ReactiveFullDuplexServer server = new ReactiveFullDuplexServer(integracionProps);

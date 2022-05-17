@@ -138,7 +138,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>module.PeyaController</mainClass>
+							<mainClass>cl.ahumada.peya.requester.main.PeyaController</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

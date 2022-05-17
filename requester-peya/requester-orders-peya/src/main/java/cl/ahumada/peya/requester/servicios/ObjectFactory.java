@@ -1,13 +1,16 @@
 package cl.ahumada.peya.requester.servicios;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -149,7 +152,8 @@ public class ObjectFactory {
 
 		List<Producto> productos = new ArrayList<Producto>();
 		for (Detail detail : details) {
-			Object codigoProducto = detail.getProduct().getIntegrationCode().toString().trim();
+			Object codigoProducto = String.format("%s|%s", detail.getProduct().getIntegrationCode().toString().trim(),
+					detail.getProduct().getDescription());
 			Long cantidad = detail.getQuantity().longValue();
 			Long precioUnitario = detail.getUnitPrice().longValue();
 			Long total = detail.getSubtotal().longValue();
@@ -194,7 +198,7 @@ public class ObjectFactory {
 		List<MedioPago> medio = new ArrayList<MedioPago>();
 		int formaPago = 3;
 //		int monto = payment.getAmountNoDiscount().intValue();
-		int monto = totalBoleta.intValue();
+		int monto = payment.getTotal().intValue();
 		medio.add(new MedioPago(formaPago, monto, 0, "0", "0", 0));
 		return medio.toArray(new MedioPago[0]);
 	}
@@ -281,11 +285,12 @@ public class ObjectFactory {
 		Order order = (Order) map.get("order");
 		integracionProps = (Properties) map.get("integracionProps");
 		String idTransaccion = String.format("%d", order.getId());
-		List<String> recetas = null;
+		List<String> recetas = new ArrayList<String>();
 		if (order.getAttachments() != null && !order.getAttachments().isEmpty()) {
-			recetas = new ArrayList<String>();
 			for (Attachment attachment: order.getAttachments())
 				recetas.add(attachment.getUrl());
+		} else {
+			recetas.add("");
 		}
 		DatosEntrega datosEntrega = factoryDatosEntrega(order);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -333,8 +338,8 @@ public class ObjectFactory {
 		request.setLatDireccion(1.0d);
 		request.setLongDireccion(1.0d);
 		request.setHomeType("");
-		request.setInitialHour(datosEntrega.fechaEntregaDesde);
-		request.setFinalHour(datosEntrega.fechaEntregaHasta);
+		request.setInitialHour(toFormat(datosEntrega.fechaEntregaDesde));
+		request.setFinalHour(toFormat(datosEntrega.fechaEntregaHasta));
 		request.setTransactionCode("0");
 		request.setTotalRemision(carroCompras.totalBoleta);
 		request.setCurrencyIsocode("CLP");
@@ -346,6 +351,19 @@ public class ObjectFactory {
 		return request;
 	}
 
+	private String toFormat(String fecha) {
+		String PEYA_PATTERN = "dd/MM/yyyy HH:mm:ss";
+		String FASA_PATTERN = "yyyy-MM-dd HH:mm:ss";
+		DateFormat PEYA_FORMATTER = new SimpleDateFormat(PEYA_PATTERN); 
+		DateFormat FASA_FORMATTER = new SimpleDateFormat(FASA_PATTERN); 
+		try {
+			Date da = PEYA_FORMATTER.parse(fecha);
+			return FASA_FORMATTER.format(da);
+		} catch (Exception e) {
+		}
+		return null;
+	}
+
 	private MedioPagoML[] factoryMediosPagoML(MedioPago[] mediosPago) {
 		List<MedioPagoML> mediosPagoML = null;
 		if (mediosPago == null || mediosPago.length == 0)
@@ -354,10 +372,10 @@ public class ObjectFactory {
 		mediosPagoML = new ArrayList<MedioPagoML>();
 		for (MedioPago medioPago : mediosPago) {
 			MedioPagoML medioPagoML = new MedioPagoML();
-			medioPagoML.setCodCierre("RECETARIO");
+			medioPagoML.setCodCierre("PEDIDOSYA");
 			medioPagoML.setCodigoAutorizacion(medioPago.codigoAutorizacion);
 			medioPagoML.setCodigoComercioTbk(medioPago.codigoComercioTbk);
-			medioPagoML.setFormaPago(medioPago.formaPago);
+			medioPagoML.setFormaPago(String.format("%d", medioPago.formaPago));
 			medioPagoML.setIdVenta("");
 			medioPagoML.setMonto(medioPago.monto);
 			medioPagoML.setObjUnicoTrx(medioPago.objUnicoTrx);
@@ -374,7 +392,10 @@ public class ObjectFactory {
 		
 		items = new ArrayList<ItemML>();
 		for (Producto producto : productos) {
-			ItemML item = new ItemML(numeroLocal, producto.codigoProducto.toString(), producto.cantidad, producto.precioUnitario);
+			StringTokenizer st = new StringTokenizer(producto.codigoProducto.toString(), "|");
+			String codigo = st.nextToken();
+			String nombre = st.nextToken();
+			ItemML item = new ItemML(numeroLocal, codigo, nombre, producto.cantidad, producto.precioUnitario);
 			items.add(item);
 		}
 		return items.toArray(new ItemML[0]);

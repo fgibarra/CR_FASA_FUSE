@@ -17,7 +17,7 @@ public class MedioPagoML implements Serializable {
 	@JsonIgnore
 	private static final long serialVersionUID = -3546393685731954028L;
 	@JsonProperty("forma_pago")
-	public Integer formaPago;
+	public String formaPago;
 	@JsonProperty("monto")
 	public Integer monto;
 	@JsonProperty("codigo_autorizacion")
@@ -37,11 +37,11 @@ public class MedioPagoML implements Serializable {
 		super();
 	}
 	
-	public Integer getFormaPago() {
+	public String getFormaPago() {
 		return formaPago;
 	}
 
-	public void setFormaPago(Integer formaPago) {
+	public void setFormaPago(String formaPago) {
 		this.formaPago = formaPago;
 	}
 

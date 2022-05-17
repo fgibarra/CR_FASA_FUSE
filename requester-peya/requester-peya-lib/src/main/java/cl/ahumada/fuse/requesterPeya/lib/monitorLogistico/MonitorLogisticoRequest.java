@@ -3,6 +3,7 @@ package cl.ahumada.fuse.requesterPeya.lib.monitorLogistico;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,7 +26,7 @@ public class MonitorLogisticoRequest implements Serializable {
 	public String numeroOrden;
 	@JsonProperty("city_name")
 	public String ciudad;
-	@JsonProperty("comuna_name")
+	@JsonProperty("colina_name")
 	public String comuna;
 	@JsonProperty("created_at")
 	public String fechaCreacion;
@@ -88,6 +89,7 @@ public class MonitorLogisticoRequest implements Serializable {
 	@JsonProperty("posmessages")
 	public MessageML posmessages[];
 
+	@JsonCreator
 	public MonitorLogisticoRequest(@JsonProperty("numero_orden")String numeroOrden, 
 			@JsonProperty("receta")List<String> recetas) {
 		super();
