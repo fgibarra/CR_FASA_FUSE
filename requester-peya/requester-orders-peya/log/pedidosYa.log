@@ -1,201 +1,134 @@
-[INFO  2022-04-15 13:20:11,313] {main} [cl.ahumada.peya.requester.main.PeyaController-71] - [15/04/22-13:20:11.312] PeyaController - 2.0.0 (08-02-2022) is running
-[INFO  2022-04-15 13:20:11,326] {main} [cl.ahumada.peya.requester.main.PeyaController-83] - [ 15/04/22-13:20:11.321 ] PeyaController - 2.0.0 (08-02-2022)  is running a desarrollo
-[INFO  2022-04-15 13:20:11,398] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:20:11,450] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:20:11,515] {Thread-0} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-159] - Listening on /[0:0:0:0:0:0:0:0]:8180
-[INFO  2022-04-15 13:20:11,769] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-108] - request Stock: {"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":2},{"codigo_producto":62051009,"cantidad":2},{"codigo_producto":62051010,"cantidad":3}]}]}
-[INFO  2022-04-15 13:20:11,770] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8181/cxf/ESB/Stock/tienda/buscar
-[INFO  2022-04-15 13:20:11,773] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar
-json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":2},{"codigo_producto":62051009,"cantidad":2},{"codigo_producto":62051010,"cantidad":3}]}]}
-[DEBUG 2022-04-15 13:20:11,795] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
-[DEBUG 2022-04-15 13:20:11,797] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
-[DEBUG 2022-04-15 13:20:12,874] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-67] - invokeEndpoint: despues del POST; result=200
-[DEBUG 2022-04-15 13:20:12,875] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-77] - invokeEndpoint: JSON Respuesta invocacion a http://localhost:8181/cxf/ESB/Stock/tienda/buscar: result:200 statusLine: OK
-{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":0},{"codigo_producto":62051009,"cantidad":300},{"codigo_producto":62051010,"cantidad":1}]}]}
-[DEBUG 2022-04-15 13:20:12,889] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-212] - invocaEsbServiceStock: stockEndPoint responde: ar.status=200
-[DEBUG 2022-04-15 13:20:12,890] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-217] - invocaEsbServiceStock: del esb: {"ConsultaStockResponse":{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":0},{"codigo_producto":62051009,"cantidad":300},{"codigo_producto":62051010,"cantidad":1}]}]}}
-[DEBUG 2022-04-15 13:20:12,890] {main} [cl.ahumada.esb.utils.json.JSonUtilities-47] - response Class =class cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse
-[DEBUG 2022-04-15 13:20:12,922] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-76] - hayStock: stockResponse: vienen datos:local
+[INFO  2022-06-07 14:59:16,699] {main} [cl.ahumada.peya.requester.main.PeyaController-83] - [07/06/22-14:59:16.697] PeyaController - 2.0.0 (08-02-2022) is running
+[INFO  2022-06-07 14:59:16,759] {main} [cl.ahumada.peya.requester.main.PeyaController-95] - [ 07/06/22-14:59:16.703 ] PeyaController - 2.0.0 (08-02-2022)  is running a desarrollo
+[INFO  2022-06-07 14:59:16,760] {main} [cl.ahumada.peya.requester.main.PeyaController-101] - PeyaController: url Monitor Logistico: https://ahumadamonitor-api-qa.digitalservices.com/api/apiXDPRsvCreacionOrden
+[INFO  2022-06-07 14:59:16,826] {main} [cl.ahumada.peya.requester.peyasdk.Requester-33] - waiting for new information ...
+[INFO  2022-06-07 14:59:17,065] {Thread-0} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-159] - Listening on /0:0:0:0:0:0:0:0:8180
+[INFO  2022-06-07 14:59:21,952] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-43] - ***********************************************************
+[INFO  2022-06-07 14:59:21,953] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-44] -                     Order received
+[INFO  2022-06-07 14:59:21,954] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-45] - ID: 141120267 state: PENDING local: 001 restaurantID=64067
+[INFO  2022-06-07 14:59:21,954] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-48] - ***********************************************************
+[INFO  2022-06-07 14:59:22,477] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-60] - ***********************************************************
+[INFO  2022-06-07 14:59:22,478] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-61] - {"address":{"street":"General las heras","corner":"test","doorNumber":"1610","complement":"707|","area":"Santiago Centro","city":"Santiago","description":"General las heras 1610 Depto. 707 esquina test","notes":"","phone":"+56967288374","coordinates":"-33.4534,-70.657"},"application":"WEB","details":[{"notes":"","optionGroups":[],"product":{"id":9625486,"section":{"name":"Farmacia","index":1,"integrationCode":"","integrationName":""},"image":"23a89970-9804-43c2-ae3e-d959f6224ca5.jpg","price":0.0,"contentQuantity":0.0,"name":"Sterimar Spray Fco. 100 Ml. Nasal","index":4,"integrationCode":"41263","integrationName":""},"quantity":1,"subtotal":21195.0,"unitPrice":21195.0,"discount":0.0,"total":21195.0}],"id":141120267,"code":"BG9L6HAH","state":"PENDING","notes":"","payment":{"id":1,"amountNoDiscount":21195.0,"currencySymbol":"$","method":"Efectivo","notes":"","online":false,"paymentAmount":21195.0,"shipping":0.0,"shippingNoDiscount":0.0,"total":21195.0,"subtotal":21195.0,"tax":0.0,"card":{}},"pickup":false,"express":false,"preOrder":false,"logistics":false,"timestamp":1654624726157,"registeredDate":"2022-06-07T13:58:45Z","deliveryDate":"2022-06-07T14:35:45Z","user":{"email":"hugoesparzaparra@gmail.com","isNew":false,"lastName":"Esparza","name":"Hugo","orderCount":4,"platform":"PEDIDOS_YA","type":"WEB_USER","company":{"name":"","document":""}},"restaurant":{"id":64067,"name":"Farmacias Ahumada - Santiago","integrationCode":"001","integrationName":""},"portal":{"id":1,"name":"Pedidos Ya"},"discounts":[],"attachments":[]}
+[INFO  2022-06-07 14:59:22,502] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-62] - ***********************************************************
+[INFO  2022-06-07 14:59:22,914] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-06-07 14:59:22,929] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-06-07 14:59:22,995] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-108] - request Stock: {"local":[{"numero_local":1,"stock":[{"codigo_producto":41263,"cantidad":1}]}]}
+[INFO  2022-06-07 14:59:22,996] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+[INFO  2022-06-07 14:59:23,007] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar
+json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":41263,"cantidad":1}]}]}
+[DEBUG 2022-06-07 14:59:23,039] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
+[DEBUG 2022-06-07 14:59:23,043] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
+[ERROR 2022-06-07 14:59:23,057] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-222] - invocaEsbServiceStock
+java.lang.RuntimeException: Failed to invoke Endpoint: 'http://localhost:8181/cxf/ESB/Stock/tienda/buscar'.
+	at cl.ahumada.peya.requester.servicios.RestApiClient.invokeEndpoint(RestApiClient.java:82)
+	at cl.ahumada.peya.requester.servicios.InvocaESB.invocaEsbServiceStock(InvocaESB.java:211)
+	at cl.ahumada.peya.requester.servicios.InvocaESB.invocaEsbServiceStock(InvocaESB.java:196)
+	at cl.ahumada.peya.requester.servicios.InvocaESB.hayStock(InvocaESB.java:75)
+	at cl.ahumada.peya.requester.servicios.InvocaESB.hayStock(InvocaESB.java:67)
+	at cl.ahumada.peya.requester.servicios.ServiciosdeBus.confirmaStock(ServiciosdeBus.java:115)
+	at cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden.procesa(ProcesaOrden.java:68)
+	at cl.ahumada.peya.requester.peyasdk.Requester$1.call(Requester.java:69)
+	at com.pedidosya.reception.sdk.clients.OrdersClient.loadOrders(OrdersClient.java:520)
+	at com.pedidosya.reception.sdk.clients.OrdersClient.access$100(OrdersClient.java:45)
+	at com.pedidosya.reception.sdk.clients.OrdersClient$3.call(OrdersClient.java:478)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.ConnectException: Connection refused (Connection refused)
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:606)
+	at java.net.Socket.connect(Socket.java:555)
+	at java.net.Socket.<init>(Socket.java:451)
+	at java.net.Socket.<init>(Socket.java:303)
+	at org.apache.commons.httpclient.protocol.DefaultProtocolSocketFactory.createSocket(DefaultProtocolSocketFactory.java:80)
+	at org.apache.commons.httpclient.protocol.DefaultProtocolSocketFactory.createSocket(DefaultProtocolSocketFactory.java:122)
+	at org.apache.commons.httpclient.HttpConnection.open(HttpConnection.java:707)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:387)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:323)
+	at cl.ahumada.peya.requester.servicios.RestApiClient.invokeEndpoint(RestApiClient.java:66)
+	... 14 more
+[INFO  2022-06-07 14:59:23,072] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8080/ESB/Stock/tienda/buscar
+[INFO  2022-06-07 14:59:23,076] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8080/ESB/Stock/tienda/buscar
+json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":41263,"cantidad":1}]}]}
+[DEBUG 2022-06-07 14:59:23,076] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
+[DEBUG 2022-06-07 14:59:23,077] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
+[DEBUG 2022-06-07 14:59:23,358] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-67] - invokeEndpoint: despues del POST; result=200
+[DEBUG 2022-06-07 14:59:23,360] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-77] - invokeEndpoint: JSON Respuesta invocacion a http://localhost:8080/ESB/Stock/tienda/buscar: result:200 statusLine: OK
+{"local":[{"numero_local":1,"stock":[{"codigo_producto":41263,"cantidad":3}]}]}
+[DEBUG 2022-06-07 14:59:23,361] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-212] - invocaEsbServiceStock: stockEndPoint responde: ar.status=200
+[DEBUG 2022-06-07 14:59:23,361] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-217] - invocaEsbServiceStock: del esb: {"ConsultaStockResponse":{"local":[{"numero_local":1,"stock":[{"codigo_producto":41263,"cantidad":3}]}]}}
+[DEBUG 2022-06-07 14:59:23,361] {pool-1-thread-1} [cl.ahumada.esb.utils.json.JSonUtilities-47] - response Class =class cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse
+[DEBUG 2022-06-07 14:59:23,389] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-76] - hayStock: stockResponse: vienen datos:local
 numeroLocal=1
-stock[0]=codigoProducto=62051008
-cantidad=0
-
-stock[1]=codigoProducto=62051009
-cantidad=300
-
-stock[2]=codigoProducto=62051010
-cantidad=1
+stock[0]=codigoProducto=41263
+cantidad=3
 
 indiceCumplimiento=0
 
-[INFO  2022-04-15 13:20:12,922] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-69] - se CONFIRMA orden: 1
-[INFO  2022-04-15 13:20:12,923] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-71] - se CONFIRMA se debe reconciliar SI
-[INFO  2022-04-15 13:20:56,149] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:20:56,154] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[DEBUG 2022-04-15 13:20:56,155] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051008
-[DEBUG 2022-04-15 13:20:56,157] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051009
-[DEBUG 2022-04-15 13:20:56,159] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051010
-[DEBUG 2022-04-15 13:21:02,650] {main} [cl.ahumada.peya.requester.servicios.ObjectFactory-310] - factoryMonitorLogisticoRequest: idTransaccion:1 fecha:2022-04-15 13:20:49 numeroLocal=001 costoDespacho:100 carroCompras:Producto[0]codigoProducto=62051009
-cantidad=2
-precioUnitario=200
-total=2000
-descuento
-type=DP
-valor_descuento=20
-codigo_descuento=300000
-descripcion_descuento=PEDIDOSYA
-aplicar=true
-
-
-Producto[1]codigoProducto=62051010
+[INFO  2022-06-07 14:59:23,389] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-69] - se CONFIRMA orden: 141120267
+[INFO  2022-06-07 14:59:23,390] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-71] - se CONFIRMA se debe reconciliar NO
+[INFO  2022-06-07 14:59:23,396] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[INFO  2022-06-07 14:59:23,397] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
+[DEBUG 2022-06-07 14:59:23,397] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.ObjectFactory-155] - factoryProducto: detail.getProduct().getIntegrationCode():41263 detail.getProduct().getIntegrationName():  detail.getQuantity().longValue(): 1 detail.getUnitPrice().longValue():21195
+[DEBUG 2022-06-07 14:59:23,403] {pool-1-thread-1} [cl.ahumada.peya.requester.servicios.ObjectFactory-317] - factoryMonitorLogisticoRequest: idTransaccion:141120267 fecha:2022-06-07 14:59:23 numeroLocal=001 costoDespacho:0 carroCompras:Producto[0]codigoProducto=41263|
 cantidad=1
-precioUnitario=300
-total=3000
-descuento
-type=DP
-valor_descuento=30
-codigo_descuento=300000
-descripcion_descuento=PEDIDOSYA
-aplicar=true
+precioUnitario=21195
+total=21195
 
-
-descuentoTotal=12
+descuentoTotal=0
 neto=0
 iva=0
-totalBoleta=2988
+totalBoleta=0
 , medioPago=formaPago=3
-monto=2988
+monto=21195
 codigoAutorizacion=0
 codigoComercioTbk=0
 objUnicoTrx=0
 tipoPago=0
- cliente=nombres=Jorge Pedrero
-apellidos=Inostrosa
-rut=123456789
-mail=email@gmail.com
- datosEntrega=telefono=999999999
-calle=Pablo Picasso
-numero=1305
-dpto=null
-comuna=Huechuraba
-region=RM
+ cliente=nombres=Hugo
+apellidos=Esparza
+rut=762114259
+mail=hugoesparzaparra@gmail.com
+ datosEntrega=telefono=+56967288374
+calle=General las heras
+numero=1610
+dpto=707 
+comuna=Santiago Centro
+region=Santiago
 tipoEntrega=1
-ruta=15/04/2022 13:20:11
-fechaEntregaDesde=15/04/2022 13:20:11
-fechaEntregaHasta=15/04/2022 13:30:11
+ruta=07/06/2022 13:58:45
+fechaEntregaDesde=07/06/2022 14:35:45
+fechaEntregaHasta=07/06/2022 14:45:45
 
-[DEBUG 2022-04-15 13:24:24,707] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-270] - apiSendOrdenMonitor: json |{"order_number":"1","city_name":"Huechuraba","comuna_name":"RM","created_at":"2022-04-15 13:20:49","email":"email@gmail.com","external_number":"0","first_name":"Jorge Pedrero","last_name":"Inostrosa","municipio_name":"Huechuraba","phone_number":"999999999","state_name":"Huechuraba","street_name":"Pablo Picasso 1305 ","tipo_envio":"RETIRO","zip_code":"00000","click_collect":"1","event_type":"","internal_number":"","codigo_comercio":"KIOSKO","rut":"","lat_direccion":1.0,"long_direccion":1.0,"home_type":"","initial_hour":"15/04/2022 13:20:11","final_hour":"15/04/2022 13:30:11","transaction_code":"0","total_remision":2988,"currency_isocode":"CLP","costo_despacho":100,"requiere_validacion_qf":false,"items":[{"fk_plant":"001","EAN1":"62051009","order_quantity":2,"precio_unitario":200,"EAN2":"","EAN3":"","EAN4":"","EAN5":"","fk_department":"0000","material_sku":"62051009","material_name":"RECETARIO MAGISTRAL ECOMMERCE","image_url":"","fk_status":"0","stock_availability":0,"descuento_total":0,"iva":0,"tipo_felicitacion":"","mensaje_felicitacion":""},{"fk_plant":"001","EAN1":"62051010","order_quantity":1,"precio_unitario":300,"EAN2":"","EAN3":"","EAN4":"","EAN5":"","fk_department":"0000","material_sku":"62051010","material_name":"RECETARIO MAGISTRAL ECOMMERCE","image_url":"","fk_status":"0","stock_availability":0,"descuento_total":0,"iva":0,"tipo_felicitacion":"","mensaje_felicitacion":""}],"medios_pago":[{"forma_pago":3,"monto":2988,"codigo_autorizacion":0,"codigo_tbk":"0","objeto_trx":"0","tipo_pago":0,"cod_cierre":"RECETARIO","id_venta":""}],"imgrecetas":["url to receta"]}|
-[DEBUG 2022-04-15 13:24:24,716] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-277] - apiSendOrdenMonitor: request.getURI()=http://localhost:8181/cxf/ESB/monitorLogistico/procesar
-[DEBUG 2022-04-15 13:24:24,820] {main} [cl.ahumada.peya.requester.servicios.Semaforo-74] - opP: espera Thread [main]. valor=-1
-[INFO  2022-04-15 13:28:43,094] {main} [cl.ahumada.peya.requester.main.PeyaController-71] - [15/04/22-13:28:43.092] PeyaController - 2.0.0 (08-02-2022) is running
-[INFO  2022-04-15 13:28:43,107] {main} [cl.ahumada.peya.requester.main.PeyaController-83] - [ 15/04/22-13:28:43.100 ] PeyaController - 2.0.0 (08-02-2022)  is running a desarrollo
-[INFO  2022-04-15 13:28:43,153] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:28:43,191] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:28:43,245] {Thread-0} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-159] - Listening on /[0:0:0:0:0:0:0:0]:8180
-[INFO  2022-04-15 13:28:43,495] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-108] - request Stock: {"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":2},{"codigo_producto":62051009,"cantidad":2},{"codigo_producto":62051010,"cantidad":3}]}]}
-[INFO  2022-04-15 13:28:43,496] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-207] - invocaEsbServiceStock: consulta stock a servidor: http://localhost:8181/cxf/ESB/Stock/tienda/buscar
-[INFO  2022-04-15 13:28:43,499] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-26] - invokeEndpoint: endpoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar
-json:{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":2},{"codigo_producto":62051009,"cantidad":2},{"codigo_producto":62051010,"cantidad":3}]}]}
-[DEBUG 2022-04-15 13:28:43,522] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-55] - invokeEndpoint: autorizacion ventas fasa2018 Basic dmVudGFzOmZhc2EyMDE4
-[DEBUG 2022-04-15 13:28:43,525] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-65] - invokeEndpoint: antes del POST
-[DEBUG 2022-04-15 13:28:43,664] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-67] - invokeEndpoint: despues del POST; result=200
-[DEBUG 2022-04-15 13:28:43,665] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-77] - invokeEndpoint: JSON Respuesta invocacion a http://localhost:8181/cxf/ESB/Stock/tienda/buscar: result:200 statusLine: OK
-{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":0},{"codigo_producto":62051009,"cantidad":300},{"codigo_producto":62051010,"cantidad":1}]}]}
-[DEBUG 2022-04-15 13:28:43,666] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-212] - invocaEsbServiceStock: stockEndPoint responde: ar.status=200
-[DEBUG 2022-04-15 13:28:43,666] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-217] - invocaEsbServiceStock: del esb: {"ConsultaStockResponse":{"local":[{"numero_local":1,"stock":[{"codigo_producto":62051008,"cantidad":0},{"codigo_producto":62051009,"cantidad":300},{"codigo_producto":62051010,"cantidad":1}]}]}}
-[DEBUG 2022-04-15 13:28:43,667] {main} [cl.ahumada.esb.utils.json.JSonUtilities-47] - response Class =class cl.ahumada.esb.dto.pharol.consultastock.ConsultaStockResponse
-[DEBUG 2022-04-15 13:28:43,701] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-76] - hayStock: stockResponse: vienen datos:local
-numeroLocal=1
-stock[0]=codigoProducto=62051008
-cantidad=0
-
-stock[1]=codigoProducto=62051009
-cantidad=300
-
-stock[2]=codigoProducto=62051010
-cantidad=1
-
-indiceCumplimiento=0
-
-[INFO  2022-04-15 13:28:43,702] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-69] - se CONFIRMA orden: 1
-[INFO  2022-04-15 13:28:43,702] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-71] - se CONFIRMA se debe reconciliar SI
-[INFO  2022-04-15 13:28:44,756] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:28:44,756] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[DEBUG 2022-04-15 13:28:44,757] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051008
-[DEBUG 2022-04-15 13:28:44,757] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051009
-[DEBUG 2022-04-15 13:28:44,757] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051010
-[DEBUG 2022-04-15 13:28:44,762] {main} [cl.ahumada.peya.requester.servicios.ObjectFactory-310] - factoryMonitorLogisticoRequest: idTransaccion:1 fecha:2022-04-15 13:28:44 numeroLocal=001 costoDespacho:100 carroCompras:Producto[0]codigoProducto=62051009
-cantidad=2
-precioUnitario=200
-total=2000
-descuento
-type=DP
-valor_descuento=20
-codigo_descuento=300000
-descripcion_descuento=PEDIDOSYA
-aplicar=true
-
-
-Producto[1]codigoProducto=62051010
-cantidad=1
-precioUnitario=300
-total=3000
-descuento
-type=DP
-valor_descuento=30
-codigo_descuento=300000
-descripcion_descuento=PEDIDOSYA
-aplicar=true
-
-
-descuentoTotal=12
-neto=0
-iva=0
-totalBoleta=2988
-, medioPago=formaPago=3
-monto=2988
-codigoAutorizacion=0
-codigoComercioTbk=0
-objUnicoTrx=0
-tipoPago=0
- cliente=nombres=Jorge Pedrero
-apellidos=Inostrosa
-rut=123456789
-mail=email@gmail.com
- datosEntrega=telefono=999999999
-calle=Pablo Picasso
-numero=1305
-dpto=null
-comuna=Huechuraba
-region=RM
-tipoEntrega=1
-ruta=15/04/2022 13:28:43
-fechaEntregaDesde=15/04/2022 13:28:43
-fechaEntregaHasta=15/04/2022 13:38:43
-
-[DEBUG 2022-04-15 13:28:44,798] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-270] - apiSendOrdenMonitor: json |{"order_number":"1","city_name":"Huechuraba","comuna_name":"RM","created_at":"2022-04-15 13:28:44","email":"email@gmail.com","external_number":"0","first_name":"Jorge Pedrero","last_name":"Inostrosa","municipio_name":"Huechuraba","phone_number":"999999999","state_name":"Huechuraba","street_name":"Pablo Picasso 1305 ","tipo_envio":"RETIRO","zip_code":"00000","click_collect":"1","event_type":"","internal_number":"","codigo_comercio":"KIOSKO","rut":"","lat_direccion":1.0,"long_direccion":1.0,"home_type":"","initial_hour":"15/04/2022 13:28:43","final_hour":"15/04/2022 13:38:43","transaction_code":"0","total_remision":2988,"currency_isocode":"CLP","costo_despacho":100,"requiere_validacion_qf":false,"items":[{"fk_plant":"001","EAN1":"62051009","order_quantity":2,"precio_unitario":200,"EAN2":"","EAN3":"","EAN4":"","EAN5":"","fk_department":"0000","material_sku":"62051009","material_name":"RECETARIO MAGISTRAL ECOMMERCE","image_url":"","fk_status":"0","stock_availability":0,"descuento_total":0,"iva":0,"tipo_felicitacion":"","mensaje_felicitacion":""},{"fk_plant":"001","EAN1":"62051010","order_quantity":1,"precio_unitario":300,"EAN2":"","EAN3":"","EAN4":"","EAN5":"","fk_department":"0000","material_sku":"62051010","material_name":"RECETARIO MAGISTRAL ECOMMERCE","image_url":"","fk_status":"0","stock_availability":0,"descuento_total":0,"iva":0,"tipo_felicitacion":"","mensaje_felicitacion":""}],"medios_pago":[{"forma_pago":3,"monto":2988,"codigo_autorizacion":0,"codigo_tbk":"0","objeto_trx":"0","tipo_pago":0,"cod_cierre":"RECETARIO","id_venta":""}],"imgrecetas":["url to receta"]}|
-[DEBUG 2022-04-15 13:28:44,800] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-277] - apiSendOrdenMonitor: request.getURI()=http://localhost:8181/cxf/ESB/monitorLogistico/procesar
-[DEBUG 2022-04-15 13:28:44,842] {main} [cl.ahumada.peya.requester.servicios.Semaforo-74] - opP: espera Thread [main]. valor=-1
-[INFO  2022-04-15 13:28:46,000] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-68] - onRequestHead: getRemoteAddress: /127.0.0.1:58891 RequestLine(request):GET /peyaRequester?numeroOrden=1&confirma=1 HTTP/1.1 request.getRequestUri(): /peyaRequester?numeroOrden=1&confirma=1
-[INFO  2022-04-15 13:28:46,000] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-167] - setParametrosURI: requestUri /peyaRequester?numeroOrden=1&confirma=1
-[INFO  2022-04-15 13:28:46,001] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-170] - setParametrosURI: data numeroOrden=1&confirma=1
-[INFO  2022-04-15 13:28:46,001] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-175] - setParametrosURI: numeroOrden 1, resultado=1
-[INFO  2022-04-15 13:28:46,007] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-102] - reconoce path /peyaRequester
-[INFO  2022-04-15 13:28:46,007] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-190] - callbackPeya: numeroOrden 1, resultado=1
-[DEBUG 2022-04-15 13:28:46,007] {server-dispatch-1} [cl.ahumada.peya.requester.servicios.Semaforo-104] - opV: encontro esperando a main valor=0
-[DEBUG 2022-04-15 13:28:46,007] {server-dispatch-1} [cl.ahumada.peya.requester.servicios.Semaforo-111] - opV: Thread [server-dispatch-1]. valor=0
-[DEBUG 2022-04-15 13:28:46,008] {main} [cl.ahumada.peya.requester.servicios.Semaforo-86] - opP: continua Thread [main]. valor=0
-[INFO  2022-04-15 13:28:46,009] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-63] - stock_critico=0 descuentosAplicables=PROMOTION,WEEKLY,JOKER endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar stockEndPoint2=http://localhost:8080/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[INFO  2022-04-15 13:28:46,009] {main} [cl.ahumada.peya.requester.servicios.InvocaESB-58] - endpoint_ws_mantiene_stock=http://localhost:8080/ESB/mantieneStock/tienda/buscar endpoint_ws_informeDeshabilita=http://localhost:8080/ESB/informeDeshabilitado/skusOrder stockEndPoint=http://localhost:8181/cxf/ESB/Stock/tienda/buscar pedidosEndPoint=http://localhost:8181/cxf/ESB/pedidosV4mock/detalle/generar
-[DEBUG 2022-04-15 13:28:46,009] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051008
-[DEBUG 2022-04-15 13:28:46,010] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051009
-[DEBUG 2022-04-15 13:28:46,010] {main} [cl.ahumada.peya.requester.servicios.ServiciosdeBus-209] - findProducto: integrationCode: 62051010 codigo: 62051010
-[INFO  2022-04-15 13:28:46,031] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-78] - onResponseHead: getRemoteAddress: /127.0.0.1:58891 StatusLine(request):HTTP/1.1 200 OK
-[INFO  2022-04-15 13:28:46,033] {server-dispatch-1} [cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer-87] - onExchangeComplete: getRemoteAddress: /127.0.0.1:58891  exchange completed (connection kept alive)
-[ERROR 2022-04-15 13:28:47,696] {main} [cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden-153] - reconciliaOrden
-java.lang.NullPointerException: Cannot invoke "java.lang.Boolean.booleanValue()" because the return value of "com.pedidosya.reception.sdk.models.Order.getLogistics()" is null
-	at cl.ahumada.peya.requester.peyasdk.Actions.getConfirm(Actions.java:29)
-	at cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden.reconciliaOrden(ProcesaOrden.java:147)
-	at cl.ahumada.peya.requester.main.PeyaController$1.onConfirmaEnd(PeyaController.java:115)
-	at cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden.procesa(ProcesaOrden.java:85)
-	at cl.ahumada.peya.requester.main.PeyaController.main(PeyaController.java:103)
+[ERROR 2022-06-07 14:59:23,407] {pool-1-thread-1} [cl.ahumada.peya.requester.peyasdk.Requester-88] - call
+java.util.NoSuchElementException
+	at java.util.StringTokenizer.nextToken(StringTokenizer.java:349)
+	at cl.ahumada.peya.requester.servicios.ObjectFactory.factoryItemsML(ObjectFactory.java:400)
+	at cl.ahumada.peya.requester.servicios.ObjectFactory.factoryMonitorLogisticoRequest(ObjectFactory.java:351)
+	at cl.ahumada.peya.requester.servicios.ServiciosdeBus.apiSendOrdenMonitor(ServiciosdeBus.java:263)
+	at cl.ahumada.peya.requester.servicios.ServiciosdeBus.invocaMonitorLogistico(ServiciosdeBus.java:247)
+	at cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden.procesa(ProcesaOrden.java:77)
+	at cl.ahumada.peya.requester.peyasdk.Requester$1.call(Requester.java:69)
+	at com.pedidosya.reception.sdk.clients.OrdersClient.loadOrders(OrdersClient.java:520)
+	at com.pedidosya.reception.sdk.clients.OrdersClient.access$100(OrdersClient.java:45)
+	at com.pedidosya.reception.sdk.clients.OrdersClient$3.call(OrdersClient.java:478)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+[INFO  2022-06-07 15:13:02,969] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-43] - ***********************************************************
+[INFO  2022-06-07 15:13:02,970] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-44] -                     Order received
+[INFO  2022-06-07 15:13:02,970] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-45] - ID: 141120267 state: REJECTED local: 001 restaurantID=64067
+[INFO  2022-06-07 15:13:02,971] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-48] - ***********************************************************
+[INFO  2022-06-07 15:13:02,971] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-51] - ***********************************************************
+[INFO  2022-06-07 15:13:02,971] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-52] -                     Order Update
+[INFO  2022-06-07 15:13:02,971] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-53] - 141120267 - REJECTED
+[INFO  2022-06-07 15:13:02,971] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-54] - ***********************************************************
+[INFO  2022-06-07 15:13:02,971] {pool-1-thread-5} [cl.ahumada.peya.requester.peyasdk.Requester-55] - waiting for new information ...

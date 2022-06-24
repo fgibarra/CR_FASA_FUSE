@@ -277,37 +277,38 @@ public class InvocaESB extends RestApiClient {
 		List<Long> productosSinStock = (List<Long>) map.get(ServiciosdeBus.PRODUCTOS_SIN_STOCK_KEY);
 
 		StringBuffer sb = new StringBuffer();
-		for (Long sku: productosSinStock) {
-			sb.append(String.format("%d", sku)).append('-');
-			Long cantidadEnStock = ProcesaOrden.buscaCantidadEnStock(sku, stockResponse);
-
-			Stock stock = null;
-			for (Stock pedido : stockResponse.local[0].stock) {
-				long cpPedido = pedido.codigoProducto;
-				if (sku == cpPedido) {
-					stock = pedido;
-					break;
+		if (productosSinStock != null) {
+			for (Long sku: productosSinStock) {
+				sb.append(String.format("%d", sku)).append('-');
+				Long cantidadEnStock = ProcesaOrden.buscaCantidadEnStock(sku, stockResponse);
+	
+				Stock stock = null;
+				for (Stock pedido : stockResponse.local[0].stock) {
+					long cpPedido = pedido.codigoProducto;
+					if (sku == cpPedido) {
+						stock = pedido;
+						break;
+					}
+				}
+				if (stock != null && cantidadEnStock != null)
+					sb.append(stock.cantidad).append('-').append(getCantidadSolicitada(sku, map)).append('-');
+				else {
+					logger.error(String.format("Encuentra Stock en nulo cuando procesa respuesta: %s",
+							stockResponse.toString()));
 				}
 			}
-			if (stock != null && cantidadEnStock != null)
-				sb.append(stock.cantidad).append('-').append(getCantidadSolicitada(sku, map)).append('-');
-			else {
-				logger.error(String.format("Encuentra Stock en nulo cuando procesa respuesta: %s",
-						stockResponse.toString()));
+			logger.debug(String.format("informaPedidoRechazado: orderId %d local %s skus: %s",
+					orderId, local, sb.toString()));
+			String url = String.format("%s/%d/%s/%s", endpointInformeDeshabilita,
+					orderId, local, sb.toString());
+	
+			try {
+				RestApiResponse ar = invokeEndpoint(url, null);
+				int httpStatus = ar.getStatusCode();
+				logger.debug(String.format("InformeDeshabilita: del esb httpStatus: %d", httpStatus));
+			} catch (Exception e) {
+				logger.error("InformeDeshabilita", e);
 			}
-		}
-		logger.debug(String.format("informaPedidoRechazado: orderId %d local %s skus: %s",
-				orderId, local, sb.toString()));
-
-		String url = String.format("%s/%d/%s/%s", endpointInformeDeshabilita,
-				orderId, local, sb.toString());
-
-		try {
-			RestApiResponse ar = invokeEndpoint(url, null);
-			int httpStatus = ar.getStatusCode();
-			logger.debug(String.format("InformeDeshabilita: del esb httpStatus: %d", httpStatus));
-		} catch (Exception e) {
-			logger.error("InformeDeshabilita", e);
 		}
 	}
 

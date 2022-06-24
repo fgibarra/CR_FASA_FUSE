@@ -33,7 +33,7 @@ import cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden;
 
 public class PeyaController {
 
-    private static final String version = "2.0.0 (08-02-2022)";
+    private static final String version = "2.0.1 (24-06-2022)";
     protected static String log4jConfigFile = "pedidosYa_log4j.properties";
     private static Logger logger = Logger.getLogger(PeyaController.class);
     

@@ -76,10 +76,14 @@ public class ProcesaOrden {
 		if (confirma > 0) {
 			Integer confirmaMonitor = serviciosdeBus.invocaMonitorLogistico(map, semaforo);
 			// queda suspendido hasta que el monitor responda
-			if (confirmaMonitor == 0)
+			if (confirmaMonitor == null) {
+				// no se pudo invocar al monitor logistico. Rechazar la orden
+				confirma = 0;
+			} else if (confirmaMonitor == 0) {
 				// si el monitor logistico rechaza la orden, se rechaza, en caso contrario 
 				// se procesa de acuerdo al stock
 				confirma = confirmaMonitor;
+			}
 		}
 
 		callback.onConfirmaEnd(map, confirma);
@@ -164,41 +168,44 @@ public class ProcesaOrden {
 		Integer stockCritico = serviciosdeBus.getStockCritico();
 		List<Long> listaSacar = new ArrayList<Long>();
 
-		for (Long sku : productosSinStock) {
-			// busca lo que hay, si esto es mayor que el critico se saca de la lista de
-			// deshabilitar
-			Long cantidadEnStock = buscaCantidadEnStock(sku, stockResponse);
-			for (Stock pedido : stockResponse.local[0].stock) {
-				long cpPedido = pedido.codigoProducto;
-				if (sku == cpPedido) {
-					// Long quedarian = pedido.cantidad - cantidadEnStock;
-					if (/* cantidadEnStock == 0 || */ cantidadEnStock >= stockCritico && cantidadEnStock > 0) {
-						// se deshabilita si lo que tengo es menor que el critico o no tengo nada
-						logger.debug(String.format(
-								"stockMenorCritico: sku: %d cantidad pedida %d cantidad en stock %d stockCritico: %d NO se deshabilita",
-								sku, pedido.cantidad, cantidadEnStock, stockCritico));
-						listaSacar.add(sku);
-					} else {
-						logger.debug(String.format(
-								"stockMenorCritico: sku: %d cantidad pedida %d cantidad en stock %d stockCritico: %d se deshabilita",
-								sku, pedido.cantidad, cantidadEnStock, stockCritico));
+		if (productosSinStock != null) {
+			for (Long sku : productosSinStock) {
+				// busca lo que hay, si esto es mayor que el critico se saca de la lista de
+				// deshabilitar
+				Long cantidadEnStock = buscaCantidadEnStock(sku, stockResponse);
+				for (Stock pedido : stockResponse.local[0].stock) {
+					long cpPedido = pedido.codigoProducto;
+					if (sku == cpPedido) {
+						// Long quedarian = pedido.cantidad - cantidadEnStock;
+						if (/* cantidadEnStock == 0 || */ cantidadEnStock >= stockCritico && cantidadEnStock > 0) {
+							// se deshabilita si lo que tengo es menor que el critico o no tengo nada
+							logger.debug(String.format(
+									"stockMenorCritico: sku: %d cantidad pedida %d cantidad en stock %d stockCritico: %d NO se deshabilita",
+									sku, pedido.cantidad, cantidadEnStock, stockCritico));
+							listaSacar.add(sku);
+						} else {
+							logger.debug(String.format(
+									"stockMenorCritico: sku: %d cantidad pedida %d cantidad en stock %d stockCritico: %d se deshabilita",
+									sku, pedido.cantidad, cantidadEnStock, stockCritico));
+						}
+						break;
 					}
-					break;
 				}
 			}
-		}
-		for (Long skuSacar : listaSacar)
-			productosSinStock.remove(skuSacar);
-
-		if (productosSinStock.size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("VA a deshabilitar los siguientes sku:");
-			for (Long sku : productosSinStock) {
-				sb.append(String.format(" %d,", sku));
+			for (Long skuSacar : listaSacar)
+				productosSinStock.remove(skuSacar);
+	
+			if (productosSinStock.size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("VA a deshabilitar los siguientes sku:");
+				for (Long sku : productosSinStock) {
+					sb.append(String.format(" %d,", sku));
+				}
+				logger.debug(sb.toString());
 			}
-			logger.debug(sb.toString());
-		}
-		return !productosSinStock.isEmpty();
+			return !productosSinStock.isEmpty();
+		} else
+			return false;
 	}
 
 	public static Long buscaCantidadEnStock(Long sku, ConsultaStockResponse stockResponse) {

@@ -115,6 +115,7 @@ public class ObjectFactory {
 		Long iva = 0l; //payment.getTax() != null ? payment.getTax().longValue() : 0;
 		Double valor  = calculaNuevoTotal(order.getDetails(), productosStock0, listaFaltaStock);
 		totalBoleta = sumatoria(valor.longValue(), order.getDiscounts());
+		logger.debug(String.format("factoryCarroCompras: nuevoTotal=%d totalBoleta=%d", valor.longValue(), totalBoleta));
 		CarroCompras carroCompra = new CarroCompras(producto, descuentoTotal, neto, iva, totalBoleta);
 		return carroCompra;
 	}
@@ -122,8 +123,10 @@ public class ObjectFactory {
 	private Long sumatoria(Long valor, List<Discount> discounts) {
 		
 		String descuentosAplicables = 	integracionProps.getProperty("descuentosAplicables");
+		logger.debug(String.format("sumatoria: descuentosAplicables=%s discounts.size=%s", descuentosAplicables, discounts!=null?String.format("%d",discounts.size(), "NULO"):"NULO"));
 		for (Discount discount : discounts) {
 			String codigoDescuento = discount.getCode();
+			logger.debug(String.format("sumatoria: codigoDescuento=%s", codigoDescuento));
 			if (descuentosAplicables.indexOf(codigoDescuento) >= 0) {
 				valor -= discount.getAmount() != null ? discount.getAmount().longValue() : 0l;
 			}
@@ -152,8 +155,10 @@ public class ObjectFactory {
 
 		List<Producto> productos = new ArrayList<Producto>();
 		for (Detail detail : details) {
+			logger.debug(String.format("factoryProducto: detail.getProduct().getIntegrationCode():%s detail.getProduct().getIntegrationName(): %s detail.getQuantity().longValue(): %d detail.getUnitPrice().longValue():%d", 
+					detail.getProduct().getIntegrationCode(), detail.getProduct().getIntegrationName(), detail.getQuantity().longValue(), detail.getUnitPrice().longValue()));
 			Object codigoProducto = String.format("%s|%s", detail.getProduct().getIntegrationCode().toString().trim(),
-					detail.getProduct().getDescription());
+					detail.getProduct().getIntegrationName());
 			Long cantidad = detail.getQuantity().longValue();
 			Long precioUnitario = detail.getUnitPrice().longValue();
 			Long total = detail.getSubtotal().longValue();
@@ -265,6 +270,9 @@ public class ObjectFactory {
 		Double newTotal = 0d;
 		HashSet<String> setProductosStock0 = productosStock0 != null ?new HashSet<String>(productosStock0) : new HashSet<String>();
 		Map<String, ReconciliaDTO> mapFaltaStock = listaFaltaStock != null ? listaFaltaStock.stream().collect(Collectors.toMap(ReconciliaDTO::getCodigoProducto, Function.identity())) : new HashMap<String, ReconciliaDTO>();
+		
+		/*logger.debug(String.format("calculaNuevoTotal: details.size=%d setProductosStock0.isEmpty=%b mapFaltaStock.isEmpty=%b", 
+				details.size(), setProductosStock0.isEmpty(), mapFaltaStock.isEmpty()));*/
 		for (Detail detail : details) {
 			Product prod = detail.getProduct();
 			String codigo = prod.getIntegrationCode();
@@ -275,7 +283,10 @@ public class ObjectFactory {
 				newTotal += (dto.getPrecioUnitario() * dto.getCantidad());
 				continue;
 			}
-			newTotal += (prod.getPrice() * prod.getContentQuantity());
+			//newTotal += (prod.getPrice() * prod.getContentQuantity()); ambos vienen en 0
+			newTotal += detail.getTotal();
+			/*logger.debug(String.format("calculaNuevoTotal: newTotal=%f prod.getPrice()=%f prod.getContentQuantity()=%f detail.getTotal()=%f", 
+					newTotal, prod.getPrice(), prod.getContentQuantity(), detail.getTotal()));*/
 		}
 		return newTotal;
 	}
@@ -285,12 +296,13 @@ public class ObjectFactory {
 		Order order = (Order) map.get("order");
 		integracionProps = (Properties) map.get("integracionProps");
 		String idTransaccion = String.format("%d", order.getId());
-		List<String> recetas = new ArrayList<String>();
+		String rut = integracionProps.getProperty("monitorLogistico.rut","762114259");
+		
+		List<String> recetas = null;
 		if (order.getAttachments() != null && !order.getAttachments().isEmpty()) {
+			recetas = new ArrayList<String>();
 			for (Attachment attachment: order.getAttachments())
 				recetas.add(attachment.getUrl());
-		} else {
-			recetas.add("");
 		}
 		DatosEntrega datosEntrega = factoryDatosEntrega(order);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -321,6 +333,7 @@ public class ObjectFactory {
 		request.setComuna(datosEntrega.region);
 		request.setFechaCreacion(fechaCreacion);
 		request.setEmail(cliente.mail);
+		request.setRut(rut); 
 		request.setExternalNumber("0");
 		request.setNombre(cliente.nombres);
 		request.setApellido(cliente.apellidos);
@@ -334,7 +347,6 @@ public class ObjectFactory {
 		request.setEventType("");
 		request.setInternalNumber("");
 		request.setCodigoComercio("KIOSKO");
-		request.setRut("");
 		request.setLatDireccion(1.0d);
 		request.setLongDireccion(1.0d);
 		request.setHomeType("");
@@ -392,9 +404,12 @@ public class ObjectFactory {
 		
 		items = new ArrayList<ItemML>();
 		for (Producto producto : productos) {
+			logger.debug(String.format("factoryItemsML: formando ItemML[] con producto: %s", producto.toString()));
 			StringTokenizer st = new StringTokenizer(producto.codigoProducto.toString(), "|");
 			String codigo = st.nextToken();
-			String nombre = st.nextToken();
+			String nombre = "NN";
+			if (st.hasMoreTokens())
+				nombre = st.nextToken();
 			ItemML item = new ItemML(numeroLocal, codigo, nombre, producto.cantidad, producto.precioUnitario);
 			items.add(item);
 		}

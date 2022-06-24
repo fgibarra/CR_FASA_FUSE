@@ -244,10 +244,12 @@ public class ServiciosdeBus {
 		String numeroOrden = String.format("%d", order.getId());
 		mapProcesoOrden.put(numeroOrden, semaforo);
 
-		apiSendOrdenMonitor(map); //
-//		apiSendOrdenMonitor(order); 
-		
-		semaforo.espere();
+		if (apiSendOrdenMonitor(map)) {
+			logger.info("invocaMonitorLogistico: espera que monitor logistico haga su gracia");
+			semaforo.espere();
+		} else {
+			logger.info("invocaMonitorLogistico: no se pudo invocar a monitor logistico, sigue con la siguiente transaccion !!!");
+		}
 		
 		return mapConfirmaOrden.remove(numeroOrden);
 	}
@@ -285,7 +287,7 @@ public class ServiciosdeBus {
 				resultado = true;
 			}
 		} catch (Exception e) {
-			logger.error("apiSendOrdenMonitor",e);
+			logger.error(String.format("apiSendOrdenMonitor: retorna %b", resultado),e);
 		} finally {
 			try {
 				stream.close();
