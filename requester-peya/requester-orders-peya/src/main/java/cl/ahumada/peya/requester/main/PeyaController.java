@@ -33,7 +33,7 @@ import cl.ahumada.peya.requester.peyasdk.threads.ProcesaOrden;
 
 public class PeyaController {
 
-    private static final String version = "2.0.1 (24-06-2022)";
+    private static final String version = "2.0.2 (31-08-2022)";
     protected static String log4jConfigFile = "pedidosYa_log4j.properties";
     private static Logger logger = Logger.getLogger(PeyaController.class);
     
@@ -97,6 +97,12 @@ public class PeyaController {
         String valor = System.getProperty("peya.requester.monitor");
         if (valor != null)
         	integracionProps.setProperty("monitorLogisticoEndPoint", valor);
+        
+        logger.info(String.format("PeyaController: url Monitor Logistico: %s", integracionProps.getProperty("monitorLogisticoEndPoint")));
+        
+        valor = System.getProperty("peya.httpclient.timeout");
+        if (valor != null)
+        	integracionProps.setProperty("httpclient.timeout", valor);
         
         logger.info(String.format("PeyaController: url Monitor Logistico: %s", integracionProps.getProperty("monitorLogisticoEndPoint")));
         

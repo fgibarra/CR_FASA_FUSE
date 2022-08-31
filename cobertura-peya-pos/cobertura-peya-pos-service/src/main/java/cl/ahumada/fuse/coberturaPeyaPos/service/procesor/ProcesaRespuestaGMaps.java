@@ -90,6 +90,12 @@ public class ProcesaRespuestaGMaps extends JacksonFunctions implements Processor
 							}
 						}
 						String street = sbA.toString();
+						if (sbB.length() == 0) {
+							if (partes.length > 3)
+								sbB.append(partes[partes.length - 3]);
+							else
+								sbB.append(partes[partes.length - 2]);
+						}
 						String comuna = sbB.toString();
 						Waypoints waypoints = new Waypoints("DROP_OFF",
 													location.getLat(), 

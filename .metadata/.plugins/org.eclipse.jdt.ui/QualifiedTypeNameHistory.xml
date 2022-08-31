@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="cl.ahumada.ordenes.peya.servicios.http.ReactiveFullDuplexServer"/>
-    <fullyQualifiedTypeName name="cl.ahumada.peya.requester.peyasdk.Token"/>
     <fullyQualifiedTypeName name="com.pedidosya.reception.sdk.ApiClient"/>
     <fullyQualifiedTypeName name="cl.ahumada.peya.requester.apirest.ReactiveFullDuplexServer"/>
     <fullyQualifiedTypeName name="cl.ahumada.peya.requester.main.PeyaController"/>
@@ -60,4 +58,6 @@
     <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonCreator"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="java.util.StringTokenizer"/>
+    <fullyQualifiedTypeName name="org.apache.http.client.params.HttpClientParams"/>
+    <fullyQualifiedTypeName name="org.apache.commons.httpclient.params.HttpClientParams"/>
 </qualifiedTypeNameHistroy>

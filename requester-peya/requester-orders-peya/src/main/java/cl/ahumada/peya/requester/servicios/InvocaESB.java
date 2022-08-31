@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.params.HttpClientParams;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pedidosya.reception.sdk.models.Order;
@@ -30,7 +31,8 @@ public class InvocaESB extends RestApiClient {
 	protected String endpointInformeDeshabilita="http://localhost:8080/ESB/informeDeshabilitado/skusOrder";
 	protected Properties integracionProps;
 	protected Integer stockCritico = 2;
-
+	protected Integer timeoutDefault = 0;
+	
 	public InvocaESB(Properties integracionProps) throws IOException {
 		super();
 		this.integracionProps = integracionProps;
@@ -49,7 +51,20 @@ public class InvocaESB extends RestApiClient {
 			if (stream == null) throw new RuntimeException("stream es nulo");
 		authorizationProps.load(stream);
 		}
-		httpclient = new HttpClient();
+		valor = integracionProps.getProperty(ServiciosdeBus.HTTPCLIENT_TIMEOUT_KEY);
+		if (valor != null) {
+			try {
+				timeoutDefault = Integer.valueOf(valor) * 1000;
+			} catch (Exception e) {
+				String msg = String.format("Propiedad %s tiene valor %s no numerico",ServiciosdeBus.HTTPCLIENT_TIMEOUT_KEY, valor);
+				logger.error(msg, e);
+				throw new RuntimeException(msg);
+			}
+		}
+		HttpClientParams cp = new HttpClientParams();
+		cp.setSoTimeout(timeoutDefault);
+		httpclient = new HttpClient(cp);
+		
 		stockEndPoint = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_STOCK_KEY);
 		stockEndPoint2 = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_STOCK2_KEY);
 		pedidosEndPoint = integracionProps.getProperty(ServiciosdeBus.ENDPOINT_PEDIDOS);
@@ -208,6 +223,7 @@ public class InvocaESB extends RestApiClient {
 		try {
 			String json = JSonUtilities.getInstance().java2json(request);
 
+			
 			RestApiResponse ar = invokeEndpoint(endpoint, json);
 			logger.debug(String.format("invocaEsbServiceStock: stockEndPoint responde: %s",
 					ar!=null?String.format("ar.status=%d", ar.getStatusCode()):"NULO"));

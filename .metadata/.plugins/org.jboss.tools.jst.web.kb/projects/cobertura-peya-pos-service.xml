@@ -104,6 +104,7 @@
   <path value="/home/fernando/.m2/repository/com/sun/xml/messaging/saaj/saaj-impl/1.4.0-b03/saaj-impl-1.4.0-b03.jar"/>
  </paths>
  <validation>
+  <core validator-id="jboss.cdi.core"/>
   <el>
    <linked-el length="74" name="%0" offset="10047" path="%1"/>
    <linked-el length="53" name="%2" offset="4221" path="%1"/>

@@ -45,6 +45,7 @@ public class ServiciosdeBus {
 	public static String ENDPOINT_INFORMA_DESHABILITA_KEY = "endpoint_ws_informeDeshabilita";
 	public static String ENDPOINT_STOCK_KEY = "stockEndPoint";
 	public static String ENDPOINT_STOCK2_KEY = "stockEndPoint2";
+	public static String HTTPCLIENT_TIMEOUT_KEY = "httpclient.timeout";
 	public static String ENDPOINT_PEDIDOS = "pedidosEndPoint";
 	public static String ENDPOINT_MONITOR_LOGISTICO = "monitorLogisticoEndPoint";
 	public static String NUMERO_ORDEN = "numeroOrden";
