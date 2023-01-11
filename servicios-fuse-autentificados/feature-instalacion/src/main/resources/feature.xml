@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="instalador-servicios-fasa-autentificados">
+
+	<feature name="instalador-servicios-pharol-autentificados" version="${project.version}">
+		<bundle>mvn:fasaFUSE.autentificado/consulta-stock-autentificado/1.0.0</bundle>
+	</feature>
+	
+	<feature name="instalador-todos-servicios-autentificados" version="${project.version}">
+	<feature prerequisite="true">instalador-servicios-pharol-autentificados</feature>
+	</feature>
+	
+</features>

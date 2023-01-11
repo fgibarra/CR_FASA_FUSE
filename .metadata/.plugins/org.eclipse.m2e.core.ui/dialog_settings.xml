@@ -31,13 +31,13 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
-			<item value="org.requester.orders.peya"/>
+			<item value="org.consultaStockAutentificado"/>
 		</list>
 		<list key="groupId">
-			<item value="fasaFUSE"/>
+			<item value="fasaFUSE.autentificado"/>
 		</list>
 		<list key="artifactId">
-			<item value="requester-orders-peya"/>
+			<item value="consultaStockAutentificado"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -48,18 +48,22 @@
 			<item value="[name]"/>
 		</list>
 		<list key="version">
-			<item value="2.0.0"/>
+			<item value="1.0.0"/>
 		</list>
 	</section>
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
-			<item value="fasaFUSE"/>
+			<item value="fasaFUSE.autentificado"/>
 		</list>
 		<list key="name">
+			<item value="ConsultaStockAutentificado"/>
+			<item value="feature-instalacion"/>
 		</list>
 		<list key="artifactId">
-			<item value="requester-orders-peya"/>
-			<item value="requester-peya"/>
+			<item value="consultaStockAutentificado"/>
+			<item value="servicios-pharol-autentificados"/>
+			<item value="feature-instalacion"/>
+			<item value="servicios-fuse-autentificados"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -70,11 +74,16 @@
 			<item value="[name]"/>
 		</list>
 		<list key="version">
-			<item value="2.0.0"/>
+			<item value="1.0.0"/>
 		</list>
 	</section>
 	<section name="MavenModuleWizardParentPage">
 		<list key="moduleName">
+			<item value="consultaStockAutentificado"/>
+			<item value="feature-instalacion"/>
+			<item value="servicios-pharol-autentificados"/>
+			<item value="servicios-pharol"/>
+			<item value="consultaStockV2"/>
 			<item value="requester-orders-peya"/>
 			<item value="monitor-logistico-mock"/>
 			<item value="requester-peya-service-consultaStock"/>
@@ -100,6 +109,9 @@
 	</section>
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="/home/fernando/Downloads/karaf-main"/>
+			<item value="/home/fernando/Downloads/apache karaf main examples"/>
+			<item value="/home/fernando/Downloads/examples-karaf-jaas-example"/>
 			<item value="/home/fernando/CodeReady/FASA/FUSE/requester-peya"/>
 			<item value="/home/fernando/CodeReady/FASA/FUSE/PedidosYaRequester-2.0"/>
 		</list>

@@ -206,4 +206,10 @@
 			<item value="org.eclipse.m2e"/>
 		</list>
 	</section>
+	<section name="CleanDialogSettings">
+		<item key="TOGGLE_SELECTED" value="true"/>
+		<item key="DIALOG_WIDTH" value="569"/>
+		<item key="DIALOG_HEIGHT" value="407"/>
+		<item key="DIALOG_FONT_NAME" value="1|Cantarell|11.0|0|GTK|1|"/>
+	</section>
 </section>

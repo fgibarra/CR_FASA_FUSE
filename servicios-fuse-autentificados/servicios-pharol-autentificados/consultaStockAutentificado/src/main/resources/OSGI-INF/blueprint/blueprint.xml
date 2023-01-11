@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://cxf.apache.org/blueprint/core"
+    xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
+    xmlns:jaas="http://karaf.apache.org/xmlns/jaas/v1.0.0"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESBA/Stock/" id="rsAuthApiSvc" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="pmAuthService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+            <!-- <bean class="cl.ahumada.fuse.stock.api.security.SecurityProvider"> 
+                <property name="userRole" value="{{roleAccepted}}"/>
+            </bean> -->
+        </jaxrs:providers>
+    </jaxrs:server>
+    <!-- Bean to allow the $[karaf.base] property to be correctly resolved -->
+    <ext:property-placeholder placeholder-prefix="$[" placeholder-suffix="]"/>
+
+    <jaas:config name="karaf" rank="1">
+        <jaas:module
+            className="org.apache.karaf.jaas.modules.properties.PropertiesLoginModule" flags="required">
+            users = $[karaf.base]/etc/users.properties
+        </jaas:module>
+        <!-- users = ${karaf.etc}/users.properties -->
+    </jaas:config>
+
+    <reference availability="mandatory"
+        filter="(osgi.jndi.service.name=pharolds)" id="pharolDataSource" interface="javax.sql.DataSource"/>
+    <bean
+        class="cl.ahumada.fuse.stock.api.resources.ConsultaStockRestService" id="pmAuthService"/>
+    <bean class="cl.ahumada.fuse.stock.procesor.PreparaQry" id="preparaQry"/>
+    <bean
+        class="cl.ahumada.fuse.stock.procesor.ProcesaProductosPorLocal" id="procesaProductosPorLocal">
+        <property name="datasource" ref="pharolDataSource"/>
+        <property name="qry" value="{{storeProcedureCall}}"/>
+    </bean>
+    <bean class="cl.ahumada.fuse.stock.procesor.TransformaSPaResponse" id="transformaSPaResponse"/>
+    <bean
+        class="cl.ahumada.fuse.stock.procesor.GeneraRespuestaWsConsultaStock" id="generaRespuestaWsConsultaStock"/>
+
+    <camelContext id="consulta-stock-autentificado"
+        trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.stock.cfg"/>
+        <route id="restApiRoute">
+            <from id="_pmAuthService" uri="direct:start"/>
+            <log id="_log1" message="received (v0.0.2) from WS: ${body}"/>
+            <to id="_ApreparaQryRoute" uri="seda:incomingOrders?timeout=30000"/>
+        </route>
+        <route id="preparaQryRoute">
+            <from id="_restApiRoute" uri="seda:incomingOrders?concurrentConsumers=5"/>
+            <process id="_preparaQryAction" ref="preparaQry"/>
+            <to id="_aProcesaProductosPorLocalRoute" uri="direct:procesaDB"/>
+        </route>
+        <route id="procesaProductosPorLocalRoute">
+            <from id="_preparaQryRoute" uri="direct:procesaDB?timeout=-1"/>
+            <!-- 
+            <to uri="sql-stored:PKG_ESB_SERVICIO.STOCK_TIENDA_BUSCAR(java.sql.Types.VARCHAR ${header.locales}, java.sql.Types.VARCHAR ${header.productos}, OUT java.sql.Types.CLOB resultadodb)?dataSource=#pharolDataSource"/>
+             -->
+            <process id="_procesaProductosPorLocalAction" ref="procesaProductosPorLocal"/>
+            <process id="_transformaSPaResponseAction" ref="transformaSPaResponse"/>
+            <process id="_generaRespuestaWsConsultaStockAction" ref="generaRespuestaWsConsultaStock"/>
+            <log id="_log2" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+</blueprint>

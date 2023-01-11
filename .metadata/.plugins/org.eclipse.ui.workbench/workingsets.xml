@@ -6,5 +6,8 @@
 <workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1648646876649_4" label="requester-peya" name="requester-peya">
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/requester-orders-peya" type="4"/>
 </workingSet>
+<workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1671631425228_5" label="karaf-jaas-example" name="karaf-jaas-example"/>
+<workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1671632549462_6" label="apache-karaf-examples" name="apache-karaf-examples"/>
+<workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1671633061236_7" label="karaf" name="karaf"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1620765019337_2" label="Window Working Set" name="Aggregate for window 1620765019337"/>
 </workingSetManager>

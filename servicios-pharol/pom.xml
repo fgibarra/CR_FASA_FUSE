@@ -286,6 +286,13 @@
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 		</dependency>
 
+		<!-- para security -->
+		<!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-jaxrs -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-jaxrs</artifactId>
+		    <version>3.13.2.Final</version>
+		</dependency>
 	</dependencies>
 
 
@@ -298,5 +305,6 @@
 		<module>pedidosV3</module>
 		<module>pedidosV4</module>
 		<module>promocionesV3</module>
+		<module>consultaStockV2</module>
 	</modules>
 </project>
