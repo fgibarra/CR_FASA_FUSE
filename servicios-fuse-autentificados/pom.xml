@@ -23,8 +23,8 @@
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
 
-  <artifactId>servicios-fuse-autentificados</artifactId>
   <groupId>fasaFUSE.autentificado</groupId>
+  <artifactId>servicios-fuse-autentificados</artifactId>
   <version>1.0.0</version>
   <name>servicios-fuse-autentificados</name>
 
@@ -244,17 +244,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- para el cxf -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-blueprint</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-cxf</artifactId>
-		</dependency>
-
 		<!-- Jackson dependencies -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -306,10 +295,22 @@
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 		</dependency>
 
+		<!-- para security -->
+		<!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-jaxrs -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-jaxrs</artifactId>
+		    <version>3.13.2.Final</version>
+		</dependency>
+
 	</dependencies>
 
 	<modules>
 		<module>servicios-pharol-autentificados</module>
 		<module>feature-instalacion</module>
+	  	<module>comunes-servicios</module>
+	  	<module>cobertura-peya-autentificados</module>
+	  	<module>comercio-electronico-autentificados</module>
+	  	<module>servicios-consultas-autentificados</module>
 	</modules>
 </project>

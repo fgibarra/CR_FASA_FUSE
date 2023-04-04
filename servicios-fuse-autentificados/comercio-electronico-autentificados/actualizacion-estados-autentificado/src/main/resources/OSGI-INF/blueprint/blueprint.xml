@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint-2.20.2.xsd">
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESBA/actualizaEstados/" id="rsServicePedidos" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="promService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <reference availability="mandatory"
+        filter="(osgi.jndi.service.name=comercioelectronicods)"
+        id="comelDataSource" interface="javax.sql.DataSource"/>
+    <bean
+        class="cl.ahumada.fuse.actualizacionEstados.api.resources.ActualizaEstadosRestService" id="promService"/>
+    <bean
+        class="cl.ahumada.fuse.actualizacionEstados.procesor.PreparaQuery" id="preparaQry"/>
+    <bean
+        class="cl.ahumada.fuse.actualizacionEstados.procesor.PreparaResponse" id="preparaResponse"/>
+    <camelContext id="actualizacionEstadosV1-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.actualizacionEstados.cfg"/>
+        <route id="restApiRoute">
+            <from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from cliente: ${body}"/>
+            <to id="_ApreparaReqRoute" uri="seda:incomingPedidos"/>
+        </route>
+        <route id="_doTest">
+            <from id="_from1" uri="seda:incomingPedidos?concurrentConsumers=2"/>
+            <process id="_preparaQry" ref="preparaQry"/>
+            <log id="_log2" message="vamos a SP con: ${headers.ID_ORDER} ; ${headers.FECHA_ESTIMADA} ; ${headers.CODIGO_ESTADO} ; ${headers.COMENTARIO}"/>
+            <to id="_to1" uri="sql-stored:interpretecorp_own.SP_REGISTRO_TRACKING(VARCHAR ${headers.ID_ORDER}, VARCHAR ${headers.FECHA_ESTIMADA}, VARCHAR ${headers.CODIGO_ESTADO}, VARCHAR ${headers.COMENTARIO}, OUT VARCHAR resultadoSP)?dataSource=#comelDataSource"/>
+            <log id="_log4" message="vuelve con headers.resultadoSP: {headers.resultadoSP} body: ${body}"/>
+            <process id="_preparaResponse" ref="preparaResponse"/>
+            <to id="resp" uri="direct:doResponse"/>
+        </route>
+        <route id="_doResponseRoute">
+            <from id="_doResponse" uri="direct:doResponse"/>
+            <log id="_log3" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+</blueprint>

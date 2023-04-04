@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2014-2017, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. 
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    https://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+   This is the OSGi Blueprint XML file defining the Camel context and routes.  Because the file is in the
+   OSGI-INF/blueprint directory inside our JAR, it will be automatically activated as soon as the bundle is installed.
+
+   The root element for any OSGi Blueprint file is 'blueprint' - you also see the namespace definitions for both the Blueprint
+   and the Camel namespaces.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://cxf.apache.org/blueprint/core"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd    http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint-2.20.2.xsd    http://camel.apache.org/schema/blueprint/cxf http://camel.apache.org/schema/cxf/camel-cxf-blueprint.xsd    http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd    http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESBA/Pedido/" id="rsAuthApiSvc" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="pmAuthService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <reference availability="mandatory"
+        filter="(osgi.jndi.service.name=consultasds)"
+        id="consultasDataSource" interface="javax.sql.DataSource"/>
+    <bean
+        class="cl.ahumada.fuse.pedidos.api.resources.ConsultaPedidosRestService" id="pmAuthService"/>
+    <bean class="cl.ahumada.fuse.pedidos.procesor.PreparaQry" id="preparaQry"/>
+    <bean class="cl.ahumada.fuse.pedidos.procesor.EjecutaSP" id="ejecutaSP">
+        <property name="datasource" ref="consultasDataSource"/>
+        <property name="qryTemplate" value="{{storeProcedureCall}}"/>
+    </bean>
+    <bean class="cl.ahumada.fuse.pedidos.procesor.GeneraRespuestaWs" id="generaRespuestaWs"/>
+    <camelContext id="consulta-pedidos-v1" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.consulta_pedidos.cfg"/>
+        <route id="restApiRoute">
+            <from id="_pmAuthService" uri="direct:start"/>
+            <log id="_log1" message="received from WS: ${body}"/>
+            <to id="_ApreparaQryRoute" uri="seda:incomingConsultaPedidos"/>
+        </route>
+        <route id="preparaQryRoute">
+            <from id="_restApiRoute" uri="seda:incomingConsultaPedidos?concurrentConsumers=2"/>
+            <process id="_preparaQryAction" ref="preparaQry"/>
+            <to id="_aProcesaProductosPorLocalRoute" uri="direct:procesaDB"/>
+        </route>
+        <route id="ejecutaSPRoute">
+            <from id="_preparaQryRoute" uri="direct:procesaDB"/>
+            <!-- 
+            <to uri="sql-stored:PKG_ESB_SERVICIO.pedidos_TIENDA_BUSCAR(java.sql.Types.VARCHAR ${header.locales}, java.sql.Types.VARCHAR ${header.productos}, OUT java.sql.Types.CLOB resultadodb)?dataSource=#consultasDataSource"/>
+             -->
+            <process id="_ejecutaSPAction" ref="ejecutaSP"/>
+            <process id="_generaRespuestaWsConsultaStockAction" ref="generaRespuestaWs"/>
+            <log id="_log2" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+</blueprint>

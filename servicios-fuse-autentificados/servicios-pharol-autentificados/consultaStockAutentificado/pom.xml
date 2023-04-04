@@ -22,18 +22,34 @@
 					<instructions>
 						<Export-Package>cl.ahumada.fuse.stock.api.resources</Export-Package>
 						<Import-Package>
-						    oracle.sql,oracle.sql.*,oracle.jdbc.*,oracle.jdbc.driver,
-							oracle.core.*,oracle.net.*,oracle.ons,oracle.security.o3logon,oracle.security.o5logon,
-							oracle.security.pki,oracle.i18n.text,oracle.i18n.text.converter,oracle.xdb,oracle.xml.parser.v2,
-							javax.resource,javax.resource.spi,javax.resource.spi.security,javax.resource.spi.endpoint,
-							com.sun.security.auth.module,org.objectweb.asm,sun.security.krb5,sun.security.krb5.internal,
-							sun.security.util
+							cl.ahumada.fuse,
+							cl.ahumada.fuse.api,
+							cl.ahumada.fuse.json.utils,
+							cl.ahumada.fuse.json.stock,
+							javax.annotation.security,
+							org.jboss.resteasy.util,
+							javax.security.auth,
+							javax.security.auth.callback,
+							javax.security.auth.login,
+							com.fasterxml.jackson.jaxrs.json;version="[2.6,3)",
+							com.fasterxml.jackson.databind,
+							com.fasterxml.jackson.annotation,
+							javax.sql,javax.transaction;version="[1.2,2)",
+							javax.ws.rs;version="[2.1,3)",
+							javax.ws.rs.core;version="[2.1,3)",
+							 javax.xml.bind.annotation;version="[2.2,3)",
+							 org.apache.camel;version="[2.21,3)",
+							 org.apache.karaf.shell.api.action.lifecycle;version="[4.0,5)",
+							 org.apache.log4j;version="[1.2,2)",
+							 org.osgi.service.blueprint;version="[1.0.0,2.0.0)",
+							 org.apache.karaf.shell*
 						</Import-Package>
-						<Built-By>Fernando </Built-By>
-						<Bundle-Description>ConsultaStock</Bundle-Description>
-						<Bundle-Name>Consulta Stock v1.0</Bundle-Name>
+						<DynamicImport-Package>*;</DynamicImport-Package>
+						<Built-By>Fernando Ibarra</Built-By>
+						<Bundle-Description>ConsultaStockAutentificado</Bundle-Description>
+						<Bundle-Name>Consulta Stock v2.0</Bundle-Name>
 						<Bundle-SymbolicName>consulta-stock-autentificado-v1</Bundle-SymbolicName>
-						<Bundle-Name>Servicios consulta stock [consulta-stock-autentificado-v1]</Bundle-Name>
+						<Bundle-Name>Servicios consulta stock autentificado [consulta-stock-autentificado-v1]</Bundle-Name>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -41,8 +57,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>

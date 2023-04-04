@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint-2.20.2.xsd">
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESBA/ABF/" id="rsServiceExcedentes" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="promService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <!-- =================================================================================================== -->
+    <bean
+        class="cl.ahumada.fuse.excedentes.api.resources.ExcedentesRestService" id="promService"/>
+    <bean
+        class="cl.ahumada.fuse.excedentes.procesor.PreparaSocketMessageA01" id="preparaSocketA01"/>
+    <bean
+        class="cl.ahumada.fuse.excedentes.procesor.PreparaSocketMessageC01" id="preparaSocketC01"/>
+    <bean
+        class="cl.ahumada.fuse.excedentes.procesor.PreparaSocketMessageC02" id="preparaSocketC02"/>
+    <bean class="cl.ahumada.fuse.excedentes.procesor.MockProxyMF" id="mockProxyMF"/>
+    <bean class="cl.ahumada.fuse.excedentes.procesor.PreparaResponseA01" id="preparaResponseA01"/>
+    <bean class="cl.ahumada.fuse.excedentes.procesor.PreparaResponseC01" id="preparaResponseC01"/>
+    <bean class="cl.ahumada.fuse.excedentes.procesor.PreparaResponseC02" id="preparaResponseC02"/>
+    <!-- =================================================================================================== -->
+    <camelContext id="excedentesABFV1-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.excedentesABF.cfg"/>
+        <route id="restApiRoute">
+            <from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from cliente: ${body} operacion: ${header.operacion}"/>
+            <to id="_ApreparaReqRoute" uri="seda:incomingRequest"/>
+        </route>
+        <!-- SOLO PARA PRUEBAS LOCALES
+        <route id="serverProxyMF">
+        	<from uri="proxyMF:excedentes:localhost:{{port}}"/>
+            <process id="_invoca" ref="mockProxyMF"/>        	
+        </route>
+         -->
+        <route id="splitTx">
+            <from id="_restApi" uri="seda:incomingRequest"/>
+            <choice id="_choiceFuncion">
+                <when id="_whenAutorizacion">
+                    <simple>${header.operacion} == 'autorizacion'</simple>
+                    <to id="_toAutorizacion" uri="seda:incomingExcedentes"/>
+                </when>
+                <when id="_whenConfirmacion">
+                    <simple>${header.operacion} == 'confirmacion'</simple>
+                    <to id="_toConfirmacion" uri="seda:incomingConfirmacion"/>
+                </when>
+                <when id="_whenAnulacion">
+                    <simple>${header.operacion} == 'anulacion'</simple>
+                    <to id="_toAnulacion" uri="seda:incomingAnulacion"/>
+                </when>
+                <camel:otherwise id="_otherwise1">
+                    <log id="_log3" message="NO esta definido header.Operacion [${header.Operacion}]"/>
+                    <camel:setBody id="_setBody1">
+                        <constant>{}</constant>
+                    </camel:setBody>
+                </camel:otherwise>
+            </choice>
+        </route>
+        <route id="_doAutorizacion">
+            <from id="_from1" uri="seda:incomingExcedentes"/>
+            <process id="_preparaQryA01" ref="preparaSocketA01"/>
+            <log id="_log2" message="Envia a PROXY"/>
+            <to id="_to1" uri="proxyMF:excedentes:{{proxyServer}}:{{port}}"/>
+            <process id="_preparaResponseA01" ref="preparaResponseA01"/>
+            <to id="resp1" uri="direct:doResponse"/>
+        </route>
+        <route id="_doConfirmacion">
+            <from id="_from2" uri="seda:incomingConfirmacion"/>
+            <process id="_preparaQryC01" ref="preparaSocketC01"/>
+            <log id="_log4" message="Envia a PROXY"/>
+            <to id="_to2" uri="proxyMF:excedentes:{{proxyServer}}:{{port}}"/>
+            <process id="_preparaResponseC01" ref="preparaResponseC01"/>
+            <to id="resp2" uri="direct:doResponse"/>
+        </route>
+        <route id="_doAnulacion">
+            <from id="_from3" uri="seda:incomingAnulacion"/>
+            <process id="_preparaQryC02" ref="preparaSocketC02"/>
+            <log id="_log5" message="Envia a PROXY"/>
+            <to id="_to3" uri="proxyMF:excedentes:{{proxyServer}}:{{port}}"/>
+            <process id="_preparaResponseC02" ref="preparaResponseC02"/>
+            <to id="resp3" uri="direct:doResponse"/>
+        </route>
+        <route id="_doResponseRoute">
+            <from id="_doResponse" uri="direct:doResponse"/>
+            <log id="_logf" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+</blueprint>

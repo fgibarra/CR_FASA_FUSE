@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2014-2017, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. 
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    https://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+   This is the OSGi Blueprint XML file defining the Camel context and routes.  Because the file is in the
+   OSGI-INF/blueprint directory inside our JAR, it will be automatically activated as soon as the bundle is installed.
+
+   The root element for any OSGi Blueprint file is 'blueprint' - you also see the namespace definitions for both the Blueprint
+   and the Camel namespaces.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint-2.20.2.xsd">
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESBA/pedidosV3/" id="rsServicePedidos" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="promService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="cl.ahumada.fuse.pedidos.api.resources.PedidosMessageProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <reference availability="mandatory"
+        filter="(osgi.jndi.service.name=pharolds)" id="pharolDataSource" interface="javax.sql.DataSource"/>
+    <bean
+        class="cl.ahumada.fuse.pedidos.api.resources.PedidosRestService" id="promService"/>
+    <bean class="cl.ahumada.fuse.pedidos.procesor.PreparaQry" id="preparaQryV3"/>
+    <bean class="cl.ahumada.fuse.pedidos.procesor.PreparaResponse" id="preparaResponseV3"/>
+    <camelContext id="pedidosV3-api" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.pedidosV3.cfg"/>
+        <route id="restApiRoute">
+            <from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from cliente: ${body}"/>
+            <to id="_ApreparaReqRoute" uri="seda:incomingPedidos"/>
+        </route>
+        <route id="_doTest">
+            <from id="_from1" uri="seda:incomingPedidos?concurrentConsumers=5"/>
+            <process id="_preparaQry" ref="preparaQryV3"/>
+            <log id="_log2" message="vamos a SP con: ${headers.oCabecera} ; ${headers.oCarro} ; ${headers.oTotalVta} ; ${headers.oMedioPago} ; ${headers.oDatosCliente} ; ${headers.odatosEntrega} ; ${headers.odatosFactura} "/>
+            <to id="_toSP" uri="sql-stored:pkg_venta_internet_v3.SP_INGRESO_VENTA_ELECTRONICA_3(VARCHAR ${headers.oCabecera}, VARCHAR ${headers.oCarro}, VARCHAR ${headers.oTotalVta}, VARCHAR ${headers.oMedioPago}, VARCHAR ${headers.oDatosCliente}, VARCHAR ${headers.odatosEntrega}, VARCHAR ${headers.odatosFactura}, VARCHAR ${headers.dataPDF}, OUT VARCHAR resultadoSP)?dataSource=#pharolDataSource"/>
+            <log id="_log3" message="vuelve con headers.resultadoSP: {headers.resultadoSP} body: ${body}"/>
+            <process id="_preparaResponse" ref="preparaResponseV3"/>
+            <to id="resp" uri="direct:doResponse"/>
+        </route>
+        <route id="_doResponseRoute">
+            <from id="_doResponse" uri="direct:doResponse"/>
+            <log id="_log4" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+</blueprint>

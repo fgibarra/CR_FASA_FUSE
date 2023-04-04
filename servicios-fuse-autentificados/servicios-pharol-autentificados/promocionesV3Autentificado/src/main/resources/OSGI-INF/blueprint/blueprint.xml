@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2014-2017, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. 
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    https://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+   This is the OSGi Blueprint XML file defining the Camel context and routes.  Because the file is in the
+   OSGI-INF/blueprint directory inside our JAR, it will be automatically activated as soon as the bundle is installed.
+
+   The root element for any OSGi Blueprint file is 'blueprint' - you also see the namespace definitions for both the Blueprint
+   and the Camel namespaces.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint-2.20.2.xsd">
+    <!-- archivo de propiedades -->
+    <cm:property-placeholder persistent-id="cl.ahumada.promociones">
+        <cm:default-properties>
+            <cm:property name="cartEntry.url" value="cartEntry.url"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <!-- CXF servers -->
+    <jaxrs:server address="/ESBA/PromocionV3/" id="restService" staticSubresourceResolution="true">
+        <jaxrs:serviceBeans>
+            <ref component-id="promService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <bean
+        class="cl.ahumada.fuse.promociones.api.resources.PromocionesV3RestService" id="promService"/>
+    <bean
+        class="cl.ahumada.fuse.promociones.procesor.PreparaRequestCartEntry" id="preparaReq"/>
+    <bean
+        class="cl.ahumada.fuse.promociones.procesor.GeneraRespuestaPromocionesV3" id="generaRespuestaWsPromociones"/>
+    <bean class="cl.ahumada.fuse.promociones.procesor.RequestProcessor" id="requestProcessor"/>
+    <camelContext id="promocionesv3-api" xmlns="http://camel.apache.org/schema/blueprint">
+        <route id="restApiRoute">
+            <from id="_promService" uri="direct:start"/>
+            <log id="_log1" message="received from WS: ${body}"/>
+            <to id="_ApreparaReqRoute" uri="seda:incomingPromos"/>
+        </route>
+        <route id="preparaReqRoute">
+            <from id="_restApiRoute" uri="seda:incomingPromos"/>
+            <process id="_preparaReqAction" ref="preparaReq"/>
+            <to id="_aPostCartEntry" uri="direct:toCartEntry"/>
+        </route>
+        <route id="postCartEntryRoute">
+            <from id="_preparaReqRoute" uri="direct:toCartEntry"/>
+            <process id="_process1" ref="requestProcessor"/>
+            <to id="_aTransformaSPaResponseRoute" uri="cxfrs:bean:rsClient"/>
+            <process id="_generaRespuestaWsPromocionesAction" ref="generaRespuestaWsPromociones"/>
+            <log id="_log2" message="devuelve a WS: ${body}"/>
+            <to id="_final" uri="mock:end"/>
+        </route>
+    </camelContext>
+    <cxf:rsServer address="/ESB/PromocionV3/" id="rsServer"
+        loggingFeatureEnabled="true" loggingSizeLimit="20" serviceClass="cl.ahumada.fuse.promociones.api.resources.PromocionesV3RestService">
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsServer>
+    <cxf:rsClient address="http://{{cartEntry.url}}/orchestrator"
+        id="rsClient" loggingFeatureEnabled="true" password="fdo123"
+        serviceClass="cl.ahumada.fuse.promociones.restclient.PromocionesV3Endpoint" username="fir">
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsClient>
+</blueprint>

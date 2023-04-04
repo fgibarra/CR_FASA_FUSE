@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>fasaFUSE.autentificado</groupId>
+    <artifactId>servicios-fuse-autentificados</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>comercio-electronico-autentificados</artifactId>
+  <packaging>pom</packaging>
+  <name>ComercioElectronicoAutentificado</name>
+  <description>Servicios de comercio electronico: actualixacion-estados, excedentesABF</description>
+	<dependencies>
+		<dependency>
+			<groupId>fasaFUSE.autentificado</groupId>
+			<artifactId>comunes-servicios</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>/home/fernando/CodeReady/FASA/FUSE/servicios-fuse-autentificados/comunes-servicios/target/comunes-servicios-1.0.0.jar</systemPath>
+		</dependency>
+	</dependencies>
+  <modules>
+  	<module>actualizacion-estados-autentificado</module>
+  	<module>excedentesABF-autentificado</module>
+  </modules>
+</project>

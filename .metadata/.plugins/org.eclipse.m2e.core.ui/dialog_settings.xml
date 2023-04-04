@@ -6,6 +6,7 @@
 	</section>
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="/home/fernando/CodeReady/FASA/FUSE/servicios-fuse-autentificados/servicios-pharol-autentificados/comunes-json"/>
 			<item value="/home/fernando/CodeReady/FASA/FUSE/requester-peya"/>
 			<item value="/home/fernando/CodeReady/FASA/FUSE/PedidosYaRequester-2.0"/>
 		</list>
@@ -31,13 +32,13 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
-			<item value="org.consultaStockAutentificado"/>
+			<item value="org.promocionesV3Autentificado"/>
 		</list>
 		<list key="groupId">
 			<item value="fasaFUSE.autentificado"/>
 		</list>
 		<list key="artifactId">
-			<item value="consultaStockAutentificado"/>
+			<item value="promocionesV3Autentificado"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -54,16 +55,41 @@
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
 			<item value="fasaFUSE.autentificado"/>
+			<item value="comunes-servicios"/>
 		</list>
 		<list key="name">
-			<item value="ConsultaStockAutentificado"/>
-			<item value="feature-instalacion"/>
+			<item value="PromocionesV3Autentificado"/>
+			<item value="Pedidos V4 Autentificado"/>
+			<item value="Pedidos v3 Autentificado"/>
+			<item value="Descuentos V4 Autentificado"/>
+			<item value="DescuentosV3Autentificado"/>
+			<item value="consultaStockV2Autentificado"/>
+			<item value="ConsultaStockFarmaciaAutentificado"/>
+			<item value="consultaProductosAutentificado"/>
+			<item value="consultaPedidosAutentificado"/>
+			<item value="ExcedentesABF-autentificado"/>
+			<item value="ActualizacionEstadosAutentificado"/>
+			<item value="Cobertura Peya Service Autentificado"/>
+			<item value="ServiciosConsultasAutentificados"/>
+			<item value="ComercioElectronicoAutentificado"/>
+			<item value="CoberturaPeyaAutentificados"/>
 		</list>
 		<list key="artifactId">
-			<item value="consultaStockAutentificado"/>
+			<item value="promocionesV3Autentificado"/>
 			<item value="servicios-pharol-autentificados"/>
-			<item value="feature-instalacion"/>
-			<item value="servicios-fuse-autentificados"/>
+			<item value="pedidosV4Autentificado"/>
+			<item value="pedidosV3Autentificado"/>
+			<item value="descuentosV4Autentificado"/>
+			<item value="descuentosV3Autentificado"/>
+			<item value="ConsultaStockV2Autentificado"/>
+			<item value="consulta-stock-farmacia-autentificado"/>
+			<item value="servicios-consultas-autentificados"/>
+			<item value="consulta-productos-autentificado"/>
+			<item value="consulta-pedidos-autentificado"/>
+			<item value="excedentesABF-autentificado"/>
+			<item value="comercio-electronico-autentificados"/>
+			<item value="actualizacion-estados-autentificado"/>
+			<item value="cobertura-peya-pos-service-autentificado"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -75,22 +101,26 @@
 		</list>
 		<list key="version">
 			<item value="1.0.0"/>
+			<item value="0.0.1-SNAPSHOT"/>
 		</list>
 	</section>
 	<section name="MavenModuleWizardParentPage">
 		<list key="moduleName">
-			<item value="consultaStockAutentificado"/>
-			<item value="feature-instalacion"/>
-			<item value="servicios-pharol-autentificados"/>
-			<item value="servicios-pharol"/>
-			<item value="consultaStockV2"/>
-			<item value="requester-orders-peya"/>
-			<item value="monitor-logistico-mock"/>
-			<item value="requester-peya-service-consultaStock"/>
-			<item value="requester-peya-lib"/>
-			<item value="ordenes-peya-confirm-service"/>
-			<item value="ordenes-peya-requester"/>
-			<item value="ordenes-peya-lib"/>
+			<item value="promocionesV3Autentificado"/>
+			<item value="pedidosV4Autentificado"/>
+			<item value="pedidosV3Autentificado"/>
+			<item value="descuentosV4Autentificado"/>
+			<item value="descuentosV3Autentificado"/>
+			<item value="ConsultaStockV2Autentificado"/>
+			<item value="consulta-stock-farmacia-autentificado"/>
+			<item value="consulta-productos-autentificado"/>
+			<item value="consulta-pedidos-autentificado"/>
+			<item value="excedentesABF-autentificado"/>
+			<item value="actualizacion-estados-autentificado"/>
+			<item value="cobertura-peya-pos-service-autentificado"/>
+			<item value="servicios-consultas-autentificados"/>
+			<item value="comercio-electronico-autentificados"/>
+			<item value="cobertura-peya-autentificados"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>

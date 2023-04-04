@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="instalador-servicios-fasa-autentificados">
 
+	<feature name="instalador-comunes-servicios-autentificados" version="${project.version}">
+		<bundle>mvn:fasaFUSE.autentificado/comunes-servicios/1.0.0</bundle>
+	</feature>
+	
+	<feature name="instalador-servicios-cobertura-peya-autentificados" version="${project.version}">
+		<feature prerequisite="true">instalador-comunes-servicios-autentificados</feature>
+		<bundle>mvn:fasaFUSE.autentificado/cobertura-peya-autentificados/1.0.0</bundle>
+	</feature>
+	
+	<feature name="instalador-servicios-comercio-electronico-autentificados" version="${project.version}">
+		<feature prerequisite="true">instalador-servicios-cobertura-peya-autentificados</feature>
+		<bundle>mvn:fasaFUSE.autentificado/actualizacion-estados-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/excedentesABF-autentificado/1.0.0</bundle>
+	</feature>
+	
+	<feature name="instalador-servicios-consultas-autentificados" version="${project.version}">
+		<feature prerequisite="true">instalador-servicios-comercio-electronico-autentificados</feature>
+		<bundle>mvn:fasaFUSE.autentificado/consulta-pedidos-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/consulta-productos-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/consulta-stock-farmacia-autentificado/1.0.0</bundle>
+	</feature>
+	
 	<feature name="instalador-servicios-pharol-autentificados" version="${project.version}">
+		<feature prerequisite="true">instalador-servicios-consultas-autentificados</feature>
 		<bundle>mvn:fasaFUSE.autentificado/consulta-stock-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/consulta-stockV2-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/descuentosV3-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/descuentosV4-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/pedidosV3-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/pedidosV4-autentificado/1.0.0</bundle>
+		<bundle>mvn:fasaFUSE.autentificado/promocionesV3-autentificado/1.0.0</bundle>
 	</feature>
 	
 	<feature name="instalador-todos-servicios-autentificados" version="${project.version}">
-	<feature prerequisite="true">instalador-servicios-pharol-autentificados</feature>
+		<feature prerequisite="true">instalador-servicios-pharol-autentificados</feature>
 	</feature>
 	
 </features>

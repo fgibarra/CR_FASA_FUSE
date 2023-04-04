@@ -39,7 +39,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http:/
         </jaxrs:providers>
     </jaxrs:server>
     <reference availability="mandatory"
-        filter="(osgi.jndi.service.name=pharoldsV2)" id="pharolDataSource" interface="javax.sql.DataSource"/>
+        filter="(osgi.jndi.service.name=pharoldsV2)"
+        id="pharolDataSource" interface="javax.sql.DataSource"/>
     <bean
         class="cl.ahumada.fuse.stock.api.resources.ConsultaStockRestService" id="pmAuthService"/>
     <bean class="cl.ahumada.fuse.stock.procesor.PreparaQry" id="preparaQry"/>

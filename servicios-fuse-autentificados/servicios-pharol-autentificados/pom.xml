@@ -18,9 +18,21 @@
 			<version>11.2.0.4</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>fasaFUSE.autentificado</groupId>
+			<artifactId>comunes-servicios</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>/home/fernando/CodeReady/FASA/FUSE/servicios-fuse-autentificados/comunes-servicios/target/comunes-servicios-1.0.0.jar</systemPath>
+		</dependency>
 	</dependencies>
 
   <modules>
-  	<module>consultaStockAutentificado</module>
+  	<module>ConsultaStockV2Autentificado</module>
+  	<module>descuentosV3Autentificado</module>
+  	<module>descuentosV4Autentificado</module>
+  	<module>pedidosV3Autentificado</module>
+  	<module>pedidosV4Autentificado</module>
+  	<module>promocionesV3Autentificado</module>
   </modules>
 </project>
