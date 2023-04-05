@@ -72,7 +72,7 @@
         class="cl.ahumada.fuse.descuentos.procesor.ProcesaRespuestaCalculateDiscount" id="procesaRespuestaCD"/>
     <bean class="cl.ahumada.fuse.descuentos.procesor.GeneraRespuesta" id="generaRespuesta"/>
     <bean class="cl.ahumada.fuse.descuentos.procesor.DumpHeaderBody" id="dumpHB"/>
-    <camelContext id="descuentos-v4-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="descuentos-v4-autentificado-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.descuentos.cfg"/>
         <route id="restApiRoute">
             <from id="_promService" uri="direct:start"/>
@@ -88,7 +88,7 @@
             <from id="_preparaReqRoute" uri="direct:toSplit"/>
             <split id="_split1" parallelProcessing="true" strategyRef="setAggregationStrategy">
                 <xpath>/Servicios/servicio</xpath>
-                <setHeader id="_setHeader1" headerName="servicio">
+                <setHeader headerName="servicio" id="_setHeader1">
                     <xpath resultType="String">/servicio/@id</xpath>
                 </setHeader>
                 <to id="_to1" uri="direct:doRequest"/>
@@ -142,7 +142,7 @@
                 <simple>${header[request[BalanceInquiryRequest]]}</simple>
             </setBody>
             <log id="_log8" message="vamos a balanceInquiry con: ${body}"/>
-            <setHeader id="_setHeader2" headerName="channel">
+            <setHeader headerName="channel" id="_setHeader2">
                 <constant>L</constant>
             </setHeader>
             <to id="_aBERoute" uri="cxfrs:bean:rsClientBootsBalanceInquiry?headerFilterStrategy=#bootsFilter"/>
@@ -178,7 +178,7 @@
             <from id="_calculateDiscountRoute" uri="direct:doCalculateDiscount"/>
             <log id="_log16" message="Entrando a _doCalculateDiscountRoute"/>
             <process id="_generaCI" ref="generaReqCalculateDiscount"/>
-            <setHeader id="_setHeader3" headerName="channel">
+            <setHeader headerName="channel" id="_setHeader3">
                 <constant>L</constant>
             </setHeader>
             <to id="_aCDRoute" uri="cxfrs:bean:rsClientBootsCalculateDiscount?headerFilterStrategy=#bootsFilter"/>

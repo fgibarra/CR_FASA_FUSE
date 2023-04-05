@@ -67,7 +67,7 @@
         class="cl.ahumada.fuse.descuentos.procesor.ProcesaRespuestaCalculateDiscount" id="procesaRespuestaCD"/>
     <bean class="cl.ahumada.fuse.descuentos.procesor.GeneraRespuesta" id="generaRespuesta"/>
     <bean class="cl.ahumada.fuse.descuentos.procesor.DumpHeaderBody" id="dumpHB"/>
-    <camelContext id="descuentosV3-api" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="descuentosV3-autentificado-api" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.descuentos.cfg"/>
         <route id="restApiRoute">
             <from id="_promService" uri="direct:start"/>
@@ -81,8 +81,7 @@
         </route>
         <route id="splitRoute">
             <from id="_preparaReqRoute" uri="direct:toSplit"/>
-            <split id="_split1" parallelProcessing="true"
-                strategyRef="setAggregationStrategy">
+            <split id="_split1" parallelProcessing="true" strategyRef="setAggregationStrategy">
                 <xpath>/Servicios/servicio</xpath>
                 <setHeader headerName="servicio" id="_setHeader1">
                     <xpath resultType="String">/servicio/@id</xpath>
@@ -92,7 +91,6 @@
             <log id="_log11" message="en splitRoute despues del split"/>
             <to id="_to5" uri="direct:doAggregate"/>
         </route>
-
         <route id="_doRequest">
             <!-- hace los request a los sitios de boots y  cartentry -->
             <from id="_preparaReqRoute" uri="direct:doRequest"/>
@@ -146,15 +144,14 @@
             <process id="_procesaRespuestaBIAction" ref="procesaRespuestaBI"/>
             <log id="_log9" message="devuelve a WS: ${body}"/>
         </route>
-        
         <route id="_agregateRoute">
             <from id="_agreggateRoute" uri="direct:doAggregate"/>
             <log id="_log14" message="En _agregateRoute entrando"/>
             <!-- <process id="_dump0Action" ref="dumpHB"/>  -->
             <when id="_when3">
-             <!--  <camel:simple>${body.size} == 2</camel:simple> -->
+                <!--  <camel:simple>${body.size} == 2</camel:simple> -->
                 <!-- <camel:simple>${header[aggregate]} == 2</camel:simple>  -->
-                <simple>${header[aggregate]} == 2 || ${header[aggregate]} == 1</simple>    
+                <simple>${header[aggregate]} == 2 || ${header[aggregate]} == 1</simple>
                 <log id="_log15" message="En _agregateRoute : hay 1 o 2 en el body"/>
                 <to id="_toCalculateDiscount" uri="direct:doCalculateDiscount"/>
             </when>
@@ -167,30 +164,28 @@
                 <to id="_toCalculateDiscount" uri="direct:doCalculateDiscount"/>
             </when>
              -->
-            <otherwise>
-            	<log message="Entrando a otherwise: ${header[aggregate]}"/>
-            	<to uri="mock:dead"/>
+            <otherwise id="_otherwise2">
+                <log id="_log10" message="Entrando a otherwise: ${header[aggregate]}"/>
+                <to id="_to6" uri="mock:dead"/>
             </otherwise>
         </route>
-         
         <route id="_doCalculateDiscountRoute">
-        	<from id="_calculateDiscountRoute" uri="direct:doCalculateDiscount"/>
-        	<log message="Entrando a _doCalculateDiscountRoute"/>
-        	<process id="_generaCI" ref="generaReqCalculateDiscount"/>
+            <from id="_calculateDiscountRoute" uri="direct:doCalculateDiscount"/>
+            <log id="_log16" message="Entrando a _doCalculateDiscountRoute"/>
+            <process id="_generaCI" ref="generaReqCalculateDiscount"/>
             <setHeader headerName="channel" id="_setHeader3">
                 <constant>L</constant>
             </setHeader>
             <to id="_aCDRoute" uri="cxfrs:bean:rsClientBootsCalculateDiscount?headerFilterStrategy=#bootsFilter"/>
             <process id="_procesaRespuestaCDAction" ref="procesaRespuestaCD"/>
-            <log message="respuesta de Calculate Discount: ${body}"/>
+            <log id="_log17" message="respuesta de Calculate Discount: ${body}"/>
             <to id="_toResponse" uri="direct:doResponse"/>
         </route>
-
         <route id="_doResponseRoute">
             <from id="_doResponse" uri="direct:doResponse"/>
             <process id="_dumpCDAction" ref="dumpHB"/>
             <process id="_generaRespuestaWsPromocionesAction" ref="generaRespuesta"/>
-            <log message="devuelve a WS: ${body}"/>
+            <log id="_log18" message="devuelve a WS: ${body}"/>
             <to id="_final" uri="mock:end"/>
         </route>
     </camelContext>
@@ -200,7 +195,7 @@
         password="{{cartEntry.password}}"
         serviceClass="cl.ahumada.fuse.descuentos.restclient.CartEntryEndpoint" username="{{cartEntry.user}}">
         <cxf:headers>
-        	<entry key="Content-Type" value="application/json"/>
+            <entry key="Content-Type" value="application/json"/>
         </cxf:headers>
         <cxf:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
@@ -208,10 +203,9 @@
     </cxf:rsClient>
     <cxf:rsClient
         address="https://{{boots.url}}/pos-api/transactions/balanceInquiry"
-        id="rsClientBootsBalanceInquiry" loggingFeatureEnabled="true" 
-        serviceClass="cl.ahumada.fuse.descuentos.restclient.BalanceInquiryEndpoint">
+        id="rsClientBootsBalanceInquiry" loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.descuentos.restclient.BalanceInquiryEndpoint">
         <cxf:headers>
-        	<entry key="Content-Type" value="application/json"/>
+            <entry key="Content-Type" value="application/json"/>
         </cxf:headers>
         <cxf:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
@@ -219,10 +213,9 @@
     </cxf:rsClient>
     <cxf:rsClient
         address="https://{{boots.url}}/pos-api/transactions/calculateDiscountsV2"
-        id="rsClientBootsCalculateDiscount" loggingFeatureEnabled="true" 
-        serviceClass="cl.ahumada.fuse.descuentos.restclient.CalculateDiscountEndpoint">
+        id="rsClientBootsCalculateDiscount" loggingFeatureEnabled="true" serviceClass="cl.ahumada.fuse.descuentos.restclient.CalculateDiscountEndpoint">
         <cxf:headers>
-        	<entry key="Content-Type" value="application/json"/>
+            <entry key="Content-Type" value="application/json"/>
         </cxf:headers>
         <cxf:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>

@@ -48,7 +48,7 @@
     <bean
         class="cl.ahumada.fuse.promociones.procesor.GeneraRespuestaPromocionesV3" id="generaRespuestaWsPromociones"/>
     <bean class="cl.ahumada.fuse.promociones.procesor.RequestProcessor" id="requestProcessor"/>
-    <camelContext id="promocionesv3-api" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="promocionesv3-autentificado-api" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="restApiRoute">
             <from id="_promService" uri="direct:start"/>
             <log id="_log1" message="received from WS: ${body}"/>

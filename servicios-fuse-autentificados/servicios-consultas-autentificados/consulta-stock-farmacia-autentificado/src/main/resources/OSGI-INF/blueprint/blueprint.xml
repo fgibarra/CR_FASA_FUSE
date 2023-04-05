@@ -47,7 +47,7 @@
     </bean>
     <bean
         class="cl.ahumada.fuse.stockFarmacia.procesor.GeneraRespuestaWs" id="generaRespuestaWs"/>
-    <camelContext id="consulta-stockFarmacia-v1" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="consulta-stockFarmacia-autentificado-v1" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.stockFarmacia.cfg"/>
         <route id="restApiRoute">
             <from id="_pmAuthService" uri="direct:start"/>

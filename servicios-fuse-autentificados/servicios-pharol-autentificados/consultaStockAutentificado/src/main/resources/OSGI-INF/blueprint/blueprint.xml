@@ -27,7 +27,7 @@
     <bean class="cl.ahumada.fuse.stock.procesor.TransformaSPaResponse" id="transformaSPaResponse"/>
     <bean
         class="cl.ahumada.fuse.stock.procesor.GeneraRespuestaWsConsultaStock" id="generaRespuestaWsConsultaStock"/>
-    <camelContext id="consulta-stock-api-autentificado" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="consulta-stock-autentificado-api" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.stock.cfg"/>
         <route id="restApiRoute">
             <from id="_pmAuthService" uri="direct:start"/>

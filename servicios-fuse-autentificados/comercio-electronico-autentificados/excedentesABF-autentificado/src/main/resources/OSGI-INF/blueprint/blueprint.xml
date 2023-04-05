@@ -28,7 +28,7 @@
     <bean class="cl.ahumada.fuse.excedentes.procesor.PreparaResponseC01" id="preparaResponseC01"/>
     <bean class="cl.ahumada.fuse.excedentes.procesor.PreparaResponseC02" id="preparaResponseC02"/>
     <!-- =================================================================================================== -->
-    <camelContext id="excedentesABFV1-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="excedentesABFV1-autentificado-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.excedentesABF.cfg"/>
         <route id="restApiRoute">
             <from id="_promService" uri="direct:start"/>

@@ -6,7 +6,8 @@
     xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint-2.20.2.xsd">
     <!-- CXF servers -->
-    <jaxrs:server address="/ESBA/actualizaEstados/" id="rsServicePedidos" staticSubresourceResolution="true">
+    <jaxrs:server address="/ESBA/actualizaEstados/"
+        id="rsServicePedidos" staticSubresourceResolution="true">
         <jaxrs:serviceBeans>
             <ref component-id="promService"/>
         </jaxrs:serviceBeans>
@@ -23,7 +24,7 @@
         class="cl.ahumada.fuse.actualizacionEstados.procesor.PreparaQuery" id="preparaQry"/>
     <bean
         class="cl.ahumada.fuse.actualizacionEstados.procesor.PreparaResponse" id="preparaResponse"/>
-    <camelContext id="actualizacionEstadosV1-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="actualizacionEstadosV1-autentificado-api" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.actualizacionEstados.cfg"/>
         <route id="restApiRoute">
             <from id="_promService" uri="direct:start"/>

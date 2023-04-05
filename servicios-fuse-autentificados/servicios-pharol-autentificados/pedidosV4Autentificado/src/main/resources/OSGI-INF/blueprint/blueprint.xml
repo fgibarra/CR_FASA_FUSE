@@ -41,7 +41,7 @@
         class="cl.ahumada.fuse.pedidos.api.resources.PedidosRestService" id="promService"/>
     <bean class="cl.ahumada.fuse.pedidos.procesor.PreparaQuery" id="preparaQry"/>
     <bean class="cl.ahumada.fuse.pedidos.procesor.PreparaResponse" id="preparaResponse"/>
-    <camelContext id="pedidosV4-api" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="pedidosV4-autentificado-api" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="file:${karaf.home}/etc/cl.ahumada.pedidos.cfg"/>
         <route id="restApiRoute">
             <from id="_promService" uri="direct:start"/>

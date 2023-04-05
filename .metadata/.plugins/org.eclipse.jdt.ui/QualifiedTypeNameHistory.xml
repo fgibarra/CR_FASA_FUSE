@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.apache.commons.httpclient.params.HttpClientParams"/>
     <fullyQualifiedTypeName name="org.jboss.resteasy.annotations.interception.ServerInterceptor"/>
     <fullyQualifiedTypeName name="org.jboss.resteasy.annotations.interception.SecurityPrecedence"/>
     <fullyQualifiedTypeName name="org.apache.cxf.transport.http.Headers"/>
@@ -60,4 +59,5 @@
     <fullyQualifiedTypeName name="cl.ahumada.fuse.json.stock.Local"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.json.stock.Stock"/>
     <fullyQualifiedTypeName name="cl.ahumada.fuse.json.stock.PharolError"/>
+    <fullyQualifiedTypeName name="javax.xml.stream.XMLOutputFactory"/>
 </qualifiedTypeNameHistroy>
